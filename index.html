@@ -1961,6 +1961,72 @@
     </div>
   </div>
 
+  <!-- MODAL: Edit Data Foto Galeri (Jejak Mabrur) -->
+  <div id="editPhotoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+            <i data-lucide="pencil" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-black text-lg text-slate-900">Edit Foto Galeri</h3>
+        </div>
+        <button onclick="closeEditPhotoModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleUpdatePhoto(event)" class="space-y-3">
+        <input type="hidden" id="editPhotoId">
+        
+        <!-- Preview Foto Saat Ini -->
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Preview Foto</label>
+          <div class="w-full h-40 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 relative">
+            <img id="editPhotoPreviewImg" src="" alt="Preview" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Ganti File Gambar (Opsional)</label>
+          <input type="file" id="editPhotoFileInput" accept="image/*" onchange="previewEditPhotoFile(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-700 file:text-white hover:file:bg-teal-800 cursor-pointer">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Kategori Wajib</label>
+          <select id="editPhotoCategory" class="w-full px-3 py-2 border rounded-xl text-sm font-semibold focus:outline-emerald-600">
+            <option value="IHRAM">Pakaian Ihram</option>
+            <option value="ARAFAH">Wukuf di Arafah</option>
+            <option value="MUZDALIFAH">Mabit Muzdalifah & Mina</option>
+            <option value="THAWAF">Thawaf / Sa'i Ka'bah</option>
+            <option value="ZIARAH">Ziarah Madinah & Raudhah</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Judul / Keterangan Momen Doa</label>
+          <input type="text" id="editPhotoCaption" required placeholder="Contoh: Saat berdoa di Jabal Rahmah..." class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Nama Jamaah</label>
+            <input type="text" id="editPhotoJamaahName" required class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Angkatan / Kloter</label>
+            <input type="text" id="editPhotoAngkatan" required placeholder="Contoh: Angkatan 3" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeEditPhotoModal()" class="px-4 py-2 bg-slate-100 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-teal-700 text-white rounded-xl text-sm font-bold hover:bg-teal-800 flex items-center gap-1.5 shadow">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Simpan Perubahan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: Lihat Pamflet & Brosur Resolusi Penuh -->
   <div id="pamphletModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-6" onclick="closePamphletModal()">
     <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col" onclick="event.stopPropagation()">
@@ -3766,6 +3832,8 @@
     }
 
     // 3. Logika Galeri Jejak Mabrur (5-10 Foto Terpilih)
+    let currentGalleryFilter = 'ALL';
+
     function renderGalleryGrid(photos) {
       const container = document.getElementById('galleryPhotoGrid');
       if (!photos || photos.length === 0) {
@@ -3778,23 +3846,37 @@
       }
 
       container.innerHTML = photos.map(p => `
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition group">
-          <div class="relative h-48 bg-slate-100 overflow-hidden">
-            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
-              ${p.category}
-            </span>
-            <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
-              ${p.size}
-            </span>
-          </div>
-          <div class="p-4 space-y-1.5">
-            <h4 class="font-bold text-slate-900 text-sm line-clamp-1">${p.title}</h4>
-            <div class="flex items-center justify-between text-xs text-slate-500">
-              <span>${p.jamaahName}</span>
-              <span class="font-semibold text-emerald-800">${p.angkatan}</span>
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition group flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 bg-slate-100 overflow-hidden">
+              <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+                ${p.category}
+              </span>
+              <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
+                ${p.size || '390 KB'}
+              </span>
             </div>
-            <div class="text-[11px] text-slate-400">${p.date}</div>
+            <div class="p-4 space-y-1.5">
+              <h4 class="font-bold text-slate-900 text-sm line-clamp-1" title="${p.title}">${p.title}</h4>
+              <div class="flex items-center justify-between text-xs text-slate-500">
+                <span class="font-medium text-slate-700">${p.jamaahName}</span>
+                <span class="font-semibold text-emerald-800">${p.angkatan}</span>
+              </div>
+              <div class="text-[11px] text-slate-400">${p.date}</div>
+            </div>
+          </div>
+
+          <!-- Tombol Aksi: Edit & Hapus Foto -->
+          <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center gap-2">
+            <button onclick="openEditPhotoModal(${p.id})" class="flex-1 py-1.5 px-2 bg-white hover:bg-amber-50 text-amber-900 border border-amber-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-xs">
+              <i data-lucide="pencil" class="w-3.5 h-3.5 text-amber-700"></i>
+              <span>Edit</span>
+            </button>
+            <button onclick="deleteGalleryPhoto(${p.id})" class="py-1.5 px-3 bg-white hover:bg-red-50 text-red-700 hover:text-red-800 border border-red-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition shadow-xs" title="Hapus foto ini dari galeri">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-600"></i>
+              <span>Hapus</span>
+            </button>
           </div>
         </div>
       `).join('');
@@ -3802,13 +3884,16 @@
     }
 
     function filterGalleryCategory(cat) {
+      currentGalleryFilter = cat;
       const buttons = document.querySelectorAll('.gallery-filter-btn');
       buttons.forEach(btn => {
         btn.classList.remove('bg-slate-900', 'text-white');
         btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-300');
       });
-      event.target.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
-      event.target.classList.add('bg-slate-900', 'text-white');
+      if (event && event.target) {
+        event.target.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+        event.target.classList.add('bg-slate-900', 'text-white');
+      }
 
       if (cat === 'ALL') {
         renderGalleryGrid(galleryPhotos);
@@ -3942,6 +4027,110 @@
       } else {
         renderGalleryGrid(galleryPhotos);
       }
+    }
+
+    // ==============================================
+    // FITUR EDIT & HAPUS FOTO GALERI (JEJAK MABRUR)
+    // ==============================================
+    let tempEditPhotoImgUrl = '';
+
+    function openEditPhotoModal(id) {
+      const p = galleryPhotos.find(item => item.id === id);
+      if (!p) return;
+
+      document.getElementById('editPhotoId').value = p.id;
+      document.getElementById('editPhotoCategory').value = p.category || 'IHRAM';
+      document.getElementById('editPhotoCaption').value = p.title || '';
+      document.getElementById('editPhotoJamaahName').value = p.jamaahName || '';
+      document.getElementById('editPhotoAngkatan').value = p.angkatan || '';
+
+      tempEditPhotoImgUrl = p.image || '';
+      const previewImg = document.getElementById('editPhotoPreviewImg');
+      if (previewImg) previewImg.src = tempEditPhotoImgUrl;
+      const fileInp = document.getElementById('editPhotoFileInput');
+      if (fileInp) fileInp.value = '';
+
+      document.getElementById('editPhotoModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeEditPhotoModal() {
+      const modal = document.getElementById('editPhotoModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function previewEditPhotoFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempEditPhotoImgUrl = e.target.result;
+          const previewImg = document.getElementById('editPhotoPreviewImg');
+          if (previewImg) previewImg.src = tempEditPhotoImgUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleUpdatePhoto(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('editPhotoId').value);
+      const pIndex = galleryPhotos.findIndex(item => item.id === id);
+      if (pIndex === -1) return;
+
+      const cat = document.getElementById('editPhotoCategory').value;
+      const caption = document.getElementById('editPhotoCaption').value.trim();
+      const jamaahName = document.getElementById('editPhotoJamaahName').value.trim();
+      const angkatan = document.getElementById('editPhotoAngkatan').value.trim();
+
+      galleryPhotos[pIndex].category = cat;
+      galleryPhotos[pIndex].title = caption;
+      galleryPhotos[pIndex].jamaahName = jamaahName;
+      galleryPhotos[pIndex].angkatan = angkatan;
+      if (tempEditPhotoImgUrl) {
+        galleryPhotos[pIndex].image = tempEditPhotoImgUrl;
+      }
+
+      saveSystemState();
+      closeEditPhotoModal();
+      
+      // Re-render sesuai filter galeri yang aktif
+      if (currentGalleryFilter === 'ALL') {
+        renderGalleryGrid(galleryPhotos);
+      } else {
+        const filtered = galleryPhotos.filter(p => p.category === currentGalleryFilter);
+        renderGalleryGrid(filtered);
+      }
+      renderYearbookPreview();
+      updateDashboardStats();
+
+      alert(`Alhamdulillah! Foto galeri "${caption}" berhasil diperbarui.`);
+    }
+
+    function deleteGalleryPhoto(id) {
+      const pIndex = galleryPhotos.findIndex(item => item.id === id);
+      if (pIndex === -1) return;
+
+      const p = galleryPhotos[pIndex];
+      const confirmDelete = confirm(`Konfirmasi Hapus Foto Galeri:\n\nApakah Anda yakin ingin menghapus foto "${p.title}" (${p.jamaahName}) dari Galeri Jejak Mabrur?\n\nTindakan ini tidak dapat dibatalkan.`);
+      if (!confirmDelete) return;
+
+      const deletedTitle = p.title;
+      galleryPhotos.splice(pIndex, 1);
+
+      saveSystemState();
+      
+      // Re-render sesuai filter galeri yang aktif
+      if (currentGalleryFilter === 'ALL') {
+        renderGalleryGrid(galleryPhotos);
+      } else {
+        const filtered = galleryPhotos.filter(item => item.category === currentGalleryFilter);
+        renderGalleryGrid(filtered);
+      }
+      renderYearbookPreview();
+      updateDashboardStats();
+
+      alert(`Foto "${deletedTitle}" telah berhasil dihapus dari galeri.`);
     }
 
     // 4. Logika Fiqih & Audio
