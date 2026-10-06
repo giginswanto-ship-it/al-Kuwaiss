@@ -22,7 +22,7 @@
   <!-- Google Fonts Outfit & Scheherazade New -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
   <!-- QRCode.js CDN for sharing QR code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   
@@ -46,70 +46,167 @@
     }
   </script>
   <style>
-    /* Optimasi iOS & Android Mobile Native Feeling */
+    /* ==========================================================================
+       OPTIMASI KETERBACAAN & RESPONSIF HP ANDROID & iOS (KBIH KUWAISS)
+       ========================================================================== */
     :root {
       --sat: env(safe-area-inset-top, 0px);
       --sab: env(safe-area-inset-bottom, 0px);
       --sal: env(safe-area-inset-left, 0px);
       --sar: env(safe-area-inset-right, 0px);
+      --font-scale: 1;
     }
     html {
+      font-size: 16px;
       -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
       scroll-behavior: smooth;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
     }
+    
+    /* Skala Ukuran Huruf Global untuk Berbagai Ukuran Layar HP & Lansia */
+    html.text-scale-1 { font-size: 16px; }       /* Standar (100%) */
+    html.text-scale-2 { font-size: 17.5px; }     /* Sedang (110%) */
+    html.text-scale-3 { font-size: 19.5px; }     /* Besar / Nyaman (122%) */
+    html.text-scale-4 { font-size: 21.5px; }     /* Ekstra Besar / Lansia (135%) */
+
     body {
-      font-size: 16px;
-      line-height: 1.6;
+      font-size: 1rem;
+      line-height: 1.65;
       background-color: #F8FAFC;
       color: #0F172A;
       padding-top: var(--sat);
-      padding-bottom: calc(var(--sab) + 72px); /* Ruang untuk mobile bottom navigation */
-      -webkit-font-smoothing: antialiased;
+      padding-bottom: calc(var(--sab) + 76px); /* Ruang aman bottom nav di Android */
       overscroll-behavior-y: none;
+      word-break: break-word;
     }
     @media (min-width: 768px) {
       body {
         padding-bottom: 0px;
       }
     }
-    /* Touch optimization */
+
+    /* Target Sentuh Ergonomis Android Touch Target (Min 44x44px) */
     button, a, select, input, textarea {
       touch-action: manipulation;
     }
-    .high-contrast {
-      letter-spacing: -0.01em;
+    button, a {
+      min-height: 38px;
     }
+    @media (max-width: 640px) {
+      input, select, textarea {
+        font-size: 16px !important; /* Mencegah auto-zoom menjengkelkan di Android Chrome */
+      }
+    }
+
+    /* Scrollbar Halus */
     .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: #CBD5E1;
+      background-color: #94A3B8;
       border-radius: 9999px;
     }
+
+    /* Navigasi Desktop Aktif */
     .active-nav {
       background-color: #065F46;
       color: #FFFFFF !important;
       box-shadow: 0 4px 12px rgba(6, 95, 70, 0.25);
     }
-    .senior-text-mode {
-      font-size: 19px !important;
-      line-height: 1.8 !important;
+
+    /* Tipografi Teks Arab Berkualitas Tinggi */
+    .font-arabic {
+      font-family: 'Scheherazade New', 'Amiri', serif !important;
+      direction: rtl;
+      text-align: right;
+      line-height: 2.2 !important;
+      letter-spacing: 0.02em;
     }
-    .senior-text-mode h2 { font-size: 26px !important; }
-    .senior-text-mode h3 { font-size: 22px !important; }
-    .senior-text-mode .text-sm { font-size: 16px !important; }
-    .senior-text-mode .text-xs { font-size: 14px !important; }
+
+    /* ==========================================================================
+       MODE KONTRAS TINGGI (UNTUK KONDISI SILAU MATAHARI DI TANAH SUCI)
+       ========================================================================== */
+    html.high-contrast-mode body {
+      background-color: #FFFFFF !important;
+      color: #000000 !important;
+    }
+    html.high-contrast-mode .bg-white {
+      background-color: #FFFFFF !important;
+      border-color: #0F172A !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    }
+    html.high-contrast-mode .text-slate-400,
+    html.high-contrast-mode .text-slate-500,
+    html.high-contrast-mode .text-slate-600 {
+      color: #1E293B !important;
+      font-weight: 600 !important;
+    }
+    html.high-contrast-mode .text-slate-700,
+    html.high-contrast-mode .text-slate-800,
+    html.high-contrast-mode .text-slate-900 {
+      color: #000000 !important;
+      font-weight: 800 !important;
+    }
+    html.high-contrast-mode .border-slate-200,
+    html.high-contrast-mode .border-slate-100 {
+      border-color: #64748B !important;
+    }
+
+    /* ==========================================================================
+       MODE LANSIA TERPADU (TEKS BESAR & RUANG BACA LEGA)
+       ========================================================================== */
+    html.senior-text-mode {
+      font-size: 20px !important;
+    }
+    html.senior-text-mode body {
+      line-height: 1.85 !important;
+    }
+    html.senior-text-mode .text-[10px],
+    html.senior-text-mode .text-[11px] {
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+    }
+    html.senior-text-mode .text-xs {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    html.senior-text-mode .text-sm {
+      font-size: 17px !important;
+      line-height: 1.7 !important;
+    }
+    html.senior-text-mode .text-base {
+      font-size: 19px !important;
+      line-height: 1.75 !important;
+    }
+    html.senior-text-mode h1 { font-size: 28px !important; line-height: 1.35 !important; }
+    html.senior-text-mode h2 { font-size: 25px !important; line-height: 1.35 !important; }
+    html.senior-text-mode h3 { font-size: 22px !important; line-height: 1.4 !important; }
+    html.senior-text-mode h4 { font-size: 19px !important; line-height: 1.4 !important; }
+    html.senior-text-mode .font-arabic { font-size: 34px !important; line-height: 2.3 !important; }
     
-    /* Mobile App Tab Bar Active state */
+    /* Mobile App Tab Bar Active state (Pill Indicator) */
     .mobile-tab-active {
       color: #065F46 !important;
-      font-weight: 800;
+      font-weight: 800 !important;
+    }
+    .mobile-tab-active .mob-icon-wrap {
+      background-color: #ECFDF5;
+      color: #065F46;
+      border-radius: 9999px;
+      box-shadow: 0 1px 3px rgba(6, 95, 70, 0.15);
     }
     .mobile-tab-active svg {
       stroke-width: 2.5px;
-      color: #065F46;
+      color: #065F46 !important;
+    }
+
+    /* Animasi Bottom Sheet Menu HP */
+    .sheet-transition {
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
     }
   </style>
 </head>
@@ -395,7 +492,7 @@
           <div>
             <span class="text-xs bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold">AUDIO TAUSIYAH TERKINI</span>
             <h4 class="font-bold text-slate-900 text-base mt-1">Kiat Menjaga Akhlak & Kemabruran Sepulang dari Tanah Suci</h4>
-            <p class="text-xs text-slate-600">Oleh: Ust. Zuhdi Rofiqi, LC â€¢ Durasi: 04:12 Menit</p>
+            <p class="text-xs text-slate-600">Oleh: Ust. Zuhdi Rofiqi, LC • Durasi: 04:12 Menit</p>
           </div>
         </div>
         <div class="flex items-center gap-3 w-full md:w-auto">
@@ -757,14 +854,24 @@
             </button>
           </div>
 
-          <!-- Teks Arab Besar & Terjemahan Ramah Lansia -->
-          <div class="bg-amber-50/60 p-6 rounded-2xl border border-amber-200/70 text-center space-y-4">
-            <p id="fiqihArabicText" class="font-arabic text-2xl sm:text-3xl text-slate-900 leading-loose">
-              Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽØŒ Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽ Ù„Ø§ÙŽ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙƒÙŽ Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽØŒ Ø¥ÙÙ†ÙŽÙ‘ Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯ÙŽ ÙˆÙŽØ§Ù„Ù†ÙÙ‘Ø¹Ù’Ù…ÙŽØ©ÙŽ Ù„ÙŽÙƒÙŽ ÙˆÙŽØ§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙŽØŒ Ù„Ø§ÙŽ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙƒÙŽ
+          <!-- Teks Arab Besar & Terjemahan Ramah Lansia (Keterbacaan Sangat Tinggi) -->
+          <div class="bg-amber-50/80 p-5 sm:p-7 rounded-3xl border-2 border-amber-300 text-center space-y-4 shadow-sm">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-black text-xs uppercase tracking-wide">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-700"></i>
+              Lafaz Arab Berharakat Jelas
+            </div>
+            <p id="fiqihArabicText" class="font-arabic text-3xl sm:text-4xl text-emerald-950 font-bold leading-[2.3] tracking-wide" dir="rtl">
+              لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ
             </p>
-            <p id="fiqihTransliteration" class="italic text-slate-700 font-medium text-sm sm:text-base">
-              "Labbaikallaahumma labbaik, labbaika laa syariika laka labbaik, innal hamda wan ni'mata laka wal mulk, laa syariika lak"
-            </p>
+            <div class="bg-white/80 p-3.5 rounded-2xl border border-amber-200 space-y-2">
+              <p id="fiqihTransliteration" class="italic text-slate-800 font-bold text-sm sm:text-base leading-relaxed">
+                "Labbaikallaahumma labbaik, labbaika laa syariika laka labbaik, innal hamda wan ni'mata laka wal mulk, laa syariika lak"
+              </p>
+              <p id="fiqihTranslation" class="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed border-t border-slate-200 pt-2">
+                <strong>Artinya:</strong> "Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu, aku penuhi panggilan-Mu. Sesungguhnya segala puji, nikmat, dan kekuasaan adalah milik-Mu, tiada sekutu bagi-Mu."
+              </p>
+            </div>
+          </div>
           </div>
 
           <!-- Penjelasan Fiqih & Sanad -->
@@ -791,7 +898,7 @@
           <span class="text-xs bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-full">Fitur Otomatisasi Biro</span>
           <h2 class="text-2xl font-black text-slate-900 mt-2">Buku Kenangan Digital (Yearbook PDF)</h2>
           <p class="text-sm text-slate-500">
-            Kompilasi otomatis manifest jamaah dan galeri 5â€“10 foto terpilih per angkatan menjadi format PDF siap cetak.
+            Kompilasi otomatis manifest jamaah dan galeri 5–10 foto terpilih per angkatan menjadi format PDF siap cetak.
           </p>
         </div>
         <div class="flex items-center gap-3">
@@ -870,7 +977,7 @@
         <!-- Kutipan Pembimbing -->
         <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-200 text-center italic text-emerald-950 font-serif text-sm">
           "Mengabadikan jejak ibadah bukan sekadar nostalgia visual, melainkan pengingat ruhani agar nilai kemabruran tetap terjaga dalam akhlak sehari-hari."
-          <div class="not-italic font-sans font-bold text-xs text-slate-600 mt-2">â€” Ust. Zuhdi Rofiqi, LC</div>
+          <div class="not-italic font-sans font-bold text-xs text-slate-600 mt-2">— Ust. Zuhdi Rofiqi, LC</div>
         </div>
 
       </div>
@@ -1197,7 +1304,7 @@
                     Bagi Pengguna Android (Chrome):
                   </div>
                   <p class="text-[11px] leading-relaxed">
-                    Ketuk menu titik tiga (â‹®) di pojok kanan atas browser Chrome, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> (Add to Home screen).
+                    Ketuk menu titik tiga (⋮) di pojok kanan atas browser Chrome, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> (Add to Home screen).
                   </p>
                 </div>
                 <div class="bg-white p-3 rounded-xl border border-emerald-100 space-y-1">
@@ -1206,7 +1313,7 @@
                     Bagi Pengguna iPhone / iPad (Safari):
                   </div>
                   <p class="text-[11px] leading-relaxed">
-                    Ketuk tombol Bagikan (ikon kotak panah ke atas <span class="font-mono">âž®</span>) di bagian bawah Safari, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> (Add to Home Screen).
+                    Ketuk tombol Bagikan (ikon kotak panah ke atas <span class="font-mono">➔</span>) di bagian bawah Safari, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> (Add to Home Screen).
                   </p>
                 </div>
               </div>
@@ -2066,7 +2173,7 @@
 
       <!-- Action Footer -->
       <div class="p-4 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3">
-        <span class="text-xs text-slate-400">KBIH KUWAISS â€¢ Pimpinan Ust. Zuhdi Rofiqi, LC</span>
+        <span class="text-xs text-slate-400">KBIH KUWAISS • Pimpinan Ust. Zuhdi Rofiqi, LC</span>
         <div class="flex items-center gap-2">
           <button id="pamphletShareWABtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow transition">
             <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
@@ -2360,7 +2467,7 @@
           <span class="bg-amber-400 text-stone-950 font-bold px-2 py-0.5 rounded text-[10px]">TERAKREDITASI</span>
         </div>
         <p class="text-slate-300 text-xs">
-          Kelompok Bimbingan Ibadah Haji KBIH KUWAISS â€¢ Pimpinan: <strong>Ust. Zuhdi Rofiqi, LC</strong>
+          Kelompok Bimbingan Ibadah Haji KBIH KUWAISS • Pimpinan: <strong>Ust. Zuhdi Rofiqi, LC</strong>
         </p>
         <p class="text-slate-400 text-[11px] leading-relaxed">
           <i data-lucide="map-pin" class="w-3.5 h-3.5 inline mr-1 text-amber-400"></i>
@@ -2708,47 +2815,51 @@
         title: 'Lafaz Talbiyah Lengkap',
         category: 'BACAAN WAJIB IHRAM',
         duration: '01:45 Menit',
-        arabic: 'Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽØŒ Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽ Ù„Ø§ÙŽ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙƒÙŽ Ù„ÙŽØ¨ÙŽÙ‘ÙŠÙ’ÙƒÙŽØŒ Ø¥ÙÙ†ÙŽÙ‘ Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯ÙŽ ÙˆÙŽØ§Ù„Ù†ÙÙ‘Ø¹Ù’Ù…ÙŽØ©ÙŽ Ù„ÙŽÙƒÙŽ ÙˆÙŽØ§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙŽØŒ Ù„Ø§ÙŽ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙƒÙŽ',
+        arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ',
         latin: '"Labbaikallaahumma labbaik, labbaika laa syariika laka labbaik, innal hamda wan ni\'mata laka wal mulk, laa syariika lak"',
+        arti: 'Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu, aku penuhi panggilan-Mu. Sesungguhnya segala puji, nikmat, dan kekuasaan adalah milik-Mu, tiada sekutu bagi-Mu.',
         notes: [
           'Dibaca sejak berniat ihram dari miqat hingga hendak melempar Jumrah Aqabah di Mina.',
-          'Bagi jamaah pria disunnahkan mengangkat suara, wanita cukup terdengar sendiri.',
-          'Pesan Ust. Zuhdi Rofiqi, LC: Resapi panggilan ini sebagai bukti ketundukan mutlak kepada Allah.'
+          'Bagi jamaah pria disunnahkan mengeraskan suara, wanita cukup terdengar oleh diri sendiri.',
+          'Pesan Ust. Zuhdi Rofiqi, LC: Resapi panggilan ini sebagai bukti ketundukan mutlak kepada Allah SWT.'
         ]
       },
       {
         title: 'Doa Melihat Ka\'bah Pertama Kali',
         category: 'SAAT TIBA DI MASJIDIL HARAM',
         duration: '02:10 Menit',
-        arabic: 'Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø²ÙØ¯Ù’ Ù‡ÙŽØ°ÙŽØ§ Ø§Ù„Ù’Ø¨ÙŽÙŠÙ’ØªÙŽ ØªÙŽØ´Ù’Ø±ÙÙŠÙÙ‹Ø§ ÙˆÙŽØªÙŽØ¹Ù’Ø¸ÙÙŠÙ…Ù‹Ø§ ÙˆÙŽØªÙŽÙƒÙ’Ø±ÙÙŠÙ…Ù‹Ø§ ÙˆÙŽÙ…ÙŽÙ‡ÙŽØ§Ø¨ÙŽØ©Ù‹ØŒ ÙˆÙŽØ²ÙØ¯Ù’ Ù…ÙŽÙ†Ù’ Ø´ÙŽØ±ÙŽÙ‘ÙÙŽÙ‡Ù ÙˆÙŽØ¹ÙŽØ¸ÙŽÙ‘Ù…ÙŽÙ‡Ù Ù…ÙÙ…ÙŽÙ‘Ù†Ù’ Ø­ÙŽØ¬ÙŽÙ‘Ù‡Ù Ø£ÙŽÙˆÙ Ø§Ø¹Ù’ØªÙŽÙ…ÙŽØ±ÙŽÙ‡Ù ØªÙŽØ´Ù’Ø±ÙÙŠÙÙ‹Ø§ ÙˆÙŽØªÙŽÙƒÙ’Ø±ÙÙŠÙ…Ù‹Ø§ ÙˆÙŽØªÙŽØ¹Ù’Ø¸ÙÙŠÙ…Ù‹Ø§ ÙˆÙŽØ¨ÙØ±Ù‹Ù‘Ø§',
-        latin: '"Allaahumma zid haadzal baita tasyriifan wa ta\'zhiiman wa takriiman wa mahaabah, wa zid man syarraå‘å±•ahu wa \'azh-zhamahu mimman hajjahu awi\'tamarahu tasyriifan wa takriiman wa ta\'zhiiman wa birraa"',
+        arabic: 'اللَّهُمَّ زِدْ هَذَا الْبَيْتَ تَشْرِيفًا وَتَعْظِيمًا وَتَكْرِيمًا وَمَهَابَةً، وَزِدْ مَنْ شَرَّفَهُ وَعَظَّمَهُ مِمَّنْ حَجَّهُ أَوِ اعْتَمَرَهُ تَشْرِيفًا وَتَكْرِيمًا وَتَعْظِيمًا وَبِرًّا',
+        latin: '"Allaahumma zid haadzal baita tasyriifan wa ta\'zhiiman wa takriiman wa mahaabah, wa zid man syarrafahu wa \'azh-zhamahu mimman hajjahu awi\'tamarahu tasyriifan wa takriiman wa ta\'zhiiman wa birraa"',
+        arti: 'Ya Allah, tambahkanlah kemuliaan, keagungan, kehormatan, dan wibawa pada Baitullah ini. Dan tambahkanlah pula kemuliaan, kehormatan, keagungan, dan kebaikan bagi orang-orang yang memuliakannya dari kalangan orang yang berhaji atau berumrah.',
         notes: [
           'Dibaca saat pandangan pertama kali tertuju ke Baitullah.',
           'Berhentilah sejenak di tempat yang aman agar tidak menghalangi arus jamaah thawaf.',
-          'Saat ini merupakan salah satu waktu mustajab untuk memohon ampunan dan doa keluarga.'
+          'Waktu ini merupakan salah satu waktu mustajab untuk memohon ampunan dan doa keselamatan keluarga.'
         ]
       },
       {
         title: 'Doa Wukuf di Padang Arafah',
         category: 'PUNCAK HAJI (9 DZULHIJJAH)',
         duration: '04:30 Menit',
-        arabic: 'Ù„Ø§ÙŽ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„Ø§ÙŽÙ‘ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù ÙˆÙŽØ­Ù’Ø¯ÙŽÙ‡Ù Ù„Ø§ÙŽ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙ‡ÙØŒ Ù„ÙŽÙ‡Ù Ø§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙ ÙˆÙŽÙ„ÙŽÙ‡Ù Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯ÙØŒ ÙˆÙŽÙ‡ÙÙˆÙŽ Ø¹ÙŽÙ„ÙŽÙ‰ ÙƒÙÙ„ÙÙ‘ Ø´ÙŽÙŠÙ’Ø¡Ù Ù‚ÙŽØ¯ÙÙŠØ±ÙŒ',
+        arabic: 'لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',
         latin: '"Laa ilaaha illallaah wahdahu laa syariika lah, lahul mulku wa lahul hamdu, wa huwa \'alaa kulli syai-in qadiir"',
+        arti: 'Tidak ada Tuhan selain Allah semata, tiada sekutu bagi-Nya. Bagi-Nya segala kerajaan dan bagi-Nya segala puji, dan Dia Maha Kuasa atas segala sesuatu.',
         notes: [
           'Sebaik-baik doa adalah doa di hari Arafah.',
           'Perbanyak istighfar, membaca tahlil, memohon husnul khatimah dan kemabruran ibadah.',
-          'Waktu wukuf dimulai sejak tergelincirnya matahari (Zuhur) hingga terbenam matahari.'
+          'Waktu wukuf dimulai sejak tergelincirnya matahari (Zuhur) hingga terbenamnya matahari (Maghrib).'
         ]
       },
       {
         title: 'Doa di Antara Rukun Yamani & Hajar Aswad',
         category: 'SETIAP PUTARAN THAWAF',
         duration: '01:20 Menit',
-        arabic: 'Ø±ÙŽØ¨ÙŽÙ‘Ù†ÙŽØ§ Ø¢ØªÙÙ†ÙŽØ§ ÙÙÙŠ Ø§Ù„Ø¯ÙÙ‘Ù†Ù’ÙŠÙŽØ§ Ø­ÙŽØ³ÙŽÙ†ÙŽØ©Ù‹ ÙˆÙŽÙÙÙŠ Ø§Ù„Ø¢Ø®ÙØ±ÙŽØ©Ù Ø­ÙŽØ³ÙŽÙ†ÙŽØ©Ù‹ ÙˆÙŽÙ‚ÙÙ†ÙŽØ§ Ø¹ÙŽØ°ÙŽØ§Ø¨ÙŽ Ø§Ù„Ù†ÙŽÙ‘Ø§Ø±Ù',
+        arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
         latin: '"Rabbanaa aatinaa fid dunyaa hasanah wa fil aakhirati hasanah wa qinaa \'adzaaban naar"',
+        arti: 'Wahai Tuhan kami, berikanlah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari siksa api neraka.',
         notes: [
-          'Sunnah Rasulullah SAW membaca doa sapu jagat ini di sisi selatan Ka\'bah.',
-          'Dianjurkan mengusap Rukun Yamani jika memungkinkan tanpa saling berdesakan atau menyakiti.'
+          'Sunnah Rasulullah SAW membaca doa sapu jagat ini di sisi selatan Ka\'bah antara Rukun Yamani dan Hajar Aswad.',
+          'Dianjurkan mengusap Rukun Yamani jika memungkinkan tanpa saling berdesakan atau membahayakan fisik.'
         ]
       }
     ];
@@ -3742,7 +3853,7 @@
                 <h4 class="font-bold text-slate-900 text-sm">${post.author}</h4>
                 <div class="flex items-center gap-2">
                   <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">${post.badge}</span>
-                  <span class="text-xs text-slate-400">â€¢ ${post.time}</span>
+                  <span class="text-xs text-slate-400">• ${post.time}</span>
                 </div>
               </div>
             </div>
@@ -4141,7 +4252,7 @@
           <div class="space-y-0.5">
             <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">${m.category}</span>
             <h4 class="font-bold text-slate-900 text-xs sm:text-sm">${m.title}</h4>
-            <span class="text-[11px] text-slate-400">Ust. Zuhdi Rofiqi, LC â€¢ ${m.duration}</span>
+            <span class="text-[11px] text-slate-400">Ust. Zuhdi Rofiqi, LC • ${m.duration}</span>
           </div>
           <div class="w-8 h-8 rounded-full ${idx === activeFiqihIndex ? 'bg-emerald-700 text-white' : 'bg-slate-100 text-slate-600'} flex items-center justify-center shrink-0">
             <i data-lucide="${idx === activeFiqihIndex ? 'volume-2' : 'play'}" class="w-4 h-4"></i>
@@ -4367,13 +4478,13 @@
       let message = '';
 
       if (type === 'angkatan') {
-        message = `*Assalamu'alaikum Warahmatullahi Wabarakatuh sahabat Haji KBIH KUWAISS!* ðŸ•‹\n\nAlhamdulillah, kini telah hadir aplikasi resmi komunitas kita: *KBIH KUWAISS* (Wadah Silaturahmi 18 musim haji & Pembinaan Ibadah Ust. Zuhdi Rofiqi, LC).\n\nYuk segera bergabung untuk:\nâœ¨ Reuni & temu kangen seangkatan\nâœ¨ Mengunggah 5-10 foto kenangan di album *Jejak Mabrur*\nâœ¨ Akses Buku Kenangan (Yearbook Digital)\n\nBuka aplikasinya di sini:\nðŸ‘‰ ${shareUrl}\n\n_Mohon bantu teruskan ke grup alumni kloter kita ya!_`;
+        message = `*Assalamu'alaikum Warahmatullahi Wabarakatuh sahabat Haji KBIH KUWAISS!* 🕋\n\nAlhamdulillah, kini telah hadir aplikasi resmi komunitas kita: *KBIH KUWAISS* (Wadah Silaturahmi 18 musim haji & Pembinaan Ibadah Ust. Zuhdi Rofiqi, LC).\n\nYuk segera bergabung untuk:\n✨ Reuni & temu kangen seangkatan\n✨ Mengunggah 5-10 foto kenangan di album *Jejak Mabrur*\n✨ Akses Buku Kenangan (Yearbook Digital)\n\nBuka aplikasinya di sini:\n👉 ${shareUrl}\n\n_Mohon bantu teruskan ke grup alumni kloter kita ya!_`;
       } else if (type === 'calon') {
-        message = `*Assalamu'alaikum Calon Dhuyufurrahman KBIH KUWAISS* ðŸ•‹\n\nBagi bapak/ibu yang sedang mempersiapkan keberangkatan haji/umrah bersama KBIH KUWAISS, yuk manfaatkan aplikasi *KBIH KUWAISS*:\n\nðŸ“– *Bimbingan Fiqih Praktis* oleh Ust. Zuhdi Rofiqi, LC\nðŸŽ§ *Audio Rekaman Doa & Talbiyah Jernih* untuk hafalan mudah\nðŸ’¬ *Forum "Tanya Alumni"* untuk tanya tips medan di Arafah & Mina\n\nAkses langsung di ponsel Anda:\nðŸ‘‰ ${shareUrl}\n\nSemoga Allah mudahkan dan raih haji mabrur. Aamiin!`;
+        message = `*Assalamu'alaikum Calon Dhuyufurrahman KBIH KUWAISS* 🕋\n\nBagi bapak/ibu yang sedang mempersiapkan keberangkatan haji/umrah bersama KBIH KUWAISS, yuk manfaatkan aplikasi *KBIH KUWAISS*:\n\n📖 *Bimbingan Fiqih Praktis* oleh Ust. Zuhdi Rofiqi, LC\n🎧 *Audio Rekaman Doa & Talbiyah Jernih* untuk hafalan mudah\n💬 *Forum "Tanya Alumni"* untuk tanya tips medan di Arafah & Mina\n\nAkses langsung di ponsel Anda:\n👉 ${shareUrl}\n\nSemoga Allah mudahkan dan raih haji mabrur. Aamiin!`;
       } else if (type === 'keluarga') {
-        message = `*Assalamu'alaikum Saudaraku* ðŸ¤²\n\nKini komunitas haji KBIH KUWAISS memiliki portal digital ukhuwah. Bagi bapak/ibu atau orang tua kita yang sudah berhaji di KBIH KUWAISS, tersedia *Mode Asistensi Keluarga & Mode Ramah Lansia*.\n\nMari bantu daftarkan profil dan foto ibadah orang tua kita di sini:\nðŸ‘‰ ${shareUrl}\n\nSemoga silaturahmi berkah ini terjaga selamanya.`;
+        message = `*Assalamu'alaikum Saudaraku* 🤲\n\nKini komunitas haji KBIH KUWAISS memiliki portal digital ukhuwah. Bagi bapak/ibu atau orang tua kita yang sudah berhaji di KBIH KUWAISS, tersedia *Mode Asistensi Keluarga & Mode Ramah Lansia*.\n\nMari bantu daftarkan profil dan foto ibadah orang tua kita di sini:\n👉 ${shareUrl}\n\nSemoga silaturahmi berkah ini terjaga selamanya.`;
       } else if (type === 'doa') {
-        message = `*Panduan Doa & Bimbingan Fiqih Haji - Ust. Zuhdi Rofiqi, LC* ðŸ•‹\n\nDengarkan lafaz talbiyah, doa melihat Ka'bah, doa hari Arafah dengan kualitas audio jernih dan teks Arab ramah lansia di *KBIH KUWAISS*:\n\nðŸ‘‰ ${shareUrl}\n\nMari jaga kemabruran haji sepanjang hayat.`;
+        message = `*Panduan Doa & Bimbingan Fiqih Haji - Ust. Zuhdi Rofiqi, LC* 🕋\n\nDengarkan lafaz talbiyah, doa melihat Ka'bah, doa hari Arafah dengan kualitas audio jernih dan teks Arab ramah lansia di *KBIH KUWAISS*:\n\n👉 ${shareUrl}\n\nMari jaga kemabruran haji sepanjang hayat.`;
       }
 
       const encoded = encodeURIComponent(message);
@@ -4944,6 +5055,7 @@
     // Jalankan inisialisasi awal saat load
     window.addEventListener('DOMContentLoaded', () => {
       initApp();
+      loadReadabilityPreferences();
       loadLeaderPhotoConfig();
     });
   </script>
