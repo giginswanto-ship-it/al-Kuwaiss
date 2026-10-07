@@ -96,6 +96,18 @@ CREATE TABLE IF NOT EXISTS pengumuman (
 CREATE INDEX IF NOT EXISTS idx_pengumuman_kategori ON pengumuman(kategori);
 
 -- ====================================================================
+-- 3B. TABEL: PENGUMUMAN_BIRO_CONFIG (RUNNING TEXT / SLIGHT BERJALAN)
+-- ====================================================================
+CREATE TABLE IF NOT EXISTS pengumuman_biro_config (
+    id SERIAL PRIMARY KEY,
+    badge VARCHAR(100) DEFAULT 'PENGUMUMAN BIRO',
+    teks TEXT NOT NULL,
+    is_running BOOLEAN DEFAULT TRUE,
+    kecepatan VARCHAR(50) DEFAULT 'normal',
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ====================================================================
 -- 4. TABEL: PIMPINAN_CONFIG (FOTO & POSISI HERO BANNER)
 -- ====================================================================
 CREATE TABLE IF NOT EXISTS pimpinan_config (
@@ -138,6 +150,18 @@ ON CONFLICT (id) DO UPDATE SET
     pos_x = EXCLUDED.pos_x,
     pos_y = EXCLUDED.pos_y,
     zoom = EXCLUDED.zoom,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- ====================================================================
+-- SEED DATA: PENGUMUMAN BIRO RUNNING TEXT
+-- ====================================================================
+INSERT INTO pengumuman_biro_config (id, badge, teks, is_running, kecepatan)
+VALUES (1, 'PENGUMUMAN BIRO', 'Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda. ✦ Pendaftaran Umrah Musim 1448 H & Manasik Haji Akbar telah dibuka. Hubungi Sekretariat KBIH KUWAISS (08129032182).', TRUE, 'normal')
+ON CONFLICT (id) DO UPDATE SET
+    badge = EXCLUDED.badge,
+    teks = EXCLUDED.teks,
+    is_running = EXCLUDED.is_running,
+    kecepatan = EXCLUDED.kecepatan,
     updated_at = CURRENT_TIMESTAMP;
 
 -- ====================================================================

@@ -243,26 +243,80 @@
     .sheet-transition {
       transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
     }
+
+    /* ==========================================================================
+       PENGUMUMAN BIRO - RUNNING TEXT / SLIGHT BERJALAN (TICKER)
+       ========================================================================== */
+    .ticker-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+    }
+    .ticker-track {
+      display: inline-flex;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ticker-slide-anim var(--ticker-duration, 22s) linear infinite;
+    }
+    .ticker-wrapper:hover .ticker-track,
+    .ticker-wrapper:active .ticker-track {
+      animation-play-state: paused;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      padding-right: 48px;
+    }
+    .ticker-static .ticker-track {
+      animation: none !important;
+    }
+    @keyframes ticker-slide-anim {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
-  <!-- Top Announcement Bar (Tausiyah / Agenda Terdekat) -->
-  <div class="bg-emerald-950 text-emerald-100 px-4 py-2 text-xs md:text-sm border-b border-emerald-800">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center gap-2 font-medium">
-        <span class="bg-amber-500 text-stone-900 font-bold px-2 py-0.5 rounded text-xs">PENGUMUMAN BIRO</span>
-        <span>Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.</span>
+  <!-- Top Announcement Bar (Tausiyah / Agenda Terdekat / Running Text) -->
+  <div id="topAnnouncementBar" class="bg-emerald-950 text-emerald-100 px-3 sm:px-4 py-2 text-xs md:text-sm border-b border-emerald-800 transition-all">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2">
+      <!-- Bagian Kiri: Badge & Slight Berjalan (Running Text Ticker) -->
+      <div class="flex items-center gap-2.5 font-medium min-w-0 flex-1 overflow-hidden">
+        <button id="topBarBadgeBtn" onclick="switchTab('announcements')" class="bg-amber-500 hover:bg-amber-400 text-stone-900 font-extrabold px-2.5 py-0.5 rounded text-xs shrink-0 shadow-xs flex items-center gap-1 transition active:scale-95 cursor-pointer" title="Klik untuk lihat rincian pengumuman">
+          <i data-lucide="megaphone" class="w-3 h-3 text-stone-950"></i>
+          <span id="topBarBadgeText">PENGUMUMAN BIRO</span>
+        </button>
+        <div id="topTickerWrapper" class="ticker-wrapper flex-1 min-w-0 py-0.5 cursor-pointer group" onclick="switchTab('announcements')" title="Klik untuk membuka Info Terkini KBIH KUWAISS (Arahkan kursor/tahan sentuhan untuk jeda)">
+          <div id="topTickerTrack" class="ticker-track">
+            <span id="topTickerSpan1" class="ticker-item text-emerald-100 group-hover:text-amber-300 transition">
+              Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda. ✦
+            </span>
+            <span id="topTickerSpan2" class="ticker-item text-emerald-100 group-hover:text-amber-300 transition" aria-hidden="true">
+              Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda. ✦
+            </span>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-2.5 sm:gap-4 text-xs font-semibold">
-        <span class="text-amber-300 hidden sm:inline">Pimpinan: Ust. Zuhdi Rofiqi, LC</span>
+
+      <!-- Bagian Kanan: Info Pimpinan, Tombol Admin & Mode Lansia -->
+      <div class="flex items-center justify-between md:justify-end gap-2.5 sm:gap-4 text-xs font-semibold shrink-0 pt-1 md:pt-0 border-t border-emerald-900/60 md:border-t-0">
+        <span class="text-amber-300 hidden xl:inline font-bold">Pimpinan: Ust. Zuhdi Rofiqi, LC</span>
         <!-- Portal Pengelola Admin -->
-        <a href="admin.html" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-2.5 py-1 rounded-md transition flex items-center gap-1.5 cursor-pointer shadow-xs" title="Buka Portal Admin Pengelola KBIH KUWAISS">
+        <a href="admin.html" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-2.5 py-1 rounded-md transition flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95" title="Buka Portal Admin Pengelola KBIH KUWAISS">
           <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
           <span>Portal Admin</span>
         </a>
         <!-- Toggle Aksesibilitas Lansia -->
-        <button id="seniorModeBtn" onclick="toggleSeniorMode()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-md border border-emerald-600 transition flex items-center gap-1.5 cursor-pointer">
+        <button id="seniorModeBtn" onclick="toggleSeniorMode()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-md border border-emerald-600 transition flex items-center gap-1.5 cursor-pointer active:scale-95">
           <i data-lucide="eye" class="w-3.5 h-3.5"></i>
           <span>Mode Lansia (Teks Besar)</span>
         </button>
@@ -1441,8 +1495,12 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <button onclick="openAddAnnouncementModal()" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-900 hover:to-teal-900 text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 border border-emerald-600">
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+          <button onclick="openTickerSettingsModal()" class="w-full sm:w-auto px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-black rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 border border-amber-400 active:scale-95" title="Atur running text pengumuman biro di bagian atas">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+            <span>⚙️ Atur Teks Berjalan Biro</span>
+          </button>
+          <button onclick="openAddAnnouncementModal()" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-900 hover:to-teal-900 text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 border border-emerald-600 active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4 text-amber-300"></i>
             <span>+ Tulis / Upload Pengumuman Baru</span>
           </button>
@@ -2507,6 +2565,134 @@
   </div>
 
   <!-- ============================================== -->
+  <!-- MODAL: ATUR RUNNING TEXT PENGUMUMAN BIRO       -->
+  <!-- ============================================== -->
+  <div id="modalTickerSettings" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-6" onclick="closeTickerSettingsModal()">
+    <div class="bg-white rounded-3xl max-w-xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200" onclick="event.stopPropagation()">
+      
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between p-4 sm:p-5 border-b border-emerald-900/60 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500 text-stone-950 flex items-center justify-center font-black shadow-lg">
+            <i data-lucide="megaphone" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base sm:text-lg text-white leading-tight">Pengaturan Teks Berjalan Pengumuman Biro</h3>
+            <p class="text-xs text-amber-200 font-medium">Bilah Running Text (Slight Berjalan) di Atas Web</p>
+          </div>
+        </div>
+        <button onclick="closeTickerSettingsModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Live Simulator Preview Box inside Modal -->
+      <div class="p-4 bg-slate-900 border-b border-slate-800">
+        <div class="text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+          <span>Live Preview Berjalan:</span>
+        </div>
+        <div class="bg-emerald-950 text-emerald-100 px-3 py-2 rounded-xl border border-emerald-800 text-xs flex items-center gap-2 overflow-hidden shadow-inner">
+          <span id="previewModalTickerBadge" class="bg-amber-500 text-stone-900 font-extrabold px-2 py-0.5 rounded text-[11px] shrink-0">PENGUMUMAN BIRO</span>
+          <div class="ticker-wrapper flex-1 overflow-hidden min-w-0">
+            <div id="previewModalTickerTrack" class="ticker-track">
+              <span id="previewModalTickerSpan1" class="ticker-item text-emerald-100">...</span>
+              <span id="previewModalTickerSpan2" class="ticker-item text-emerald-100" aria-hidden="true">...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Pengaturan -->
+      <form onsubmit="handleSaveTickerConfig(event)" class="overflow-y-auto p-4 sm:p-6 space-y-4 flex-grow custom-scrollbar">
+        <!-- Status Gerak -->
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1.5">Status Gerak Bilah Pengumuman</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 cursor-pointer text-xs font-bold">
+              <input type="radio" name="tickerStatus" value="running" checked onchange="updateModalTickerLivePreview()" class="text-emerald-700 focus:ring-emerald-600">
+              <span>🟢 Slide Berjalan</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50 cursor-pointer text-xs font-bold">
+              <input type="radio" name="tickerStatus" value="static" onchange="updateModalTickerLivePreview()" class="text-emerald-700 focus:ring-emerald-600">
+              <span>⏸️ Teks Diam</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-red-50 cursor-pointer text-xs font-bold">
+              <input type="radio" name="tickerStatus" value="hidden" onchange="updateModalTickerLivePreview()" class="text-emerald-700 focus:ring-emerald-600">
+              <span>🚫 Sembunyikan</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Label Badge -->
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1.5">Label Badge / Judul Singkat</label>
+          <div class="flex gap-2">
+            <input type="text" id="modalTickerBadgeInput" value="PENGUMUMAN BIRO" oninput="updateModalTickerLivePreview()" class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-xs font-bold focus:outline-emerald-600">
+            <button type="button" onclick="setTickerBadgeQuick('PENGUMUMAN BIRO')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">Biro</button>
+            <button type="button" onclick="setTickerBadgeQuick('INFO TERKINI')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">Info Terkini</button>
+            <button type="button" onclick="setTickerBadgeQuick('AGENDA PENTING')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">Agenda</button>
+          </div>
+        </div>
+
+        <!-- Kecepatan Berjalan -->
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1.5">Kecepatan Gerak Slide (Running Speed)</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center justify-center p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 cursor-pointer text-xs font-bold">
+              <input type="radio" name="tickerSpeed" value="slow" onchange="updateModalTickerLivePreview()" class="mr-1.5 text-emerald-700">
+              <span>🐢 Lambat</span>
+            </label>
+            <label class="flex items-center justify-center p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 cursor-pointer text-xs font-bold">
+              <input type="radio" name="tickerSpeed" value="normal" checked onchange="updateModalTickerLivePreview()" class="mr-1.5 text-emerald-700">
+              <span>🚶 Normal</span>
+            </label>
+            <label class="flex items-center justify-center p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 cursor-pointer text-xs font-bold">
+              <input type="radio" name="tickerSpeed" value="fast" onchange="updateModalTickerLivePreview()" class="mr-1.5 text-emerald-700">
+              <span>⚡ Cepat</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Isi Teks Pengumuman -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold text-slate-700">Isi Teks Pengumuman Berjalan <span class="text-red-500">*</span></label>
+            <button type="button" onclick="autoGenerateTickerFromAnnouncements()" class="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3 text-amber-500"></i>
+              <span>Ambil dari Info Terkini</span>
+            </button>
+          </div>
+          <textarea id="modalTickerTextInput" rows="3" required oninput="updateModalTickerLivePreview()" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-medium focus:outline-emerald-600 leading-relaxed custom-scrollbar" placeholder="Ketik teks pengumuman yang akan mengalir..."></textarea>
+          <p class="text-[11px] text-slate-500 mt-1">Tips: Gunakan tanda pemisah <code>✦</code> atau <code>•</code> untuk memisahkan beberapa pengumuman.</p>
+        </div>
+
+        <!-- Template Teks Cepat -->
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+          <span class="text-[11px] font-bold text-slate-600 block mb-1.5">Pilihan Teks Cepat:</span>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="setTickerTextPreset('reuni')" class="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-slate-200 rounded-lg text-[11px] font-bold transition">📢 Reuni Akbar</button>
+            <button type="button" onclick="setTickerTextPreset('umrah')" class="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-slate-200 rounded-lg text-[11px] font-bold transition">🕋 Manasik & Umrah</button>
+            <button type="button" onclick="setTickerTextPreset('taklim')" class="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-slate-200 rounded-lg text-[11px] font-bold transition">🕌 Pengajian Rutin</button>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeTickerSettingsModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-xs rounded-xl shadow-md transition flex items-center gap-1.5 active:scale-95">
+            <i data-lucide="save" class="w-4 h-4 text-amber-300"></i>
+            <span>Simpan & Terapkan Running Text</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
   <!-- MODAL UPLOAD & ATUR POSISI FOTO PIMPINAN KBIHU  -->
   <!-- ============================================== -->
   <div id="modalLeaderPhoto" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto" onclick="closeLeaderPhotoModal()">
@@ -3325,6 +3511,8 @@
             renderGalleryGrid(galleryPhotos);
             renderForumFeed();
             renderAnnouncements(announcementsData);
+      loadTickerConfig();
+      applyTickerConfig();
             renderYearbookPreview();
             updateKotaDatalist();
             updateDashboardStats();
@@ -4717,6 +4905,197 @@
       } else {
         alert('Silakan salin tautan link aplikasi atau tangkap layar (screenshot) kode QR.');
       }
+    }
+
+    // ==============================================
+    // LOGIKA MODUL: PENGUMUMAN BIRO & RUNNING TEXT (SLIGHT BERJALAN)
+    // ==============================================
+    let tickerConfig = {
+      enabled: true,
+      status: 'running', // 'running', 'static', 'hidden'
+      badge: 'PENGUMUMAN BIRO',
+      text: 'Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda. ✦ Pendaftaran Umrah Musim 1448 H & Manasik Haji Akbar telah dibuka. Hubungi Sekretariat KBIH KUWAISS (08129032182).',
+      speed: 'normal' // 'slow', 'normal', 'fast'
+    };
+
+    function loadTickerConfig() {
+      try {
+        const saved = localStorage.getItem('alkuwaiss_ticker_config');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') {
+            tickerConfig = Object.assign(tickerConfig, parsed);
+          }
+        }
+      } catch (e) {
+        console.warn('Gagal memuat ticker config:', e);
+      }
+    }
+
+    function applyTickerConfig() {
+      const bar = document.getElementById('topAnnouncementBar');
+      const badgeText = document.getElementById('topBarBadgeText');
+      const span1 = document.getElementById('topTickerSpan1');
+      const span2 = document.getElementById('topTickerSpan2');
+      const track = document.getElementById('topTickerTrack');
+      const wrapper = document.getElementById('topTickerWrapper');
+
+      if (!bar) return;
+
+      if (tickerConfig.status === 'hidden' || tickerConfig.enabled === false) {
+        bar.classList.add('hidden');
+        return;
+      } else {
+        bar.classList.remove('hidden');
+      }
+
+      const badgeStr = tickerConfig.badge || 'PENGUMUMAN BIRO';
+      if (badgeText) badgeText.innerText = badgeStr;
+
+      const rawText = tickerConfig.text || 'Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.';
+      const displayText = rawText.trim() + ' ✦ ';
+
+      if (span1) span1.innerText = displayText;
+      if (span2) span2.innerText = displayText;
+
+      let duration = '22s';
+      if (tickerConfig.speed === 'slow') duration = '36s';
+      else if (tickerConfig.speed === 'fast') duration = '14s';
+
+      if (track) {
+        track.style.setProperty('--ticker-duration', duration);
+        if (tickerConfig.status === 'static') {
+          track.style.animation = 'none';
+          if (span2) span2.style.display = 'none';
+        } else {
+          track.style.animation = `ticker-slide-anim ${duration} linear infinite`;
+          if (span2) span2.style.display = 'inline-flex';
+        }
+      }
+      lucide.createIcons();
+    }
+
+    function openTickerSettingsModal() {
+      loadTickerConfig();
+      const modal = document.getElementById('modalTickerSettings');
+      if (!modal) return;
+
+      const badgeInput = document.getElementById('modalTickerBadgeInput');
+      const textInput = document.getElementById('modalTickerTextInput');
+
+      if (badgeInput) badgeInput.value = tickerConfig.badge || 'PENGUMUMAN BIRO';
+      if (textInput) textInput.value = tickerConfig.text || '';
+
+      const statusRadios = document.getElementsByName('tickerStatus');
+      statusRadios.forEach(r => {
+        if (r.value === (tickerConfig.status || 'running')) r.checked = true;
+      });
+
+      const speedRadios = document.getElementsByName('tickerSpeed');
+      speedRadios.forEach(r => {
+        if (r.value === (tickerConfig.speed || 'normal')) r.checked = true;
+      });
+
+      updateModalTickerLivePreview();
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeTickerSettingsModal() {
+      const modal = document.getElementById('modalTickerSettings');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function updateModalTickerLivePreview() {
+      const badgeInput = document.getElementById('modalTickerBadgeInput');
+      const textInput = document.getElementById('modalTickerTextInput');
+      const badgePreview = document.getElementById('previewModalTickerBadge');
+      const span1 = document.getElementById('previewModalTickerSpan1');
+      const span2 = document.getElementById('previewModalTickerSpan2');
+      const track = document.getElementById('previewModalTickerTrack');
+
+      const badgeVal = badgeInput ? badgeInput.value.trim() || 'PENGUMUMAN BIRO' : 'PENGUMUMAN BIRO';
+      const textVal = textInput ? textInput.value.trim() || 'Ketik pengumuman di bawah...' : '';
+
+      if (badgePreview) badgePreview.innerText = badgeVal;
+      if (span1) span1.innerText = textVal + ' ✦ ';
+      if (span2) span2.innerText = textVal + ' ✦ ';
+
+      const statusVal = Array.from(document.getElementsByName('tickerStatus')).find(r => r.checked)?.value || 'running';
+      const speedVal = Array.from(document.getElementsByName('tickerSpeed')).find(r => r.checked)?.value || 'normal';
+
+      let duration = '22s';
+      if (speedVal === 'slow') duration = '36s';
+      else if (speedVal === 'fast') duration = '14s';
+
+      if (track) {
+        track.style.setProperty('--ticker-duration', duration);
+        if (statusVal === 'static') {
+          track.style.animation = 'none';
+          if (span2) span2.style.display = 'none';
+        } else {
+          track.style.animation = `ticker-slide-anim ${duration} linear infinite`;
+          if (span2) span2.style.display = 'inline-flex';
+        }
+      }
+    }
+
+    function setTickerBadgeQuick(val) {
+      const input = document.getElementById('modalTickerBadgeInput');
+      if (input) {
+        input.value = val;
+        updateModalTickerLivePreview();
+      }
+    }
+
+    function setTickerTextPreset(type) {
+      const input = document.getElementById('modalTickerTextInput');
+      if (!input) return;
+
+      if (type === 'reuni') {
+        input.value = 'Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda. ✦ KBIH KUWAISS: Merajut Kenangan Meraih Berkah.';
+      } else if (type === 'umrah') {
+        input.value = 'Pendaftaran Umrah Musim 1448 H & Manasik Haji Akbar telah dibuka. Hubungi Sekretariat KBIH KUWAISS (08129032182). ✦ Kuota Terbatas!';
+      } else if (type === 'taklim') {
+        input.value = "Kajian & Ta'lim Bulanan Alumni KBIH KUWAISS bersama Ust. Zuhdi Rofiqi, LC. Ahad Pertama Setiap Bulan di Masjid Al-Ikhlas Cimuning.";
+      }
+      updateModalTickerLivePreview();
+    }
+
+    function autoGenerateTickerFromAnnouncements() {
+      if (!announcementsData || announcementsData.length === 0) {
+        alert('Tidak ada data pengumuman yang tersimpan untuk dirangkum.');
+        return;
+      }
+      const titles = announcementsData.slice(0, 4).map(a => `📢 ${a.title} (${a.date || 'Agenda'})`);
+      const merged = titles.join(' ✦ ');
+      const input = document.getElementById('modalTickerTextInput');
+      if (input) {
+        input.value = merged;
+        updateModalTickerLivePreview();
+      }
+    }
+
+    function handleSaveTickerConfig(e) {
+      e.preventDefault();
+      const badgeInput = document.getElementById('modalTickerBadgeInput');
+      const textInput = document.getElementById('modalTickerTextInput');
+      const statusVal = Array.from(document.getElementsByName('tickerStatus')).find(r => r.checked)?.value || 'running';
+      const speedVal = Array.from(document.getElementsByName('tickerSpeed')).find(r => r.checked)?.value || 'normal';
+
+      tickerConfig.badge = badgeInput ? badgeInput.value.trim() : 'PENGUMUMAN BIRO';
+      tickerConfig.text = textInput ? textInput.value.trim() : '';
+      tickerConfig.status = statusVal;
+      tickerConfig.speed = speedVal;
+      tickerConfig.enabled = statusVal !== 'hidden';
+
+      try {
+        localStorage.setItem('alkuwaiss_ticker_config', JSON.stringify(tickerConfig));
+      } catch (err) {}
+
+      applyTickerConfig();
+      closeTickerSettingsModal();
+      alert('Alhamdulillah! Pengaturan Pengumuman Biro berhasil disimpan dan teks berjalan (running text) telah aktif.');
     }
 
     // ==============================================
