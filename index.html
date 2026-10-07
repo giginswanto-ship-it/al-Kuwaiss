@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <!-- Anti-Cache Headers untuk Menjamin Website Selalu Versi Terbaru -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <title>KBIH KUWAISS - Komunitas Jamaah Haji & Alumni</title>
   
   <!-- Optimasi Khusus Android & iOS Mobile Web App -->
@@ -3345,7 +3350,14 @@
       event.target.value = '';
     }
 
+    const APP_BUILD_VERSION = '2026.10.07.v4';
+
     function initApp() {
+      const localVer = localStorage.getItem('alkuwaiss_build_ver');
+      if (localVer !== APP_BUILD_VERSION) {
+        localStorage.setItem('alkuwaiss_build_ver', APP_BUILD_VERSION);
+        saveSystemState();
+      }
       loadSystemState();
       populateUserRoleSelect();
       renderDirectoryGrid(jamaahDatabase);
