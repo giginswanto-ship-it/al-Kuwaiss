@@ -4412,9 +4412,9 @@
 
               <!-- Overlay Animasi Bantuan Sentuh / Zoom -->
               <div class="absolute inset-0 bg-black/35 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center p-3">
-                <span class="bg-black/80 backdrop-blur-md text-white text-xs font-black px-3.5 py-2 rounded-full flex items-center gap-2 shadow-2xl border border-white/30 transform scale-95 group-hover/img:scale-100 transition-transform">
-                  <i data-lucide="zoom-in" class="w-4 h-4 text-amber-300"></i>
-                  <span>Zoom Real Foto</span>
+                <span class="bg-black/80 backdrop-blur-md text-white text-xs font-black px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-2xl border border-white/30 transform scale-95 group-hover/img:scale-100 transition-transform select-none">
+                  <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-amber-300"></i>
+                  <span>Zoom Foto</span>
                 </span>
               </div>
             </div>
@@ -4431,21 +4431,21 @@
             </div>
           </div>
 
-          <!-- Tombol Aksi: Zoom Real Foto & Simpan ke HP -->
-          <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center gap-2">
-            <button onclick="openPhotoZoomModal(${p.id})" class="flex-1 py-2.5 px-3 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-xs active:scale-95 min-h-[44px]" title="Buka Real Zoom Foto HD">
-              <i data-lucide="zoom-in" class="w-4 h-4 text-amber-300"></i>
-              <span>Zoom Real</span>
+          <!-- Tombol Aksi: Zoom Foto, Simpan, Edit, Hapus (Kompres & Proporsional Sesuai Space) -->
+          <div class="p-2 sm:p-2.5 bg-slate-50 border-t border-slate-100 flex items-center gap-1.5 select-none">
+            <button onclick="openPhotoZoomModal(${p.id})" class="flex-1 py-1.5 px-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition shadow-xs active:scale-95 h-8 sm:h-9 select-none whitespace-nowrap min-w-0" title="Buka Real Zoom Foto HD">
+              <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-amber-300 shrink-0"></i>
+              <span class="truncate">Zoom</span>
             </button>
-            <button onclick="event.stopPropagation(); downloadPhotoDirect(${p.id})" class="py-2.5 px-3.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-xs active:scale-95 min-h-[44px]" title="Simpan / Download Foto ke HP">
-              <i data-lucide="download" class="w-4 h-4 text-stone-950"></i>
-              <span>Simpan</span>
+            <button onclick="event.stopPropagation(); downloadPhotoDirect(${p.id})" class="flex-1 py-1.5 px-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-xs active:scale-95 h-8 sm:h-9 select-none whitespace-nowrap min-w-0" title="Simpan / Download Foto ke HP">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-stone-950 shrink-0"></i>
+              <span class="truncate">Simpan</span>
             </button>
-            <button onclick="openEditPhotoModal(${p.id})" class="p-2.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition shadow-xs min-h-[44px] min-w-[40px] flex items-center justify-center" title="Edit Data Foto">
-              <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+            <button onclick="openEditPhotoModal(${p.id})" class="w-8 sm:w-9 h-8 sm:h-9 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition shadow-xs flex items-center justify-center shrink-0 active:scale-95 select-none" title="Edit Data Foto">
+              <i data-lucide="pencil" class="w-3.5 h-3.5 text-slate-600"></i>
             </button>
-            <button onclick="deleteGalleryPhoto(${p.id})" class="p-2.5 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition shadow-xs min-h-[44px] min-w-[40px] flex items-center justify-center" title="Hapus Foto">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            <button onclick="deleteGalleryPhoto(${p.id})" class="w-8 sm:w-9 h-8 sm:h-9 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition shadow-xs flex items-center justify-center shrink-0 active:scale-95 select-none" title="Hapus Foto">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-600"></i>
             </button>
           </div>
         </div>

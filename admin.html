@@ -2237,9 +2237,9 @@
               
               <!-- Hover Zoom Badge -->
               <div class="absolute inset-0 bg-black/35 opacity-0 group-hover/admimg:opacity-100 transition-opacity flex items-center justify-center p-2">
-                <span class="bg-black/80 backdrop-blur-sm text-white text-xs font-black px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl border border-white/20">
-                  <i data-lucide="zoom-in" class="w-4 h-4 text-amber-300"></i>
-                  <span>Zoom Real Foto</span>
+                <span class="bg-black/80 backdrop-blur-sm text-white text-xs font-black px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl border border-white/20 select-none">
+                  <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-amber-300"></i>
+                  <span>Zoom Foto</span>
                 </span>
               </div>
             </div>
@@ -2249,25 +2249,22 @@
               <div class="text-[11px] text-slate-400">${p.date}</div>
             </div>
           </div>
-          <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-1.5">
-            <div class="flex items-center gap-1.5">
-              <button onclick="openAdminPhotoZoomModal(${p.id})" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs rounded-xl transition flex items-center gap-1 border border-emerald-200" title="Zoom Real Foto">
-                <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-emerald-700"></i>
-                <span class="hidden sm:inline">Zoom</span>
-              </button>
-              <button onclick="downloadAdminPhotoDirect(${p.id})" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 font-black text-xs rounded-xl transition flex items-center gap-1 border border-amber-200" title="Simpan / Download Foto ke HP">
-                <i data-lucide="download" class="w-3.5 h-3.5 text-stone-950"></i>
-                <span>Simpan</span>
-              </button>
-            </div>
-            <div class="flex items-center gap-1">
-              <button onclick="openAdminEditPhotoModal(${p.id})" class="p-1.5 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl transition flex items-center border border-slate-300" title="Update Foto">
-                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-              </button>
-              <button onclick="deleteAdminPhoto(${p.id})" class="p-1.5 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl transition flex items-center border border-red-200" title="Hapus Foto">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
+          <!-- Tombol Aksi: Zoom Foto, Simpan, Edit, Hapus (Kompres & Proporsional Sesuai Space) -->
+          <div class="p-2 sm:p-2.5 bg-slate-50 border-t border-slate-100 flex items-center gap-1.5 select-none">
+            <button onclick="openAdminPhotoZoomModal(${p.id})" class="flex-1 py-1.5 px-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition shadow-xs active:scale-95 h-8 sm:h-9 select-none whitespace-nowrap min-w-0" title="Buka Real Zoom Foto HD">
+              <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-amber-300 shrink-0"></i>
+              <span class="truncate">Zoom</span>
+            </button>
+            <button onclick="downloadAdminPhotoDirect(${p.id})" class="flex-1 py-1.5 px-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-xs active:scale-95 h-8 sm:h-9 select-none whitespace-nowrap min-w-0" title="Simpan / Download Foto ke HP">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-stone-950 shrink-0"></i>
+              <span class="truncate">Simpan</span>
+            </button>
+            <button onclick="openAdminEditPhotoModal(${p.id})" class="w-8 sm:w-9 h-8 sm:h-9 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition shadow-xs flex items-center justify-center shrink-0 active:scale-95 select-none" title="Edit Data Foto">
+              <i data-lucide="pencil" class="w-3.5 h-3.5 text-slate-600"></i>
+            </button>
+            <button onclick="deleteAdminPhoto(${p.id})" class="w-8 sm:w-9 h-8 sm:h-9 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition shadow-xs flex items-center justify-center shrink-0 active:scale-95 select-none" title="Hapus Foto">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-600"></i>
+            </button>
           </div>
         </div>
       `).join('');
