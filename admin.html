@@ -639,7 +639,7 @@
           <p class="text-xs sm:text-sm text-slate-500">Unduh seluruh manifest jamaah, foto galeri, pengumuman, dan riwayat forum ke format file aman JSON.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           
           <!-- Box Ekspor Data -->
           <div class="p-6 rounded-3xl bg-emerald-50 border border-emerald-200 space-y-4">
@@ -676,6 +676,64 @@
             </label>
           </div>
 
+          <!-- Box Ekspor PostgreSQL SQL Script (data_lokal.sql) -->
+          <div class="p-6 rounded-3xl bg-blue-50 border border-blue-200 space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-blue-800 text-amber-300 flex items-center justify-center font-bold shadow">
+              <i data-lucide="database" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-lg">Ekspor PostgreSQL (.sql)</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Unduh file <strong>data_lokal.sql</strong> terformat resmi PostgreSQL untuk migrasi data ke database live/cloud (Supabase, Neon, VPS, cPanel).
+              </p>
+            </div>
+            <button onclick="exportDatabasePostgreSQL()" class="w-full py-3 bg-blue-800 hover:bg-blue-900 text-white font-black text-xs sm:text-sm rounded-xl transition shadow flex items-center justify-center gap-2 active:scale-95">
+              <i data-lucide="file-code" class="w-4 h-4 text-amber-300"></i>
+              <span>Unduh data_lokal.sql</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Panduan Perintah Terminal Restore Database -->
+        <div class="p-5 sm:p-6 rounded-3xl bg-slate-900 text-slate-100 border border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-blue-600/30 text-blue-400 flex items-center justify-center font-bold">
+                <i data-lucide="terminal" class="w-4 h-4"></i>
+              </div>
+              <h4 class="font-bold text-sm sm:text-base text-white">Panduan Terminal: Restore Database ke Server Live</h4>
+            </div>
+            <span class="text-xs text-emerald-400 font-mono bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-800">PostgreSQL CLI</span>
+          </div>
+
+          <div class="space-y-3.5 text-xs">
+            <div>
+              <div class="text-slate-300 mb-1.5 font-sans font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+                <span>Opsi 1: File Plain SQL (.sql) — Format Standar</span>
+              </div>
+              <div class="bg-black/70 p-3 sm:p-3.5 rounded-xl border border-white/10 text-emerald-300 font-mono flex items-center justify-between gap-3 overflow-x-auto">
+                <code class="whitespace-nowrap select-all">psql -U username_live -d nama_db_live -f data_lokal.sql</code>
+                <button onclick="copyToClipboard('psql -U username_live -d nama_db_live -f data_lokal.sql')" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-[11px] rounded-lg font-sans transition shrink-0">Salin</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-slate-300 mb-1.5 font-sans font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+                <span>Opsi 2: File Format Custom (.dump)</span>
+              </div>
+              <div class="bg-black/70 p-3 sm:p-3.5 rounded-xl border border-white/10 text-amber-300 font-mono flex items-center justify-between gap-3 overflow-x-auto">
+                <code class="whitespace-nowrap select-all">pg_restore -U username_live -d nama_db_live -v --no-owner --no-privileges data_lokal.dump</code>
+                <button onclick="copyToClipboard('pg_restore -U username_live -d nama_db_live -v --no-owner --no-privileges data_lokal.dump')" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-[11px] rounded-lg font-sans transition shrink-0">Salin</button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-800/80 rounded-xl text-slate-300 text-[11px] leading-relaxed border border-slate-700/60">
+              💡 <strong>Tips Teknis:</strong> Flag <code>--no-owner</code> dan <code>--no-privileges</code> sangat penting agar tidak terjadi error izin akses saat restore ke database live yang memiliki nama user berbeda dari database lokal.
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2245,6 +2303,135 @@
     // ==============================================================
     // E. EKSPOR & IMPOR DATABASE (.JSON)
     // ==============================================================
+
+    // Fungsi Ekspor Database ke Format PostgreSQL (.sql)
+    function exportDatabasePostgreSQL() {
+      function escapeSql(str) {
+        if (str === null || str === undefined) return 'NULL';
+        return "'" + String(str).replace(/'/g, "''") + "'";
+      }
+
+      let sql = `-- ====================================================================
+-- SISTEM MANAJEMEN DATABASE KBIH KUWAISS
+-- File: data_lokal.sql
+-- Format: Plain SQL (PostgreSQL 12+)
+-- Diekspor Otomatis dari Portal Admin KBIH KUWAISS
+-- Tanggal Ekspor: ${new Date().toISOString()}
+--
+-- CARA RESTORE KE DATABASE LIVE:
+-- psql -U username_live -d nama_db_live -f data_lokal.sql
+-- ====================================================================
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS jamaah (
+    id BIGINT PRIMARY KEY,
+    nama VARCHAR(255) NOT NULL,
+    angkatan VARCHAR(10) NOT NULL,
+    tahun VARCHAR(10),
+    kota VARCHAR(100),
+    alamat TEXT,
+    regu VARCHAR(100),
+    wa VARCHAR(50),
+    mahrom VARCHAR(255),
+    status VARCHAR(100),
+    avatar TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS galeri_foto (
+    id BIGINT PRIMARY KEY,
+    jamaah_nama VARCHAR(255),
+    angkatan VARCHAR(50),
+    kategori VARCHAR(50) NOT NULL,
+    judul VARCHAR(255) NOT NULL,
+    image_url TEXT NOT NULL,
+    tanggal VARCHAR(100),
+    ukuran VARCHAR(50),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pengumuman (
+    id BIGINT PRIMARY KEY,
+    judul VARCHAR(255) NOT NULL,
+    kategori VARCHAR(50) NOT NULL,
+    tipe_dokumen VARCHAR(100),
+    tanggal_kegiatan VARCHAR(100),
+    lokasi VARCHAR(255),
+    pembimbing VARCHAR(255) DEFAULT 'Ust. Zuhdi Rofiqi, LC',
+    highlight VARCHAR(255),
+    ringkasan TEXT,
+    image_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pimpinan_config (
+    id SERIAL PRIMARY KEY,
+    nama_pimpinan VARCHAR(255) NOT NULL DEFAULT 'Ust. Zuhdi Rofiqi, LC',
+    foto_src TEXT DEFAULT 'ustadz_zuhdi.jpg',
+    pos_x INT DEFAULT 50,
+    pos_y INT DEFAULT 20,
+    zoom INT DEFAULT 100,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO pimpinan_config (id, nama_pimpinan, foto_src, pos_x, pos_y, zoom)
+VALUES (1, 'Ust. Zuhdi Rofiqi, LC', ${escapeSql(leaderPhotoConfig.src || 'ustadz_zuhdi.jpg')}, ${leaderPhotoConfig.posX || 50}, ${leaderPhotoConfig.posY || 20}, ${leaderPhotoConfig.zoom || 100})
+ON CONFLICT (id) DO UPDATE SET
+    foto_src = EXCLUDED.foto_src, pos_x = EXCLUDED.pos_x, pos_y = EXCLUDED.pos_y, zoom = EXCLUDED.zoom, updated_at = CURRENT_TIMESTAMP;
+`;
+
+      // Seeding Jamaah
+      jamaahDatabase.forEach(j => {
+        sql += `INSERT INTO jamaah (id, nama, angkatan, tahun, kota, alamat, regu, wa, mahrom, status, avatar)
+VALUES (${j.id}, ${escapeSql(j.name)}, ${escapeSql(j.angkatan)}, ${escapeSql(j.tahun)}, ${escapeSql(j.kota)}, ${escapeSql(j.alamat)}, ${escapeSql(j.regu)}, ${escapeSql(j.wa)}, ${escapeSql(j.mahrom)}, ${escapeSql(j.status)}, ${escapeSql(j.avatar)})
+ON CONFLICT (id) DO UPDATE SET
+    nama = EXCLUDED.nama, angkatan = EXCLUDED.angkatan, kota = EXCLUDED.kota, wa = EXCLUDED.wa, alamat = EXCLUDED.alamat;\n`;
+      });
+
+      // Seeding Galeri Foto
+      galleryPhotos.forEach(g => {
+        sql += `INSERT INTO galeri_foto (id, jamaah_nama, angkatan, kategori, judul, image_url, tanggal, ukuran)
+VALUES (${g.id}, ${escapeSql(g.jamaahName)}, ${escapeSql(g.angkatan)}, ${escapeSql(g.category)}, ${escapeSql(g.title)}, ${escapeSql(g.image)}, ${escapeSql(g.date)}, ${escapeSql(g.size)})
+ON CONFLICT (id) DO UPDATE SET
+    judul = EXCLUDED.judul, image_url = EXCLUDED.image_url;\n`;
+      });
+
+      // Seeding Pengumuman
+      announcementsData.forEach(a => {
+        sql += `INSERT INTO pengumuman (id, judul, kategori, tipe_dokumen, tanggal_kegiatan, lokasi, ringkasan, image_url)
+VALUES (${a.id}, ${escapeSql(a.title)}, ${escapeSql(a.category)}, ${escapeSql(a.pamphletType)}, ${escapeSql(a.date)}, ${escapeSql(a.location)}, ${escapeSql(a.summary)}, ${escapeSql(a.image)})
+ON CONFLICT (id) DO UPDATE SET
+    judul = EXCLUDED.judul, ringkasan = EXCLUDED.ringkasan, image_url = EXCLUDED.image_url;\n`;
+      });
+
+      sql += `\nCOMMIT;\n`;
+
+      const blob = new Blob([sql], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'data_lokal.sql';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      alert('Alhamdulillah! File data_lokal.sql (PostgreSQL) berhasil diunduh.');
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('Perintah berhasil disalin ke clipboard:\n' + text);
+        });
+      } else {
+        alert('Perintah:\n' + text);
+      }
+    }
+
     function exportDatabaseJSON() {
       const exportData = {
         metadata: {
