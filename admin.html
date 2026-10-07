@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <title>Portal Admin KBIH KUWAISS - Panel Pengelola Resmi</title>
+  
+  <!-- Optimasi Android & iOS Mobile Web App -->
+  <meta name="theme-color" content="#065F46">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emeraldPrimary: '#065F46',
+            emeraldDark: '#022C22',
+            emeraldLight: '#ECFDF5',
+            goldAccent: '#D97706',
+            goldLight: '#FEF3C7',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            arabic: ['"Scheherazade New"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+    }
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      padding-top: var(--sat);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    button, a, input, select, textarea {
+      touch-action: manipulation;
+    }
+    /* Touch Target Standar Android 48dp */
+    .btn-touch-48 {
+      min-height: 48px;
+      min-width: 48px;
+    }
+    input, select, textarea {
+      min-height: 48px;
+      font-size: 16px !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #94A3B8;
+      border-radius: 9999px;
+    }
+    .admin-nav-active {
+      background-color: #065F46 !important;
+      color: #FFFFFF !important;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(6, 95, 70, 0.25);
+    }
+    .admin-nav-active svg {
+      color: #F59E0B !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-slate-50">
+
+  <!-- ============================================== -->
+  <!-- 1. LOGIN SCREEN (PROTEKSI AKSES PENGELOLA)     -->
+  <!-- ============================================== -->
+  <div id="adminLoginScreen" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6">
+      
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-900 text-amber-300 mx-auto flex items-center justify-center shadow-lg font-black">
+          <i data-lucide="shield-check" class="w-9 h-9"></i>
+        </div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-black uppercase tracking-wider">
+          Portal Khusus Pengelola
+        </div>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">KBIH KUWAISS Admin</h2>
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Pusat kendali data jamaah, foto Jejak Mabrur, pengumuman brosur umrah/haji, dan foto profil pimpinan.
+        </p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="text-xs font-extrabold text-slate-700 block mb-1.5">KATA SANDI / PIN ADMIN</label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+            <input type="password" id="adminPasswordInput" required placeholder="Masukkan PIN Admin..." class="w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-300 rounded-xl text-base focus:outline-emerald-600 font-semibold text-slate-900">
+            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600">
+              <i data-lucide="eye" id="eyeIcon" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-700"></i>
+            <span>PIN Pengelola: <strong>kuwaiss2026</strong> atau <strong>admin123</strong></span>
+          </p>
+        </div>
+
+        <div class="pt-1 space-y-2">
+          <button type="submit" class="w-full py-3.5 bg-emerald-800 hover:bg-emerald-900 active:scale-95 text-white font-black text-sm rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+            <i data-lucide="log-in" class="w-4 h-4 text-amber-300"></i>
+            <span>Buka Portal Pengelola</span>
+          </button>
+          
+          <a href="index.html" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Kembali ke Halaman Web Jamaah</span>
+          </a>
+        </div>
+      </form>
+
+      <div class="border-t border-slate-100 pt-3 text-center">
+        <span class="text-[11px] text-slate-400">Pimpinan: Ust. Zuhdi Rofiqi, LC • Mustika Jaya, Kota Bekasi</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- 2. ADMIN HEADER & NAVIGATION                   -->
+  <!-- ============================================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20 gap-3">
+        
+        <!-- Logo & Branding Admin -->
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 flex items-center justify-center text-amber-300 shadow-md shrink-0">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-lg sm:text-xl font-black text-emerald-950 tracking-tight">KBIH KUWAISS</span>
+              <span class="bg-amber-400 text-stone-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">Admin Panel</span>
+            </div>
+            <p class="text-xs text-slate-500 font-semibold line-clamp-1">Pusat Kelola Data Jamaah, Foto, & Pengumuman</p>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi Cepat Header -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a href="index.html" target="_blank" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-300 shadow-xs active:scale-95" title="Buka website tampilan jamaah">
+            <i data-lucide="external-link" class="w-4 h-4 text-emerald-700"></i>
+            <span class="hidden sm:inline">Lihat Web Jamaah</span>
+          </a>
+
+          <button onclick="handleAdminLogout()" class="px-3.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-red-200 active:scale-95" title="Keluar dari Panel Admin">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Keluar</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Tab Bar Sub-Modul Admin -->
+      <nav class="flex items-center gap-1.5 py-2 overflow-x-auto custom-scrollbar border-t border-slate-100 text-xs font-bold">
+        <button onclick="switchAdminTab('overview')" id="tab-overview" class="admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 admin-nav-active transition whitespace-nowrap">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-amber-400"></i>
+          <span>Ringkasan</span>
+        </button>
+        <button onclick="switchAdminTab('jamaah')" id="tab-jamaah" class="admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+          <i data-lucide="users" class="w-4 h-4 text-emerald-700"></i>
+          <span>Kelola Jamaah</span>
+        </button>
+        <button onclick="switchAdminTab('gallery')" id="tab-gallery" class="admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+          <i data-lucide="camera" class="w-4 h-4 text-teal-700"></i>
+          <span>Kelola Galeri Foto</span>
+        </button>
+        <button onclick="switchAdminTab('announcements')" id="tab-announcements" class="admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+          <i data-lucide="megaphone" class="w-4 h-4 text-amber-600"></i>
+          <span>Kelola Pengumuman & Brosur</span>
+        </button>
+        <button onclick="switchAdminTab('leader')" id="tab-leader" class="admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+          <i data-lucide="crown" class="w-4 h-4 text-amber-500"></i>
+          <span>Foto Pimpinan</span>
+        </button>
+        <button onclick="switchAdminTab('backup')" id="tab-backup" class="admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+          <i data-lucide="database" class="w-4 h-4 text-blue-600"></i>
+          <span>Cadangan & Ekspor</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- 3. MAIN CONTAINER ADMIN CONTENT                -->
+  <!-- ============================================== -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- ============================================================== -->
+    <!-- VIEW A: OVERVIEW & STATISTIK                                   -->
+    <!-- ============================================================== -->
+    <div id="view-admin-overview" class="space-y-6">
+      
+      <!-- Banner Sambutan Admin -->
+      <div class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-emerald-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-black border border-amber-400/30">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            KONTROL SISTEM KBIH KUWAISS
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
+            Selamat Datang di Portal Pengelola Biro
+          </h1>
+          <p class="text-xs sm:text-sm text-emerald-100 leading-relaxed font-normal">
+            Gunakan panel ini untuk mengedit data jamaah 18 angkatan, menambah foto kenangan sakral Jejak Mabrur, mempublikasikan jadwal umrah, serta mengunci posisi foto pimpinan Ust. Zuhdi Rofiqi, LC.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto shrink-0">
+          <button onclick="openAdminAddJamaahModal()" class="px-4 py-3 bg-amber-400 hover:bg-amber-300 text-stone-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center justify-center gap-2 active:scale-95">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>+ Tambah Jamaah</span>
+          </button>
+          <button onclick="openAdminAddAnnouncementModal()" class="px-4 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 border border-emerald-500 active:scale-95">
+            <i data-lucide="megaphone" class="w-4 h-4 text-amber-300"></i>
+            <span>+ Tulis Pengumuman</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Statistik Real-time -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2 cursor-pointer hover:border-emerald-500 transition" onclick="switchAdminTab('jamaah')">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Jamaah Terdata</span>
+            <div id="admStatTotalJamaah" class="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">0</div>
+          </div>
+          <span class="text-xs text-emerald-700 font-semibold flex items-center gap-1">
+            <span>Kelola Master Jamaah</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2 cursor-pointer hover:border-teal-500 transition" onclick="switchAdminTab('gallery')">
+          <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+            <i data-lucide="camera" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Foto Jejak Mabrur</span>
+            <div id="admStatTotalFoto" class="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">0</div>
+          </div>
+          <span class="text-xs text-teal-700 font-semibold flex items-center gap-1">
+            <span>Kelola Galeri Foto</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2 cursor-pointer hover:border-amber-500 transition" onclick="switchAdminTab('announcements')">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+            <i data-lucide="megaphone" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pengumuman & Brosur</span>
+            <div id="admStatTotalPengumuman" class="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">0</div>
+          </div>
+          <span class="text-xs text-amber-700 font-semibold flex items-center gap-1">
+            <span>Kelola Info Terkini</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2 cursor-pointer hover:border-blue-500 transition" onclick="switchAdminTab('backup')">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
+            <i data-lucide="database" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Status Database</span>
+            <div class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Sinkron (Aktif)</div>
+          </div>
+          <span class="text-xs text-blue-700 font-semibold flex items-center gap-1">
+            <span>Cadangkan Data JSON</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Pintasan Operasional Cepat Admin -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
+          Pintasan Cepat Operasional Pengelola
+        </h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          
+          <button onclick="switchAdminTab('jamaah'); openAdminAddJamaahModal();" class="p-4 rounded-2xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-left transition flex items-center gap-3 active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="user-plus" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Pendaftaran Jamaah Baru</div>
+              <p class="text-xs text-slate-500">Input data paspor, nomor WA & foto</p>
+            </div>
+          </button>
+
+          <button onclick="switchAdminTab('gallery'); openAdminUploadPhotoModal();" class="p-4 rounded-2xl bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-left transition flex items-center gap-3 active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-teal-700 text-white flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Upload Foto Jejak Mabrur</div>
+              <p class="text-xs text-slate-500">Unggah foto Ihram, Arafah, Thawaf</p>
+            </div>
+          </button>
+
+          <button onclick="switchAdminTab('announcements'); openAdminAddAnnouncementModal();" class="p-4 rounded-2xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 text-left transition flex items-center gap-3 active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="megaphone" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Buat Pengumuman & Brosur</div>
+              <p class="text-xs text-slate-500">Jadwal umrah, manasik, dan kajian</p>
+            </div>
+          </button>
+
+          <button onclick="switchAdminTab('leader')" class="p-4 rounded-2xl bg-slate-50 hover:bg-purple-50 border border-slate-200 hover:border-purple-300 text-left transition flex items-center gap-3 active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-purple-700 text-white flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Presisi Foto Pimpinan</div>
+              <p class="text-xs text-slate-500">Atur zoom & posisi peci Ust. Zuhdi</p>
+            </div>
+          </button>
+
+          <button onclick="exportDatabaseJSON()" class="p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-left transition flex items-center gap-3 active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-blue-700 text-white flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="download" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Unduh Cadangan (.json)</div>
+              <p class="text-xs text-slate-500">Simpan backup seluruh database biro</p>
+            </div>
+          </button>
+
+          <a href="index.html" target="_blank" class="p-4 rounded-2xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-left transition flex items-center gap-3 active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-emerald-900 text-amber-300 flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="globe" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Buka Halaman Jamaah</div>
+              <p class="text-xs text-slate-500">Tinjau tampilan publik di tab baru</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW B: KELOLA MASTER DATA JAMAAH (18 ANGKATAN)                -->
+    <!-- ============================================================== -->
+    <div id="view-admin-jamaah" class="hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900">Manajemen Data Jamaah 18 Angkatan</h2>
+            <p class="text-xs sm:text-sm text-slate-500">Kelola direktori nama, foto profil, angkatan, nomor WhatsApp, alamat, dan mahrom.</p>
+          </div>
+          
+          <button onclick="openAdminAddJamaahModal()" class="px-5 py-3 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-xs sm:text-sm rounded-xl transition shadow-md flex items-center gap-2 self-start md:self-auto active:scale-95">
+            <i data-lucide="user-plus" class="w-4 h-4 text-amber-300"></i>
+            <span>+ Daftarkan Jamaah Baru</span>
+          </button>
+        </div>
+
+        <!-- Filter Pencarian & Angkatan -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Cari Nama / No. Porsi / Kota</label>
+            <div class="relative">
+              <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="text" id="adminJamaahSearch" oninput="filterAdminJamaahList()" placeholder="Ketik nama jamaah..." class="w-full pl-11 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Filter Angkatan Musim Haji</label>
+            <select id="adminJamaahAngkatanFilter" onchange="filterAdminJamaahList()" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-emerald-600">
+              <option value="ALL">Semua Angkatan (Angkatan 1 s/d 18)</option>
+              <option value="18">Angkatan 18 (2026 - Berjalan)</option>
+              <option value="17">Angkatan 17 (2025)</option>
+              <option value="16">Angkatan 16 (2023)</option>
+              <option value="15">Angkatan 15 (2022)</option>
+              <option value="14">Angkatan 14 (2021)</option>
+              <option value="13">Angkatan 13 (2019)</option>
+              <option value="12">Angkatan 12 (2018)</option>
+              <option value="11">Angkatan 11 (2017)</option>
+              <option value="10">Angkatan 10 (2016)</option>
+              <option value="9">Angkatan 9 (2015)</option>
+              <option value="8">Angkatan 8 (2014)</option>
+              <option value="7">Angkatan 7 (2013)</option>
+              <option value="6">Angkatan 6 (2012)</option>
+              <option value="5">Angkatan 5 (2011)</option>
+              <option value="4">Angkatan 4 (2010)</option>
+              <option value="3">Angkatan 3 (2009)</option>
+              <option value="2">Angkatan 2 (2008)</option>
+              <option value="1">Angkatan 1 (2007)</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <button onclick="resetAdminJamaahFilter()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs sm:text-sm transition border border-slate-300">
+              Reset Filter
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabel Daftar Jamaah -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">
+            Total Jamaah Ditampilkan: <strong id="adminJamaahCountBadge" class="text-slate-900">0</strong>
+          </span>
+          <span class="text-xs text-emerald-800 font-semibold sm:hidden flex items-center gap-1">
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i> Geser tabel ke samping
+          </span>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs sm:text-sm whitespace-nowrap sm:whitespace-normal min-w-[700px]">
+            <thead class="bg-slate-100 text-slate-700 font-bold border-y border-slate-200">
+              <tr>
+                <th class="py-3 px-4">No</th>
+                <th class="py-3 px-4">Nama Lengkap & Foto</th>
+                <th class="py-3 px-4">Angkatan</th>
+                <th class="py-3 px-4">Kota & Alamat</th>
+                <th class="py-3 px-4">WhatsApp</th>
+                <th class="py-3 px-4">Regu / Mahrom</th>
+                <th class="py-3 px-4 text-center">Aksi Pengelola</th>
+              </tr>
+            </thead>
+            <tbody id="adminJamaahTableBody" class="divide-y divide-slate-100">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW C: KELOLA GALERI FOTO JEJAK MABRUR                        -->
+    <!-- ============================================================== -->
+    <div id="view-admin-gallery" class="hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100 text-teal-900 text-xs font-bold mb-1">
+            Pilar 3: Dokumentasi Sakral
+          </div>
+          <h2 class="text-2xl font-black text-slate-900">Manajemen Galeri Jejak Mabrur</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Kelola album 5-10 foto sakral (Ihram, Arafah, Muzdalifah, Thawaf, Raudhah) per jamaah.</p>
+        </div>
+
+        <button onclick="openAdminUploadPhotoModal()" class="px-5 py-3 bg-teal-800 hover:bg-teal-900 text-white font-black text-xs sm:text-sm rounded-xl transition shadow-md flex items-center gap-2 self-start md:self-auto active:scale-95">
+          <i data-lucide="upload-cloud" class="w-4 h-4 text-amber-300"></i>
+          <span>+ Upload Foto Baru</span>
+        </button>
+      </div>
+
+      <!-- Filter Kategori Galeri -->
+      <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+        <button onclick="filterAdminGalleryCategory('ALL')" class="adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white" data-cat="ALL">Semua Kategori</button>
+        <button onclick="filterAdminGalleryCategory('IHRAM')" class="adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50" data-cat="IHRAM">Pakaian Ihram</button>
+        <button onclick="filterAdminGalleryCategory('ARAFAH')" class="adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50" data-cat="ARAFAH">Wukuf di Arafah</button>
+        <button onclick="filterAdminGalleryCategory('MUZDALIFAH')" class="adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50" data-cat="MUZDALIFAH">Mabit Muzdalifah / Mina</button>
+        <button onclick="filterAdminGalleryCategory('THAWAF')" class="adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50" data-cat="THAWAF">Thawaf & Sa'i Ka'bah</button>
+        <button onclick="filterAdminGalleryCategory('ZIARAH')" class="adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50" data-cat="ZIARAH">Ziarah Madinah & Raudhah</button>
+      </div>
+
+      <!-- Grid Foto Admin -->
+      <div id="adminGalleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW D: KELOLA PENGUMUMAN & BROSUR DIGITAL                     -->
+    <!-- ============================================================== -->
+    <div id="view-admin-announcements" class="hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold mb-1">
+            Papan Informasi Resmi KBIHU
+          </div>
+          <h2 class="text-2xl font-black text-slate-900">Kelola Pengumuman, Jadwal & Brosur</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Publikasikan jadwal umrah, flyer ta'lim bulanan, dokumen syarat haji, dan surat edaran.</p>
+        </div>
+
+        <button onclick="openAdminAddAnnouncementModal()" class="px-5 py-3 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-xs sm:text-sm rounded-xl transition shadow-md flex items-center gap-2 self-start md:self-auto active:scale-95">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-amber-300"></i>
+          <span>+ Tulis / Upload Pengumuman</span>
+        </button>
+      </div>
+
+      <!-- Grid Pengumuman Admin -->
+      <div id="adminAnnouncementsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW E: PENGATURAN FOTO PROFIL PIMPINAN KBIH KUWAISS          -->
+    <!-- ============================================================== -->
+    <div id="view-admin-leader" class="hidden space-y-6">
+      
+      <div class="bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white p-6 sm:p-8 rounded-3xl border border-emerald-800 shadow-xl space-y-6">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-800/80 pb-5">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500 text-stone-950 flex items-center justify-center font-black shadow-lg">
+              <i data-lucide="crown" class="w-6 h-6 text-stone-950"></i>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-extrabold uppercase tracking-wide border border-amber-400/30">
+                Pimpinan KBIH KUWAISS
+              </div>
+              <h3 class="text-xl font-black text-white mt-1">Pengaturan Foto Profil Ust. Zuhdi Rofiqi, LC</h3>
+              <p class="text-xs text-emerald-200">Foto resmi yang tampil pada kartu sambutan utama di halaman depan.</p>
+            </div>
+          </div>
+
+          <button type="button" onclick="openAdminLeaderPhotoModal()" class="bg-amber-400 hover:bg-amber-300 text-stone-950 font-black px-5 py-3 rounded-xl text-xs sm:text-sm transition flex items-center gap-2 shadow-lg active:scale-95 border border-amber-300">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-stone-950"></i>
+            <span>Atur Presisi & Zoom Foto</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          
+          <div class="md:col-span-4 flex flex-col items-center text-center">
+            <div class="w-36 h-54 sm:w-44 sm:h-64 rounded-3xl overflow-hidden ring-4 ring-amber-400 shadow-2xl bg-emerald-950 flex items-center justify-center relative">
+              <img id="adminLeaderImgCard" src="ustadz_zuhdi.jpg" alt="Ust. Zuhdi Rofiqi, LC" class="w-full h-full object-cover" style="object-position: 50% 20%; transform: scale(1.0);">
+              <div class="absolute -bottom-1 -right-1 bg-amber-500 text-stone-950 font-black text-xs px-2.5 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1">
+                <i data-lucide="award" class="w-3 h-3 text-stone-950"></i>
+                <span>Pimpinan</span>
+              </div>
+            </div>
+            <span class="text-sm font-bold text-white mt-2.5">Ust. Zuhdi Rofiqi, LC</span>
+            <span class="text-xs text-amber-300 font-semibold">🔒 Posisi Terkunci & Permanen</span>
+          </div>
+
+          <div class="md:col-span-8 space-y-4 text-xs">
+            <div class="bg-black/30 backdrop-blur-sm p-5 rounded-2xl border border-white/10 space-y-2.5">
+              <div class="font-bold text-amber-300 flex items-center gap-2 text-sm">
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                Status Konfigurasi Saat Ini:
+              </div>
+              <ul class="text-emerald-100 space-y-2 list-disc list-inside leading-relaxed text-xs">
+                <li>Posisi Horizontal (Kiri/Kanan): <strong id="statPosX" class="text-amber-300">50%</strong></li>
+                <li>Posisi Vertikal (Atas/Bawah): <strong id="statPosY" class="text-amber-300">20%</strong></li>
+                <li>Skala / Zoom Wajah: <strong id="statZoom" class="text-amber-300">1.00x</strong></li>
+                <li>Status Penyimpanan: <strong class="text-emerald-300">Tersimpan di Penyimpanan Sistem</strong></li>
+              </ul>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <button type="button" onclick="openAdminLeaderPhotoModal()" class="px-5 py-3 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl border border-white/30 transition flex items-center gap-2 text-xs sm:text-sm active:scale-95">
+                <i data-lucide="camera" class="w-4 h-4 text-amber-400"></i>
+                <span>Ganti Foto Baru / Sesuaikan Slider</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW F: CADANGAN DATA, EKSPOR & PULIHKAN                       -->
+    <!-- ============================================================== -->
+    <div id="view-admin-backup" class="hidden space-y-6">
+      
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-900 text-xs font-bold mb-1">
+            Keamanan Data Biro
+          </div>
+          <h2 class="text-2xl font-black text-slate-900">Cadangan & Pemulihan Basis Data</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Unduh seluruh manifest jamaah, foto galeri, pengumuman, dan riwayat forum ke format file aman JSON.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          
+          <!-- Box Ekspor Data -->
+          <div class="p-6 rounded-3xl bg-emerald-50 border border-emerald-200 space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-800 text-amber-300 flex items-center justify-center font-bold shadow">
+              <i data-lucide="download" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-lg">Ekspor Seluruh Database (.json)</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Unduh file cadangan yang memuat seluruh data jamaah 18 angkatan, album Jejak Mabrur, dan info pengumuman ke komputer Anda.
+              </p>
+            </div>
+            <button onclick="exportDatabaseJSON()" class="w-full py-3 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-xs sm:text-sm rounded-xl transition shadow flex items-center justify-center gap-2 active:scale-95">
+              <i data-lucide="download" class="w-4 h-4 text-amber-300"></i>
+              <span>Unduh File Cadangan JSON</span>
+            </button>
+          </div>
+
+          <!-- Box Impor Data -->
+          <div class="p-6 rounded-3xl bg-amber-50 border border-amber-200 space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center font-bold shadow">
+              <i data-lucide="upload" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-lg">Pulihkan / Impor Database (.json)</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Pulihkan data dari file cadangan sebelumnya. Sistem akan otomatis memperbarui database dan menyinkronkan seluruh tampilan.
+              </p>
+            </div>
+            <label class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm rounded-xl transition shadow flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Pilih & Impor File JSON</span>
+              <input type="file" accept=".json" onchange="importDatabaseJSON(event)" class="hidden">
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================== -->
+  <!-- MODAL 1: TAMBAH / DAFTARKAN JAMAAH BARU        -->
+  <!-- ============================================== -->
+  <div id="adminAddJamaahModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4" onclick="closeAdminAddJamaahModal()">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+            <i data-lucide="user-plus" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-lg text-slate-900 leading-tight">Daftarkan Data Jamaah Baru</h3>
+            <p class="text-xs text-slate-500">Entri data resmi manifest KBIH KUWAISS</p>
+          </div>
+        </div>
+        <button onclick="closeAdminAddJamaahModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleAdminCreateJamaah(event)" class="space-y-3.5">
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Nama Lengkap Sesuai Paspor <span class="text-red-500">*</span></label>
+          <input type="text" id="admNewJamaahName" required placeholder="Contoh: Muhammad Ilham Pratama" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Status / Angkatan <span class="text-red-500">*</span></label>
+            <select id="admNewJamaahAngkatan" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-emerald-600">
+              <option value="18">Angkatan 18 (2026 / 1447 H)</option>
+              <option value="17">Angkatan 17 (2024–2025 / 1446 H)</option>
+              <option value="16">Angkatan 16 (2023 / 1445 H)</option>
+              <option value="15">Angkatan 15 (2022 / 1444 H)</option>
+              <option value="14">Angkatan 14 (2021 / 1443 H)</option>
+              <option value="13">Angkatan 13 (2019 / 1441 H)</option>
+              <option value="12">Angkatan 12 (2018 / 1440 H)</option>
+              <option value="11">Angkatan 11 (2017 / 1439 H)</option>
+              <option value="10">Angkatan 10 (2016 / 1438 H)</option>
+              <option value="9">Angkatan 9 (2015 / 1437 H)</option>
+              <option value="8">Angkatan 8 (2014 / 1436 H)</option>
+              <option value="7">Angkatan 7 (2013 / 1435 H)</option>
+              <option value="6">Angkatan 6 (2012 / 1434 H)</option>
+              <option value="5">Angkatan 5 (2011 / 1433 H)</option>
+              <option value="4">Angkatan 4 (2010 / 1432 H)</option>
+              <option value="3">Angkatan 3 (2009 / 1431 H)</option>
+              <option value="2">Angkatan 2 (2008 / 1430 H)</option>
+              <option value="1">Angkatan 1 (2007 / 1428 H)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Kota Asal <span class="text-red-500">*</span></label>
+            <input type="text" id="admNewJamaahKota" required placeholder="Contoh: Bandung" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Nomor WhatsApp Aktif <span class="text-red-500">*</span></label>
+            <input type="text" id="admNewJamaahWA" required placeholder="0812xxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Nomor Maktab / Regu</label>
+            <input type="text" id="admNewJamaahMaktab" placeholder="Maktab 65 / Regu 01" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Nama Mahrom / Pasangan (Opsional)</label>
+          <input type="text" id="admNewJamaahMahrom" placeholder="Nama Suami/Istri/Keluarga Pendamping" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Alamat Lengkap Domisili</label>
+          <textarea id="admNewJamaahAlamat" rows="2" placeholder="Jl. Raya Bekasi Timur Regensi..." class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600"></textarea>
+        </div>
+
+        <!-- Foto Profil Jamaah -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <label class="text-xs font-bold text-slate-800 block">Pilih File Foto Profil Jamaah (Opsional)</label>
+          <input type="file" id="admNewJamaahAvatarInput" accept="image/*" onchange="previewAdminNewAvatar(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-800 file:text-white hover:file:bg-emerald-900 cursor-pointer">
+          <div id="admNewAvatarPreview" class="hidden mt-2 w-14 h-14 rounded-2xl overflow-hidden border border-emerald-600">
+            <img id="admNewAvatarImg" src="" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeAdminAddJamaahModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs sm:text-sm font-bold text-slate-700 transition">
+            Batal
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center gap-2 active:scale-95">
+            <i data-lucide="check" class="w-4 h-4 text-amber-300"></i>
+            <span>Simpan Jamaah</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL 2: EDIT DATA JAMAAH                      -->
+  <!-- ============================================== -->
+  <div id="adminEditJamaahModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4" onclick="closeAdminEditJamaahModal()">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+            <i data-lucide="user-pen" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-lg text-slate-900 leading-tight">Edit Data Jamaah</h3>
+            <p class="text-xs text-slate-500">Perbarui profil resmi dan nomor kontak</p>
+          </div>
+        </div>
+        <button onclick="closeAdminEditJamaahModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleAdminUpdateJamaah(event)" class="space-y-3.5">
+        <input type="hidden" id="admEditJamaahId">
+        
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Nama Lengkap Sesuai Paspor <span class="text-red-500">*</span></label>
+          <input type="text" id="admEditJamaahName" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Angkatan <span class="text-red-500">*</span></label>
+            <select id="admEditJamaahAngkatan" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-emerald-600">
+              <option value="18">Angkatan 18 (2026)</option>
+              <option value="17">Angkatan 17 (2025)</option>
+              <option value="16">Angkatan 16 (2023)</option>
+              <option value="15">Angkatan 15 (2022)</option>
+              <option value="14">Angkatan 14 (2021)</option>
+              <option value="13">Angkatan 13 (2019)</option>
+              <option value="12">Angkatan 12 (2018)</option>
+              <option value="11">Angkatan 11 (2017)</option>
+              <option value="10">Angkatan 10 (2016)</option>
+              <option value="9">Angkatan 9 (2015)</option>
+              <option value="8">Angkatan 8 (2014)</option>
+              <option value="7">Angkatan 7 (2013)</option>
+              <option value="6">Angkatan 6 (2012)</option>
+              <option value="5">Angkatan 5 (2011)</option>
+              <option value="4">Angkatan 4 (2010)</option>
+              <option value="3">Angkatan 3 (2009)</option>
+              <option value="2">Angkatan 2 (2008)</option>
+              <option value="1">Angkatan 1 (2007)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Kota Asal <span class="text-red-500">*</span></label>
+            <input type="text" id="admEditJamaahKota" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Nomor WhatsApp Aktif <span class="text-red-500">*</span></label>
+            <input type="text" id="admEditJamaahWA" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Nomor Maktab / Regu</label>
+            <input type="text" id="admEditJamaahMaktab" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Nama Mahrom / Pasangan</label>
+          <input type="text" id="admEditJamaahMahrom" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Alamat Domisili</label>
+          <textarea id="admEditJamaahAlamat" rows="2" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600"></textarea>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <label class="text-xs font-bold text-slate-800 block">Ganti Foto Profil Jamaah</label>
+          <div class="flex items-center gap-3">
+            <img id="admEditAvatarPreview" src="" class="w-14 h-14 rounded-2xl object-cover border border-emerald-600 shrink-0">
+            <input type="file" id="admEditAvatarInput" accept="image/*" onchange="previewAdminEditAvatar(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-800 file:text-white cursor-pointer">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeAdminEditJamaahModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs sm:text-sm font-bold text-slate-700 transition">
+            Batal
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center gap-2 active:scale-95">
+            <i data-lucide="check" class="w-4 h-4 text-amber-300"></i>
+            <span>Simpan Perubahan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL 3: UPLOAD FOTO GALERI JEJAK MABRUR       -->
+  <!-- ============================================== -->
+  <div id="adminUploadPhotoModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4" onclick="closeAdminUploadPhotoModal()">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+            <i data-lucide="camera" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-lg text-slate-900 leading-tight">Upload Foto Jejak Mabrur</h3>
+            <p class="text-xs text-slate-500">Mendukung batch upload foto suci</p>
+          </div>
+        </div>
+        <button onclick="closeAdminUploadPhotoModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleAdminUploadPhoto(event)" class="space-y-3.5">
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Kategori Sakral <span class="text-red-500">*</span></label>
+          <select id="admNewPhotoCategory" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-emerald-600">
+            <option value="IHRAM">Pakaian Ihram</option>
+            <option value="ARAFAH">Wukuf di Arafah</option>
+            <option value="MUZDALIFAH">Mabit Muzdalifah & Mina</option>
+            <option value="THAWAF">Thawaf / Sa'i Ka'bah</option>
+            <option value="ZIARAH">Ziarah Madinah & Raudhah</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Judul / Momen Kenangan <span class="text-red-500">*</span></label>
+          <input type="text" id="admNewPhotoTitle" required placeholder="Contoh: Berdoa di Jabal Rahmah bersama rombongan..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Nama Jamaah</label>
+            <input type="text" id="admNewPhotoJamaah" placeholder="Nama Jamaah..." class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Angkatan</label>
+            <input type="text" id="admNewPhotoAngkatan" placeholder="Contoh: Angkatan 18" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Pilih File Foto (Bisa Banyak / Batch) <span class="text-red-500">*</span></label>
+          <input type="file" id="admNewPhotoFileInput" accept="image/*" multiple onchange="handleAdminPhotoBatchSelect(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-800 file:text-white cursor-pointer">
+          <div id="admPhotoBatchPreview" class="grid grid-cols-4 gap-2 pt-2 hidden"></div>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeAdminUploadPhotoModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs sm:text-sm font-bold text-slate-700 transition">
+            Batal
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center gap-2 active:scale-95">
+            <i data-lucide="upload-cloud" class="w-4 h-4 text-amber-300"></i>
+            <span>Simpan Foto</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL 4: PUBLIKASI INFO & BROSUR PENGUMUMAN    -->
+  <!-- ============================================== -->
+  <div id="adminAddAnnouncementModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4" onclick="closeAdminAddAnnouncementModal()">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+            <i data-lucide="megaphone" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-lg text-slate-900 leading-tight">Publikasi Pengumuman / Brosur Digital</h3>
+            <p class="text-xs text-slate-500">Tampil resmi di menu Info Terkini aplikasi</p>
+          </div>
+        </div>
+        <button onclick="closeAdminAddAnnouncementModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleAdminCreateAnnouncement(event)" class="space-y-3.5">
+        
+        <!-- Template Cepat 1-Klik -->
+        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 space-y-2">
+          <span class="text-xs font-bold text-amber-950 block">Template Cepat Penulisan (1-Klik):</span>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs">
+            <button type="button" onclick="applyAdminAnnTemplate('JADWAL_UMRAH')" class="py-2 px-2 bg-white hover:bg-emerald-50 text-slate-800 rounded-xl border border-amber-200 font-bold text-center">🕋 Umrah</button>
+            <button type="button" onclick="applyAdminAnnTemplate('PENDAFTARAN')" class="py-2 px-2 bg-white hover:bg-emerald-50 text-slate-800 rounded-xl border border-amber-200 font-bold text-center">📝 Pendaftaran</button>
+            <button type="button" onclick="applyAdminAnnTemplate('PENGAJIAN')" class="py-2 px-2 bg-white hover:bg-emerald-50 text-slate-800 rounded-xl border border-amber-200 font-bold text-center">🕌 Pengajian</button>
+            <button type="button" onclick="applyAdminAnnTemplate('DOKUMEN')" class="py-2 px-2 bg-white hover:bg-emerald-50 text-slate-800 rounded-xl border border-amber-200 font-bold text-center">📄 Dokumen</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Judul Agenda / Brosur <span class="text-red-500">*</span></label>
+          <input type="text" id="admNewAnnTitle" required placeholder="Contoh: Jadwal Keberangkatan Umrah Kloter Syawal..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Kategori Info <span class="text-red-500">*</span></label>
+            <select id="admNewAnnCategory" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-emerald-600">
+              <option value="JADWAL_UMRAH">🕋 Jadwal Umrah Terdekat</option>
+              <option value="PENDAFTARAN">📝 Pendaftaran Umrah/Haji</option>
+              <option value="PENGAJIAN">🕌 Pertemuan Pengajian</option>
+              <option value="DOKUMEN">📄 Kelengkapan Dokumen</option>
+              <option value="LAINNYA">✨ Informasi Lain</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Format Tipe Pamflet</label>
+            <input type="text" id="admNewAnnType" value="Pamflet Flyer Digital" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Waktu / Jadwal Pelaksanaan <span class="text-red-500">*</span></label>
+            <input type="text" id="admNewAnnDate" required placeholder="Ahad, 19 April 2026 (08.30 WIB)" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Tempat / Lokasi Acara <span class="text-red-500">*</span></label>
+            <input type="text" id="admNewAnnLocation" required placeholder="Kantor KBIH KUWAISS Cimuning..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Rincian Pengumuman <span class="text-red-500">*</span></label>
+          <textarea id="admNewAnnSummary" rows="3" required placeholder="Tuliskan keterangan lengkap..." class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:outline-emerald-600"></textarea>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Upload File Pamflet / Brosur Gambar (JPG/PNG)</label>
+          <input type="file" id="admNewAnnFileInput" accept="image/*" onchange="previewAdminAnnPamphlet(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-800 file:text-white cursor-pointer">
+          <div id="admAnnPamphletPreviewContainer" class="hidden mt-2 max-h-40 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 flex items-center justify-center">
+            <img id="admAnnPamphletPreviewImg" src="" class="h-40 object-contain">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeAdminAddAnnouncementModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs sm:text-sm font-bold text-slate-700 transition">
+            Batal
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center gap-2 active:scale-95">
+            <i data-lucide="send" class="w-4 h-4 text-amber-300"></i>
+            <span>Publikasikan Sekarang</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL 5: ATUR & KUNCI POSISI FOTO PIMPINAN     -->
+  <!-- ============================================== -->
+  <div id="adminLeaderPhotoModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4" onclick="closeAdminLeaderPhotoModal()">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500 text-stone-950 flex items-center justify-center font-black">
+            <i data-lucide="camera" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-lg text-slate-900 leading-tight">Presisi Foto Profil Pimpinan</h3>
+            <p class="text-xs text-slate-500">Atur zoom dan posisi peci Ust. Zuhdi Rofiqi, LC</p>
+          </div>
+        </div>
+        <button onclick="closeAdminLeaderPhotoModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Live Preview Box -->
+        <div class="flex flex-col items-center justify-center bg-slate-100 p-4 rounded-3xl border border-slate-200">
+          <div class="w-36 h-54 sm:w-40 sm:h-60 rounded-3xl overflow-hidden ring-4 ring-amber-400 shadow-xl bg-emerald-950 flex items-center justify-center relative">
+            <img id="admLivePreviewLeaderImg" src="ustadz_zuhdi.jpg" class="w-full h-full object-cover" style="object-position: 50% 20%; transform: scale(1.0);">
+          </div>
+          <span class="text-xs font-bold text-slate-700 mt-2">Ust. Zuhdi Rofiqi, LC</span>
+        </div>
+
+        <!-- Upload File Baru -->
+        <div class="p-3.5 bg-amber-50 rounded-2xl border border-amber-200 space-y-1.5">
+          <label class="text-xs font-bold text-slate-800 block">Pilih Foto Pimpinan Baru dari Galeri:</label>
+          <input type="file" id="admLeaderFileInput" accept="image/*" onchange="handleAdminLeaderPhotoUpload(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-800 file:text-white cursor-pointer">
+        </div>
+
+        <!-- Sliders Presisi -->
+        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs">
+          <div>
+            <div class="flex justify-between font-bold text-slate-700 mb-1">
+              <span>Posisi Vertikal (Atas/Bawah)</span>
+              <span id="admLabelPosY" class="font-mono text-emerald-700">20%</span>
+            </div>
+            <input type="range" id="admRangePosY" min="0" max="100" value="20" oninput="updateAdminLeaderPhotoLive()" class="w-full accent-emerald-700 cursor-pointer">
+          </div>
+
+          <div>
+            <div class="flex justify-between font-bold text-slate-700 mb-1">
+              <span>Posisi Horizontal (Kiri/Kanan)</span>
+              <span id="admLabelPosX" class="font-mono text-emerald-700">50%</span>
+            </div>
+            <input type="range" id="admRangePosX" min="0" max="100" value="50" oninput="updateAdminLeaderPhotoLive()" class="w-full accent-emerald-700 cursor-pointer">
+          </div>
+
+          <div>
+            <div class="flex justify-between font-bold text-slate-700 mb-1">
+              <span>Zoom / Ukuran Skala Wajah</span>
+              <span id="admLabelZoom" class="font-mono text-emerald-700">1.00x</span>
+            </div>
+            <input type="range" id="admRangeZoom" min="100" max="220" value="100" oninput="updateAdminLeaderPhotoLive()" class="w-full accent-emerald-700 cursor-pointer">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeAdminLeaderPhotoModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs sm:text-sm font-bold text-slate-700 transition">
+            Batal
+          </button>
+          <button type="button" onclick="saveAdminLeaderPhotoSettings()" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center gap-2 active:scale-95">
+            <i data-lucide="lock" class="w-4 h-4 text-amber-300"></i>
+            <span>Terapkan & Kunci Tetap</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- JAVASCRIPT LOGIKA PORTAL ADMIN                 -->
+  <!-- ============================================== -->
+  <script>
+    // State Admin
+    let isAdminAuthenticated = false;
+    let currentAdminTab = 'overview';
+
+    // Master Data Sinkron dengan index.html
+    let jamaahDatabase = [];
+    let galleryPhotos = [];
+    let announcementsData = [];
+    let forumPosts = [];
+
+    let leaderPhotoConfig = {
+      src: 'ustadz_zuhdi.jpg',
+      posX: 50,
+      posY: 20,
+      zoom: 100
+    };
+
+    // Load Database dari localStorage
+    function loadAdminSystemState() {
+      try {
+        const savedJamaah = localStorage.getItem('alkuwaiss_jamaah_db');
+        if (savedJamaah) {
+          const parsed = JSON.parse(savedJamaah);
+          if (Array.isArray(parsed)) jamaahDatabase = parsed;
+        }
+
+        const savedPhotos = localStorage.getItem('alkuwaiss_gallery_photos');
+        if (savedPhotos) {
+          const parsed = JSON.parse(savedPhotos);
+          if (Array.isArray(parsed)) galleryPhotos = parsed;
+        }
+
+        const savedAnnouncements = localStorage.getItem('alkuwaiss_announcements');
+        if (savedAnnouncements) {
+          const parsed = JSON.parse(savedAnnouncements);
+          if (Array.isArray(parsed)) announcementsData = parsed;
+        }
+
+        const savedForum = localStorage.getItem('alkuwaiss_forum_posts');
+        if (savedForum) {
+          const parsed = JSON.parse(savedForum);
+          if (Array.isArray(parsed)) forumPosts = parsed;
+        }
+
+        const savedLeader = localStorage.getItem('alkuwaiss_leader_photo_config');
+        if (savedLeader) {
+          leaderPhotoConfig = Object.assign(leaderPhotoConfig, JSON.parse(savedLeader));
+        }
+      } catch (e) {
+        console.warn('Gagal memuat local state admin:', e);
+      }
+    }
+
+    function saveAdminSystemState() {
+      try {
+        localStorage.setItem('alkuwaiss_jamaah_db', JSON.stringify(jamaahDatabase));
+        localStorage.setItem('alkuwaiss_gallery_photos', JSON.stringify(galleryPhotos));
+        localStorage.setItem('alkuwaiss_announcements', JSON.stringify(announcementsData));
+        localStorage.setItem('alkuwaiss_forum_posts', JSON.stringify(forumPosts));
+        localStorage.setItem('alkuwaiss_leader_photo_config', JSON.stringify(leaderPhotoConfig));
+      } catch (e) {
+        console.warn('Gagal menyimpan local state:', e);
+      }
+    }
+
+    // Autentikasi Admin
+    function checkAdminSession() {
+      const auth = sessionStorage.getItem('alkuwaiss_admin_auth');
+      if (auth === 'true') {
+        isAdminAuthenticated = true;
+        const loginScreen = document.getElementById('adminLoginScreen');
+        if (loginScreen) loginScreen.classList.add('hidden');
+      }
+    }
+
+    function handleAdminLogin(e) {
+      if (e) e.preventDefault();
+      const pwd = document.getElementById('adminPasswordInput').value.trim();
+      if (pwd === 'kuwaiss2026' || pwd === 'admin123' || pwd === 'admin') {
+        sessionStorage.setItem('alkuwaiss_admin_auth', 'true');
+        isAdminAuthenticated = true;
+        document.getElementById('adminLoginScreen').classList.add('hidden');
+        initAdminDashboard();
+        alert('Selamat datang di Portal Admin Resmi KBIH KUWAISS.');
+      } else {
+        alert('PIN Admin salah. Silakan masukkan kuwaiss2026 atau admin123.');
+      }
+    }
+
+    function handleAdminLogout() {
+      sessionStorage.removeItem('alkuwaiss_admin_auth');
+      window.location.reload();
+    }
+
+    function togglePasswordVisibility() {
+      const inp = document.getElementById('adminPasswordInput');
+      const icon = document.getElementById('eyeIcon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+      } else {
+        inp.type = 'password';
+      }
+    }
+
+    // Inisialisasi Admin Dashboard
+    function initAdminDashboard() {
+      loadAdminSystemState();
+      updateAdminStats();
+      renderAdminJamaahTable(jamaahDatabase);
+      renderAdminGalleryGrid(galleryPhotos);
+      renderAdminAnnouncementsGrid(announcementsData);
+      applyAdminLeaderPhotoCard();
+      lucide.createIcons();
+    }
+
+    function updateAdminStats() {
+      document.getElementById('admStatTotalJamaah').innerText = jamaahDatabase.length.toLocaleString();
+      document.getElementById('admStatTotalFoto').innerText = galleryPhotos.length.toLocaleString();
+      document.getElementById('admStatTotalPengumuman').innerText = announcementsData.length.toLocaleString();
+      document.getElementById('adminJamaahCountBadge').innerText = jamaahDatabase.length.toLocaleString() + ' Orang';
+    }
+
+    // Tab Navigasi Admin
+    function switchAdminTab(tabKey) {
+      currentAdminTab = tabKey;
+      const tabs = ['overview', 'jamaah', 'gallery', 'announcements', 'leader', 'backup'];
+      tabs.forEach(t => {
+        const view = document.getElementById('view-admin-' + t);
+        const btn = document.getElementById('tab-' + t);
+        if (view) {
+          if (t === tabKey) view.classList.remove('hidden');
+          else view.classList.add('hidden');
+        }
+        if (btn) {
+          if (t === tabKey) {
+            btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 admin-nav-active transition whitespace-nowrap';
+          } else {
+            btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap';
+          }
+        }
+      });
+      lucide.createIcons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==============================================================
+    // A. LOGIKA KELOLA JAMAAH (CRUD)
+    // ==============================================================
+    let tempAdminAvatarUrl = '';
+
+    function renderAdminJamaahTable(data) {
+      const tbody = document.getElementById('adminJamaahTableBody');
+      if (!tbody) return;
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-12 text-center text-slate-400">
+              <i data-lucide="users" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+              <p class="font-bold text-slate-600">Tidak ada data jamaah yang cocok.</p>
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = data.map((j, idx) => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4 font-semibold text-slate-500">${idx + 1}</td>
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-3">
+              <img src="${j.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120'}" class="w-10 h-10 rounded-xl object-cover ring-2 ring-emerald-600 shrink-0">
+              <div>
+                <strong class="text-slate-900 block font-bold text-sm">${j.name}</strong>
+                <span class="text-xs text-slate-500">ID: #${j.id}</span>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${j.angkatan === '18' ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-emerald-100 text-emerald-900 border border-emerald-200'}">
+              Angkatan ${j.angkatan} (${j.tahun || '-'})
+            </span>
+          </td>
+          <td class="py-3 px-4">
+            <div class="text-xs">
+              <strong class="text-slate-800 block">${j.kota || '-'}</strong>
+              <span class="text-slate-500 text-[11px] line-clamp-1">${j.alamat || '-'}</span>
+            </div>
+          </td>
+          <td class="py-3 px-4">
+            <a href="https://wa.me/${(j.wa || '').replace(/[^0-9]/g, '')}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-bold text-xs hover:bg-emerald-100 transition border border-emerald-200">
+              <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+              <span>${j.wa || '-'}</span>
+            </a>
+          </td>
+          <td class="py-3 px-4">
+            <div class="text-xs">
+              <span class="text-slate-700 block font-medium">${j.regu || 'Regu Umum'}</span>
+              ${j.mahrom ? `<span class="text-amber-800 font-semibold text-[11px]">Mahrom: ${j.mahrom}</span>` : ''}
+            </div>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="openAdminEditJamaahModal(${j.id})" class="p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 transition border border-amber-200" title="Edit Data Jamaah">
+                <i data-lucide="pencil" class="w-4 h-4"></i>
+              </button>
+              <button onclick="deleteAdminJamaah(${j.id})" class="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 transition border border-red-200" title="Hapus Jamaah">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function filterAdminJamaahList() {
+      const q = (document.getElementById('adminJamaahSearch')?.value || '').toLowerCase().trim();
+      const ang = document.getElementById('adminJamaahAngkatanFilter')?.value || 'ALL';
+
+      const filtered = jamaahDatabase.filter(j => {
+        const matchSearch = !q || (j.name || '').toLowerCase().includes(q) || 
+                                   (j.kota || '').toLowerCase().includes(q) ||
+                                   (j.alamat || '').toLowerCase().includes(q) ||
+                                   (j.wa || '').toLowerCase().includes(q);
+        const matchAng = (ang === 'ALL') || (j.angkatan === ang);
+        return matchSearch && matchAng;
+      });
+
+      renderAdminJamaahTable(filtered);
+      document.getElementById('adminJamaahCountBadge').innerText = filtered.length.toLocaleString() + ' Orang';
+    }
+
+    function resetAdminJamaahFilter() {
+      if (document.getElementById('adminJamaahSearch')) document.getElementById('adminJamaahSearch').value = '';
+      if (document.getElementById('adminJamaahAngkatanFilter')) document.getElementById('adminJamaahAngkatanFilter').value = 'ALL';
+      renderAdminJamaahTable(jamaahDatabase);
+      document.getElementById('adminJamaahCountBadge').innerText = jamaahDatabase.length.toLocaleString() + ' Orang';
+    }
+
+    // Modal Tambah Jamaah
+    function openAdminAddJamaahModal() {
+      tempAdminAvatarUrl = '';
+      const previewCont = document.getElementById('admNewAvatarPreview');
+      if (previewCont) previewCont.classList.add('hidden');
+      document.getElementById('adminAddJamaahModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAdminAddJamaahModal() {
+      document.getElementById('adminAddJamaahModal').classList.add('hidden');
+    }
+
+    function previewAdminNewAvatar(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          tempAdminAvatarUrl = ev.target.result;
+          document.getElementById('admNewAvatarImg').src = tempAdminAvatarUrl;
+          document.getElementById('admNewAvatarPreview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleAdminCreateJamaah(e) {
+      e.preventDefault();
+      const name = document.getElementById('admNewJamaahName').value.trim();
+      const angkatan = document.getElementById('admNewJamaahAngkatan').value;
+      const kota = document.getElementById('admNewJamaahKota').value.trim();
+      const wa = document.getElementById('admNewJamaahWA').value.trim();
+      const maktab = document.getElementById('admNewJamaahMaktab').value.trim() || 'Regu Umum';
+      const mahrom = document.getElementById('admNewJamaahMahrom').value.trim();
+      const alamat = document.getElementById('admNewJamaahAlamat').value.trim();
+
+      const newId = Date.now();
+      const tahunMasehi = 2006 + parseInt(angkatan);
+
+      const newEntry = {
+        id: newId,
+        name: name,
+        angkatan: angkatan,
+        tahun: tahunMasehi.toString(),
+        kota: kota,
+        alamat: alamat,
+        regu: maktab,
+        wa: wa,
+        mahrom: mahrom,
+        status: angkatan === '18' ? 'Jamaah Angkatan 18 (2026)' : `Alumni Angkatan ${angkatan} (${tahunMasehi})`,
+        avatar: tempAdminAvatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150'
+      };
+
+      jamaahDatabase.unshift(newEntry);
+      saveAdminSystemState();
+      filterAdminJamaahList();
+      updateAdminStats();
+      closeAdminAddJamaahModal();
+      alert(`Alhamdulillah! Data jamaah ${name} berhasil disimpan.`);
+    }
+
+    // Modal Edit Jamaah
+    function openAdminEditJamaahModal(id) {
+      const j = jamaahDatabase.find(item => item.id === id);
+      if (!j) return;
+
+      document.getElementById('admEditJamaahId').value = j.id;
+      document.getElementById('admEditJamaahName').value = j.name || '';
+      document.getElementById('admEditJamaahAngkatan').value = j.angkatan || '18';
+      document.getElementById('admEditJamaahKota').value = j.kota || '';
+      document.getElementById('admEditJamaahWA').value = j.wa || '';
+      document.getElementById('admEditJamaahMaktab').value = j.regu || '';
+      document.getElementById('admEditJamaahMahrom').value = j.mahrom || '';
+      document.getElementById('admEditJamaahAlamat').value = j.alamat || '';
+
+      tempAdminAvatarUrl = j.avatar || '';
+      document.getElementById('admEditAvatarPreview').src = tempAdminAvatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150';
+
+      document.getElementById('adminEditJamaahModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAdminEditJamaahModal() {
+      document.getElementById('adminEditJamaahModal').classList.add('hidden');
+    }
+
+    function previewAdminEditAvatar(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          tempAdminAvatarUrl = ev.target.result;
+          document.getElementById('admEditAvatarPreview').src = tempAdminAvatarUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleAdminUpdateJamaah(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('admEditJamaahId').value);
+      const idx = jamaahDatabase.findIndex(item => item.id === id);
+      if (idx === -1) return;
+
+      const name = document.getElementById('admEditJamaahName').value.trim();
+      const angkatan = document.getElementById('admEditJamaahAngkatan').value;
+      const kota = document.getElementById('admEditJamaahKota').value.trim();
+      const wa = document.getElementById('admEditJamaahWA').value.trim();
+      const maktab = document.getElementById('admEditJamaahMaktab').value.trim() || 'Regu Umum';
+      const mahrom = document.getElementById('admEditJamaahMahrom').value.trim();
+      const alamat = document.getElementById('admEditJamaahAlamat').value.trim();
+
+      jamaahDatabase[idx].name = name;
+      jamaahDatabase[idx].angkatan = angkatan;
+      jamaahDatabase[idx].tahun = (2006 + parseInt(angkatan)).toString();
+      jamaahDatabase[idx].kota = kota;
+      jamaahDatabase[idx].wa = wa;
+      jamaahDatabase[idx].regu = maktab;
+      jamaahDatabase[idx].mahrom = mahrom;
+      jamaahDatabase[idx].alamat = alamat;
+      if (tempAdminAvatarUrl) jamaahDatabase[idx].avatar = tempAdminAvatarUrl;
+
+      saveAdminSystemState();
+      filterAdminJamaahList();
+      closeAdminEditJamaahModal();
+      alert(`Alhamdulillah! Perubahan data jamaah ${name} berhasil disimpan.`);
+    }
+
+    function deleteAdminJamaah(id) {
+      const idx = jamaahDatabase.findIndex(item => item.id === id);
+      if (idx === -1) return;
+
+      const j = jamaahDatabase[idx];
+      const conf = confirm(`Apakah Anda yakin ingin menghapus data jamaah "${j.name}" (Angkatan ${j.angkatan})?`);
+      if (conf) {
+        jamaahDatabase.splice(idx, 1);
+        saveAdminSystemState();
+        filterAdminJamaahList();
+        updateAdminStats();
+        alert(`Data jamaah ${j.name} berhasil dihapus.`);
+      }
+    }
+
+    // ==============================================================
+    // B. LOGIKA KELOLA GALERI JEJAK MABRUR
+    // ==============================================================
+    let currentAdminGalleryFilter = 'ALL';
+    let tempAdminBatchPhotos = [];
+
+    function renderAdminGalleryGrid(photos) {
+      const container = document.getElementById('adminGalleryGrid');
+      if (!container) return;
+
+      if (!photos || photos.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 p-8">
+            <i data-lucide="camera-off" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+            <p class="font-bold text-slate-600">Belum ada foto dalam kategori ini.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = photos.map(p => `
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 bg-slate-900 overflow-hidden">
+              <img src="${p.image}" class="w-full h-full object-cover">
+              <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+                ${p.category}
+              </span>
+            </div>
+            <div class="p-4 space-y-1">
+              <h4 class="font-extrabold text-slate-900 text-sm line-clamp-1" title="${p.title}">${p.title}</h4>
+              <div class="text-xs text-slate-600 font-medium">${p.jamaahName} • <span class="text-emerald-800 font-bold">${p.angkatan}</span></div>
+              <div class="text-[11px] text-slate-400">${p.date}</div>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
+            <button onclick="deleteAdminPhoto(${p.id})" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl transition flex items-center gap-1 border border-red-200">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Hapus</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function filterAdminGalleryCategory(cat) {
+      currentAdminGalleryFilter = cat;
+      const btns = document.querySelectorAll('.adm-gal-filter-btn');
+      btns.forEach(b => {
+        if (b.getAttribute('data-cat') === cat) {
+          b.className = 'adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white';
+        } else {
+          b.className = 'adm-gal-filter-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50';
+        }
+      });
+
+      if (cat === 'ALL') {
+        renderAdminGalleryGrid(galleryPhotos);
+      } else {
+        const filtered = galleryPhotos.filter(p => p.category === cat);
+        renderAdminGalleryGrid(filtered);
+      }
+    }
+
+    function openAdminUploadPhotoModal() {
+      tempAdminBatchPhotos = [];
+      const preview = document.getElementById('admPhotoBatchPreview');
+      if (preview) {
+        preview.innerHTML = '';
+        preview.classList.add('hidden');
+      }
+      document.getElementById('adminUploadPhotoModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAdminUploadPhotoModal() {
+      document.getElementById('adminUploadPhotoModal').classList.add('hidden');
+    }
+
+    function handleAdminPhotoBatchSelect(e) {
+      const files = Array.from(e.target.files);
+      tempAdminBatchPhotos = files.slice(0, 10);
+      const preview = document.getElementById('admPhotoBatchPreview');
+      if (preview) {
+        preview.innerHTML = '';
+        preview.classList.remove('hidden');
+        tempAdminBatchPhotos.forEach(f => {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const div = document.createElement('div');
+            div.className = 'h-16 rounded-xl overflow-hidden border border-slate-300 bg-slate-100';
+            div.innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
+            preview.appendChild(div);
+          };
+          reader.readAsDataURL(f);
+        });
+      }
+    }
+
+    function handleAdminUploadPhoto(e) {
+      e.preventDefault();
+      const cat = document.getElementById('admNewPhotoCategory').value;
+      const title = document.getElementById('admNewPhotoTitle').value.trim();
+      const jName = document.getElementById('admNewPhotoJamaah').value.trim() || 'Jamaah KBIH KUWAISS';
+      const angk = document.getElementById('admNewPhotoAngkatan').value.trim() || 'Angkatan 18';
+
+      if (tempAdminBatchPhotos.length > 0) {
+        tempAdminBatchPhotos.forEach((file, idx) => {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            galleryPhotos.unshift({
+              id: Date.now() + idx,
+              jamaahName: jName,
+              angkatan: angk,
+              category: cat,
+              title: tempAdminBatchPhotos.length > 1 ? `${title} (Foto ${idx+1}/${tempAdminBatchPhotos.length})` : title,
+              image: ev.target.result,
+              date: 'Dokumentasi Baru',
+              size: '390 KB'
+            });
+            saveAdminSystemState();
+            filterAdminGalleryCategory(currentAdminGalleryFilter);
+            updateAdminStats();
+          };
+          reader.readAsDataURL(file);
+        });
+        alert(`Alhamdulillah! Berhasil mengunggah ${tempAdminBatchPhotos.length} foto ke album Jejak Mabrur.`);
+      } else {
+        alert('Mohon pilih minimal 1 file gambar foto.');
+        return;
+      }
+
+      closeAdminUploadPhotoModal();
+    }
+
+    function deleteAdminPhoto(id) {
+      const idx = galleryPhotos.findIndex(item => item.id === id);
+      if (idx === -1) return;
+
+      const p = galleryPhotos[idx];
+      const conf = confirm(`Apakah Anda yakin ingin menghapus foto "${p.title}"?`);
+      if (conf) {
+        galleryPhotos.splice(idx, 1);
+        saveAdminSystemState();
+        filterAdminGalleryCategory(currentAdminGalleryFilter);
+        updateAdminStats();
+        alert('Foto berhasil dihapus dari galeri.');
+      }
+    }
+
+    // ==============================================================
+    // C. LOGIKA KELOLA PENGUMUMAN & BROSUR
+    // ==============================================================
+    let tempAdminAnnFileBase64 = null;
+
+    function renderAdminAnnouncementsGrid(items) {
+      const container = document.getElementById('adminAnnouncementsGrid');
+      if (!container) return;
+
+      if (!items || items.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 p-8">
+            <p class="font-bold text-slate-600">Belum ada pengumuman yang tersimpan.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(item => `
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 bg-slate-900 overflow-hidden">
+              <img src="${item.image}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20"></div>
+              <span class="absolute top-3 left-3 bg-white/95 text-stone-950 text-xs font-black px-2.5 py-0.5 rounded-full shadow">
+                ${item.category}
+              </span>
+            </div>
+            <div class="p-5 space-y-2.5">
+              <h3 class="font-black text-slate-900 text-base leading-snug">${item.title}</h3>
+              <div class="text-xs text-slate-600 space-y-1">
+                <div>🗓 <strong>${item.date}</strong></div>
+                <div>📍 <span>${item.location}</span></div>
+              </div>
+              <p class="text-xs text-slate-500 line-clamp-2 pt-1 border-t border-slate-100">${item.summary}</p>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="shareAdminAnnouncementWA(${item.id})" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 transition">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+              <span>Bagikan WA</span>
+            </button>
+            <button onclick="deleteAdminAnnouncement(${item.id})" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl flex items-center gap-1 transition border border-red-200">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Hapus</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function openAdminAddAnnouncementModal() {
+      tempAdminAnnFileBase64 = null;
+      document.getElementById('adminAddAnnouncementModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAdminAddAnnouncementModal() {
+      document.getElementById('adminAddAnnouncementModal').classList.add('hidden');
+    }
+
+    function previewAdminAnnPamphlet(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          tempAdminAnnFileBase64 = ev.target.result;
+          document.getElementById('admAnnPamphletPreviewImg').src = tempAdminAnnFileBase64;
+          document.getElementById('admAnnPamphletPreviewContainer').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function applyAdminAnnTemplate(type) {
+      const t = document.getElementById('admNewAnnTitle');
+      const c = document.getElementById('admNewAnnCategory');
+      const d = document.getElementById('admNewAnnDate');
+      const l = document.getElementById('admNewAnnLocation');
+      const s = document.getElementById('admNewAnnSummary');
+
+      if (type === 'JADWAL_UMRAH') {
+        c.value = 'JADWAL_UMRAH';
+        t.value = 'Jadwal Keberangkatan Umrah Syawal & Awal Musim 1448 H (12 Hari)';
+        d.value = 'Keberangkatan: 28 Syawal 1447 H / Mei 2026';
+        l.value = 'Hotel Bintang 5 Ring 1 Makkah & Madinah Direct Saudia';
+        s.value = 'Paket bimbingan intensif Ust. Zuhdi Rofiqi, LC. Tiket PP direct, visa umrah nusuk, makan 3x sehari masakan Indonesia, ziarah napak tilas, dan perlengkapan koper fiber lengkap.';
+      } else if (type === 'PENDAFTARAN') {
+        c.value = 'PENDAFTARAN';
+        t.value = 'Pendaftaran Calon Jamaah Haji Reguler, Haji Plus & Umrah 1448 H / 2027';
+        d.value = 'Setiap Hari Kerja (08.30 – 16.30 WIB)';
+        l.value = 'Sekretariat KBIH KUWAISS Mustika Jaya, Kota Bekasi';
+        s.value = 'Layanan pendaftaran satu atap: formulir pendaftaran, pembukaan tabungan haji/umrah, penetapan nomor porsi, dan pendampingan bimbingan ibadah terpadu.';
+      } else if (type === 'PENGAJIAN') {
+        c.value = 'PENGAJIAN';
+        t.value = 'Pengajian Rutin Bulanan, Doa Bersama & Silaturahmi Alumni 18 Angkatan';
+        d.value = 'Ahad, 19 April 2026 (Pukul 08.30 – 11.45 WIB)';
+        l.value = 'Aula Pertemuan KBIH KUWAISS / Masjid Al-Barkah Cimuning, Bekasi';
+        s.value = 'Kajian mendalam seputar hikmah kemabruran haji diasuh Ust. Zuhdi Rofiqi, LC, doa bersama kelancaran ibadah, dan silaturahmi temu kangen alumni.';
+      } else if (type === 'DOKUMEN') {
+        c.value = 'DOKUMEN';
+        t.value = 'Checklist Kelengkapan Dokumen Wajib Haji & Umrah Resmi 1447–1448 H';
+        d.value = 'Menyesuaikan Jadwal Kloter Keberangkatan';
+        l.value = 'Loket Administrasi KBIH KUWAISS Bekasi Timur';
+        s.value = 'Syarat wajib: Paspor asli berlaku min. 7 bulan, salinan KTP & KK, buku nikah/akta lahir, pasfoto 4x6 latar putih 80% wajah, sertifikat vaksin meningitis, dan rekam biometrik Bio Visa.';
+      }
+    }
+
+    function handleAdminCreateAnnouncement(e) {
+      e.preventDefault();
+      const title = document.getElementById('admNewAnnTitle').value.trim();
+      const cat = document.getElementById('admNewAnnCategory').value;
+      const date = document.getElementById('admNewAnnDate').value.trim();
+      const loc = document.getElementById('admNewAnnLocation').value.trim();
+      const summary = document.getElementById('admNewAnnSummary').value.trim();
+
+      const defaultImgs = {
+        'JADWAL_UMRAH': 'https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&q=80&w=800',
+        'PENDAFTARAN': 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=800',
+        'PENGAJIAN': 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&q=80&w=800',
+        'DOKUMEN': 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&q=80&w=800',
+        'LAINNYA': 'https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?auto=format&fit=crop&q=80&w=800'
+      };
+
+      const newEntry = {
+        id: Date.now(),
+        title: title,
+        category: cat,
+        pamphletType: document.getElementById('admNewAnnType')?.value || 'Pamflet Digital',
+        date: date,
+        location: loc,
+        pembimbing: 'Ust. Zuhdi Rofiqi, LC',
+        highlight: 'Pengumuman Resmi KBIHU',
+        summary: summary,
+        image: tempAdminAnnFileBase64 || defaultImgs[cat] || defaultImgs['LAINNYA']
+      };
+
+      announcementsData.unshift(newEntry);
+      saveAdminSystemState();
+      renderAdminAnnouncementsGrid(announcementsData);
+      updateAdminStats();
+      closeAdminAddAnnouncementModal();
+      alert(`Alhamdulillah! Pengumuman "${title}" berhasil dipublikasikan.`);
+    }
+
+    function deleteAdminAnnouncement(id) {
+      const idx = announcementsData.findIndex(a => a.id === id);
+      if (idx === -1) return;
+
+      const a = announcementsData[idx];
+      const conf = confirm(`Apakah Anda yakin ingin menghapus pengumuman "${a.title}"?`);
+      if (conf) {
+        announcementsData.splice(idx, 1);
+        saveAdminSystemState();
+        renderAdminAnnouncementsGrid(announcementsData);
+        updateAdminStats();
+        alert('Pengumuman telah berhasil dihapus.');
+      }
+    }
+
+    function shareAdminAnnouncementWA(id) {
+      const item = announcementsData.find(a => a.id === id);
+      if (!item) return;
+
+      const shareUrl = window.location.origin + '/index.html';
+      const msg = `*INFO RESMI KBIH KUWAISS* 📢\n(Pimpinan: Ust. Zuhdi Rofiqi, LC)\n\n📌 *${item.title}*\n🗓 *Jadwal:* ${item.date}\n📍 *Lokasi:* ${item.location}\n\n📝 *Rincian:* ${item.summary}\n\nInfo lengkap dapat diakses di aplikasi web komunitas:\n👉 ${shareUrl}\n\nSekretariat: Jl. Raya Bekasi Timur Regensi Blok H1 No 10, Cimuning, Mustika Jaya, Kota Bekasi (08129032182)`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // ==============================================================
+    // D. LOGIKA KELOLA FOTO PIMPINAN (UST. ZUHDI ROFIQI, LC)
+    // ==============================================================
+    function applyAdminLeaderPhotoCard() {
+      const img = document.getElementById('adminLeaderImgCard');
+      if (img) {
+        img.src = leaderPhotoConfig.src || 'ustadz_zuhdi.jpg';
+        img.style.objectPosition = `${leaderPhotoConfig.posX}% ${leaderPhotoConfig.posY}%`;
+        img.style.transform = `scale(${(leaderPhotoConfig.zoom / 100).toFixed(2)})`;
+      }
+      document.getElementById('statPosX').innerText = `${leaderPhotoConfig.posX}%`;
+      document.getElementById('statPosY').innerText = `${leaderPhotoConfig.posY}%`;
+      document.getElementById('statZoom').innerText = `${(leaderPhotoConfig.zoom / 100).toFixed(2)}x`;
+    }
+
+    function openAdminLeaderPhotoModal() {
+      document.getElementById('admRangePosX').value = leaderPhotoConfig.posX;
+      document.getElementById('admRangePosY').value = leaderPhotoConfig.posY;
+      document.getElementById('admRangeZoom').value = leaderPhotoConfig.zoom;
+
+      document.getElementById('admLabelPosX').innerText = `${leaderPhotoConfig.posX}%`;
+      document.getElementById('admLabelPosY').innerText = `${leaderPhotoConfig.posY}%`;
+      document.getElementById('admLabelZoom').innerText = `${(leaderPhotoConfig.zoom / 100).toFixed(2)}x`;
+
+      const prev = document.getElementById('admLivePreviewLeaderImg');
+      if (prev) {
+        prev.src = leaderPhotoConfig.src;
+        prev.style.objectPosition = `${leaderPhotoConfig.posX}% ${leaderPhotoConfig.posY}%`;
+        prev.style.transform = `scale(${(leaderPhotoConfig.zoom / 100).toFixed(2)})`;
+      }
+
+      document.getElementById('adminLeaderPhotoModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAdminLeaderPhotoModal() {
+      document.getElementById('adminLeaderPhotoModal').classList.add('hidden');
+    }
+
+    function updateAdminLeaderPhotoLive() {
+      const posX = parseInt(document.getElementById('admRangePosX').value) || 50;
+      const posY = parseInt(document.getElementById('admRangePosY').value) || 20;
+      const zoom = parseInt(document.getElementById('admRangeZoom').value) || 100;
+
+      document.getElementById('admLabelPosX').innerText = `${posX}%`;
+      document.getElementById('admLabelPosY').innerText = `${posY}%`;
+      document.getElementById('admLabelZoom').innerText = `${(zoom / 100).toFixed(2)}x`;
+
+      const prev = document.getElementById('admLivePreviewLeaderImg');
+      if (prev) {
+        prev.style.objectPosition = `${posX}% ${posY}%`;
+        prev.style.transform = `scale(${(zoom / 100).toFixed(2)})`;
+      }
+
+      const card = document.getElementById('adminLeaderImgCard');
+      if (card) {
+        card.style.objectPosition = `${posX}% ${posY}%`;
+        card.style.transform = `scale(${(zoom / 100).toFixed(2)})`;
+      }
+    }
+
+    function handleAdminLeaderPhotoUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          leaderPhotoConfig.src = ev.target.result;
+          document.getElementById('admLivePreviewLeaderImg').src = ev.target.result;
+          document.getElementById('adminLeaderImgCard').src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function saveAdminLeaderPhotoSettings() {
+      leaderPhotoConfig.posX = parseInt(document.getElementById('admRangePosX').value) || 50;
+      leaderPhotoConfig.posY = parseInt(document.getElementById('admRangePosY').value) || 20;
+      leaderPhotoConfig.zoom = parseInt(document.getElementById('admRangeZoom').value) || 100;
+
+      saveAdminSystemState();
+      applyAdminLeaderPhotoCard();
+      closeAdminLeaderPhotoModal();
+      alert('Alhamdulillah! Posisi foto Pimpinan berhasil dikunci permanen.');
+    }
+
+    // ==============================================================
+    // E. EKSPOR & IMPOR DATABASE (.JSON)
+    // ==============================================================
+    function exportDatabaseJSON() {
+      const exportData = {
+        metadata: {
+          app: 'KBIH KUWAISS Admin Portal',
+          pimpinan: 'Ust. Zuhdi Rofiqi, LC',
+          exportedAt: new Date().toISOString(),
+          totalJamaah: jamaahDatabase.length,
+          totalFoto: galleryPhotos.length,
+          totalPengumuman: announcementsData.length
+        },
+        jamaah: jamaahDatabase,
+        gallery: galleryPhotos,
+        announcements: announcementsData,
+        forum: forumPosts,
+        leaderPhotoConfig: leaderPhotoConfig
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `database-kuwaiss-backup-${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      alert('File cadangan database KBIH KUWAISS berhasil diunduh!');
+    }
+
+    function importDatabaseJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (imported.jamaah && Array.isArray(imported.jamaah)) {
+            jamaahDatabase = imported.jamaah;
+            if (imported.gallery && Array.isArray(imported.gallery)) galleryPhotos = imported.gallery;
+            if (imported.announcements && Array.isArray(imported.announcements)) announcementsData = imported.announcements;
+            if (imported.forum && Array.isArray(imported.forum)) forumPosts = imported.forum;
+            if (imported.leaderPhotoConfig) leaderPhotoConfig = imported.leaderPhotoConfig;
+
+            saveAdminSystemState();
+            initAdminDashboard();
+            alert(`Alhamdulillah! Berhasil memulihkan ${jamaahDatabase.length} data jamaah ke sistem.`);
+          } else {
+            alert('Format file cadangan JSON tidak cocok.');
+          }
+        } catch (err) {
+          alert('Gagal membaca file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    // Jalankan saat halaman siap
+    window.addEventListener('DOMContentLoaded', () => {
+      loadAdminSystemState();
+      checkAdminSession();
+      initAdminDashboard();
+    });
+  </script>
+</body>
+</html>

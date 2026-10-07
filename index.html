@@ -249,8 +249,13 @@
         <span class="bg-amber-500 text-stone-900 font-bold px-2 py-0.5 rounded text-xs">PENGUMUMAN BIRO</span>
         <span>Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.</span>
       </div>
-      <div class="flex items-center gap-4 text-xs font-semibold">
-        <span class="text-amber-300">Pimpinan: Ust. Zuhdi Rofiqi, LC</span>
+      <div class="flex items-center gap-2.5 sm:gap-4 text-xs font-semibold">
+        <span class="text-amber-300 hidden sm:inline">Pimpinan: Ust. Zuhdi Rofiqi, LC</span>
+        <!-- Portal Pengelola Admin -->
+        <a href="admin.html" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-2.5 py-1 rounded-md transition flex items-center gap-1.5 cursor-pointer shadow-xs" title="Buka Portal Admin Pengelola KBIH KUWAISS">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>Portal Admin</span>
+        </a>
         <!-- Toggle Aksesibilitas Lansia -->
         <button id="seniorModeBtn" onclick="toggleSeniorMode()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-md border border-emerald-600 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="eye" class="w-3.5 h-3.5"></i>
@@ -298,6 +303,10 @@
               <!-- Diisi dinamis dari database -->
             </select>
           </div>
+          <!-- Mobile Admin Quick Link -->
+          <a href="admin.html" class="md:hidden flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-black shadow-xs transition" title="Portal Admin KBIH KUWAISS">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </a>
 
           <button onclick="switchTab('profile')" class="flex items-center gap-2 sm:gap-3 p-1 hover:bg-slate-100 rounded-xl transition">
             <img id="headerUserAvatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120" alt="Avatar" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-emerald-600 shrink-0">
@@ -352,6 +361,10 @@
           <i data-lucide="share-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Bagikan</span>
         </button>
+        <a href="admin.html" class="tab-btn px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-[13px] flex items-center gap-1.5 bg-emerald-900 hover:bg-emerald-800 text-amber-300 transition shadow-xs whitespace-nowrap" title="Buka Portal Pengelola & Admin KBIH KUWAISS">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400"></i>
+          <span>Portal Admin</span>
+        </a>
       </nav>
     </div>
   </header>
@@ -2505,7 +2518,11 @@
         </p>
       </div>
 
-      <div class="flex items-center">
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="admin.html" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black rounded-xl flex items-center gap-2 transition shadow-md">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <span>Portal Admin KBIH</span>
+        </a>
         <a href="https://wa.me/628129032182?text=Assalamu%27alaikum%20KBIH%20KUWAISS" target="_blank" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center gap-2 transition shadow-md">
           <i data-lucide="message-square" class="w-4 h-4"></i>
           <span>Hubungi WhatsApp</span>
@@ -5087,6 +5104,19 @@
       initApp();
       loadReadabilityPreferences();
       loadLeaderPhotoConfig();
+    });
+
+    // Sinkronisasi Dua Arah Real-Time dengan Portal Admin KBIH KUWAISS
+    window.addEventListener('storage', (e) => {
+      if (e.key && e.key.startsWith('alkuwaiss_')) {
+        loadSystemState();
+        loadLeaderPhotoConfig();
+        renderDirectoryGrid(jamaahDatabase);
+        renderForumFeed();
+        renderGalleryGrid(galleryPhotos);
+        renderAnnouncements(announcementsData);
+        updateDashboardStats();
+      }
     });
   </script>
 </body>
