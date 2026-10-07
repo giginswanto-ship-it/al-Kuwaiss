@@ -1,27 +1,32 @@
 -- ====================================================================
--- SISTEM MANAJEMEN DATABASE KBIH KUWAISS
+-- SISTEM MANAJEMEN BASIS DATA KBIH KUWAISS
 -- File: data_lokal.sql
 -- Format: Plain SQL (PostgreSQL 12+)
--- Tanggal Ekspor: 2026-10-07
+-- Tanggal Pembuatan: 2026-10-07
+-- Lembaga: Kelompok Bimbingan Ibadah Haji (KBIH) KUWAISS
+-- Pimpinan: Ust. Zuhdi Rofiqi, LC
+-- Alamat: Jl. Raya Bekasi Timur Regensi Blok H1 No 10, Mustika Jaya, Kota Bekasi
+-- ====================================================================
 -- 
 -- CARA MENJALANKAN DI SERVER LIVE:
 -- ====================================================================
--- 1. Menggunakan file plain SQL (.sql) langsung:
+-- 1. Menggunakan file plain SQL (.sql) langsung (Paling Direkomendasikan):
 --    psql -U username_live -d nama_db_live -f data_lokal.sql
 --
---    Atau jika server remote dengan host dan port:
+--    Jika ke server remote dengan host dan port:
 --    psql -h host_live -p 5432 -U username_live -d nama_db_live -f data_lokal.sql
 --
 --    Atau menggunakan URI Connection String:
 --    psql "postgresql://username_live:password@host_live:5432/nama_db_live" -f data_lokal.sql
 --
--- 2. Jika Anda mengonversinya ke format custom (.dump) terlebih dahulu:
+-- 2. Jika Anda mengonversinya ke format custom archive (.dump):
 --    pg_dump -U username_lokal -d nama_db_lokal -Fc -f data_lokal.dump
 --    pg_restore -U username_live -d nama_db_live -v --no-owner --no-privileges data_lokal.dump
 -- ====================================================================
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -104,7 +109,26 @@ CREATE TABLE IF NOT EXISTS pimpinan_config (
 );
 
 -- ====================================================================
--- DATA SEEDING: PIMPINAN CONFIG
+-- 5. TABEL: FORUM_POSTS (DISKUSI UKHUWAH LINTAS ANGKATAN)
+-- ====================================================================
+CREATE TABLE IF NOT EXISTS forum_posts (
+    id BIGINT PRIMARY KEY,
+    author VARCHAR(255) NOT NULL,
+    avatar TEXT,
+    badge VARCHAR(100),
+    kategori VARCHAR(50),
+    judul VARCHAR(255) NOT NULL,
+    konten TEXT NOT NULL,
+    waktu VARCHAR(100),
+    likes INT DEFAULT 0,
+    komentar_json JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_forum_kategori ON forum_posts(kategori);
+
+-- ====================================================================
+-- SEED DATA: PIMPINAN CONFIG
 -- ====================================================================
 INSERT INTO pimpinan_config (id, nama_pimpinan, foto_src, pos_x, pos_y, zoom)
 VALUES (1, 'Ust. Zuhdi Rofiqi, LC', 'ustadz_zuhdi.jpg', 50, 20, 100)
@@ -117,7 +141,7 @@ ON CONFLICT (id) DO UPDATE SET
     updated_at = CURRENT_TIMESTAMP;
 
 -- ====================================================================
--- DATA SEEDING: JAMAAH (31 Data)
+-- SEED DATA: JAMAAH (31 Baris Data)
 -- ====================================================================
 INSERT INTO jamaah (id, nama, angkatan, tahun, kota, alamat, regu, wa, mahrom, status, avatar)
 VALUES (1801, 'Ahmad Fauzi', '18', '2026', 'Bandung', 'Jl. Riau No. 45, Citarum, Kec. Bandung Wetan', 'Maktab 65 / Regu 01', '081311223344', 'Hj. Siti Marwah (Istri)', 'Jamaah Angkatan 18 (2026)', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120')
@@ -276,7 +300,7 @@ ON CONFLICT (id) DO UPDATE SET
     alamat = EXCLUDED.alamat, regu = EXCLUDED.regu, wa = EXCLUDED.wa, mahrom = EXCLUDED.mahrom, status = EXCLUDED.status, avatar = EXCLUDED.avatar;
 
 -- ====================================================================
--- DATA SEEDING: GALERI FOTO (6 Data)
+-- SEED DATA: GALERI FOTO (6 Baris Data)
 -- ====================================================================
 INSERT INTO galeri_foto (id, jamaah_nama, angkatan, kategori, judul, image_url, tanggal, ukuran)
 VALUES (1, 'H. Syamsul Arifin', 'Angkatan 3', 'IHRAM', 'Niat Ihram di Miqat Bir Ali', 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=600', '1433 H / 2012 M', '382 KB (Terkompresi)')
@@ -304,7 +328,7 @@ ON CONFLICT (id) DO UPDATE SET
     jamaah_nama = EXCLUDED.jamaah_nama, angkatan = EXCLUDED.angkatan, kategori = EXCLUDED.kategori, judul = EXCLUDED.judul, image_url = EXCLUDED.image_url;
 
 -- ====================================================================
--- DATA SEEDING: PENGUMUMAN & BROSUR (10 Data)
+-- SEED DATA: PENGUMUMAN & BROSUR (10 Baris Data)
 -- ====================================================================
 INSERT INTO pengumuman (id, judul, kategori, tipe_dokumen, tanggal_kegiatan, lokasi, pembimbing, highlight, ringkasan, image_url)
 VALUES (1, 'Jadwal Keberangkatan Umrah Syawal & Awal Musim 1448 H (Paket 12 Hari)', 'JADWAL_UMRAH', 'Jadwal Umrah Terdekat', 'Keberangkatan: 28 Syawal 1447 H / 16 Mei 2026', 'Rute: Bandara Soekarno Hatta (CGK) – Madinah (MED) – Makkah (JED)', 'Bimbingan Penuh: Ust. Zuhdi Rofiqi, LC', 'Seat Tersisa 12 Jamaah (Kloter Terdekat)', 'Pemberitahuan resmi jadwal keberangkatan umrah terdekat kloter Syawal dan awal musim 1448 H. Fasilitas hotel bintang 5 ring 1 pelataran Masjidil Haram & Nabawi, ziarah napak tilas Badar & Uhud, serta manasik intensif 3 kali.', 'https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&q=80&w=800')
@@ -357,6 +381,25 @@ ON CONFLICT (id) DO UPDATE SET
     judul = EXCLUDED.judul, kategori = EXCLUDED.kategori, tipe_dokumen = EXCLUDED.tipe_dokumen,
     tanggal_kegiatan = EXCLUDED.tanggal_kegiatan, lokasi = EXCLUDED.lokasi, ringkasan = EXCLUDED.ringkasan, image_url = EXCLUDED.image_url;
 
+-- ====================================================================
+-- SEED DATA: FORUM DISKUSI (3 Baris Data)
+-- ====================================================================
+INSERT INTO forum_posts (id, author, avatar, badge, kategori, judul, konten, waktu, likes, komentar_json)
+VALUES (101, 'Ahmad Fauzi', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120', 'Angkatan 18 (2026)', 'LINTAS', 'Tanya Alumni: Perlengkapan apa yang paling penting dipersiapkan saat mabit di Mina?', 'Bismillah, assalamu alaikum para alumni senior. Mohon tipsnya, untuk persiapan fisik dan alas tidur saat mabit di Mina apakah tendanya cukup padat? Apa yang wajib kami bawa di ransel kecil?', '3 jam lalu', 12, '[{"author":"H. Syamsul Arifin","badge":"Alumni Angkatan 3 (2012)","text":"Wa alaikumussalam saudaraku. Bawalah sleeping mat portable yang tipis dan bantal tiup. Sandal jepit cadangan dan botol semprotan air untuk cuaca panas sangat membantu."},{"author":"Ust. Zuhdi Rofiqi, LC","badge":"Pembimbing Ibadah","text":"Yang paling utama adalah menjaga kesabaran hati dan banyak berzikir. Jangan lupa obat-obatan pribadi yang rutin dikonsumsi agar selalu dalam tas pinggang."}]'::jsonb)
+ON CONFLICT (id) DO UPDATE SET
+    author = EXCLUDED.author, avatar = EXCLUDED.avatar, badge = EXCLUDED.badge,
+    kategori = EXCLUDED.kategori, judul = EXCLUDED.judul, konten = EXCLUDED.konten, likes = EXCLUDED.likes, komentar_json = EXCLUDED.komentar_json;
+INSERT INTO forum_posts (id, author, avatar, badge, kategori, judul, konten, waktu, likes, komentar_json)
+VALUES (102, 'H. Bambang Soediro', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120', 'Alumni Angkatan 1 (2010)', 'REGIONAL', 'Rencana Temu Kangen & Halal Bi Halal Wilayah Jawa Timur', 'Salam ukhuwah untuk seluruh alumni KBIH KUWAISS di Surabaya, Malang, dan Sidoarjo. Insya Allah akhir bulan ini kita adakan sarapan bersama sambil membahas program wakaf bersama.', '1 hari lalu', 24, '[{"author":"Hj. Endang Sulastri","badge":"Alumni Angkatan 10","text":"Alhamdulillah, insya Allah saya dari Jogja siap ikut gabung jika diadakan di akhir pekan!"}]'::jsonb)
+ON CONFLICT (id) DO UPDATE SET
+    author = EXCLUDED.author, avatar = EXCLUDED.avatar, badge = EXCLUDED.badge,
+    kategori = EXCLUDED.kategori, judul = EXCLUDED.judul, konten = EXCLUDED.konten, likes = EXCLUDED.likes, komentar_json = EXCLUDED.komentar_json;
+INSERT INTO forum_posts (id, author, avatar, badge, kategori, judul, konten, waktu, likes, komentar_json)
+VALUES (103, 'H. Syamsul Arifin', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120', 'Alumni Angkatan 3 (2012)', 'INTRA', 'Temu Kangen Khusus Angkatan 3 (Maktab 38)', 'Sahabat seperjuangan 2012, tidak terasa sudah 14 tahun kita wukuf bersama di Arafah. Yuk kita kumpulkan kembali foto-foto di menu Galeri Jejak Mabrur untuk Yearbook angkatan kita.', '2 hari lalu', 18, '[{"author":"Hj. Aminah Zahra","badge":"Alumni Angkatan 3 (2012)","text":"Aamiin ya Rabbal alamin. Foto saat di Raudhah sudah saya unggah ya Pak Haji."}]'::jsonb)
+ON CONFLICT (id) DO UPDATE SET
+    author = EXCLUDED.author, avatar = EXCLUDED.avatar, badge = EXCLUDED.badge,
+    kategori = EXCLUDED.kategori, judul = EXCLUDED.judul, konten = EXCLUDED.konten, likes = EXCLUDED.likes, komentar_json = EXCLUDED.komentar_json;
+
 COMMIT;
 
--- Selesai migrasi data KBIH KUWAISS ke PostgreSQL.
+-- Selesai! Data KBIH KUWAISS berhasil dimigrasikan ke PostgreSQL.
