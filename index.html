@@ -47,8 +47,38 @@
   </script>
   <style>
     /* ==========================================================================
-       OPTIMASI KETERBACAAN & RESPONSIF HP ANDROID & iOS (KBIH KUWAISS)
+       OPTIMASI ANDROID: SATUAN SP (SCALE-INDEPENDENT PIXELS) & TOUCH TARGET 48x48dp
        ========================================================================== */
+    :root {
+      /* Android Accessibility Mapping: 1rem = 16sp secara default */
+      --sp-min-secondary: 0.75rem; /* 12sp (Teks Sekunder Minimum) */
+      --sp-min-body: 0.875rem;      /* 14sp (Teks Isi Minimum) */
+      --sp-default-body: 1rem;      /* 16sp (Teks Isi Standar) */
+      --android-touch-target: 48px; /* 48x48dp Touch Target */
+    }
+
+    /* Memastikan tombol interaktif memenuhi Touch Target minimal 48x48dp */
+    button, 
+    a[role="button"],
+    .tab-btn,
+    .mobile-nav-btn,
+    .btn-touch-48 {
+      min-height: 48px;
+      min-width: 48px;
+      touch-action: manipulation;
+    }
+
+    /* Mencegah ukuran teks berada di bawah 12sp di seluruh aplikasi */
+    * {
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Ukuran input formulir minimal 48dp dan teks 16sp agar nyaman ditekan */
+    input, select, textarea {
+      min-height: 48px !important;
+      font-size: 1rem !important; /* 16sp */
+      touch-action: manipulation;
+    }
     :root {
       --sat: env(safe-area-inset-top, 0px);
       --sab: env(safe-area-inset-bottom, 0px);
@@ -165,8 +195,8 @@
     html.senior-text-mode body {
       line-height: 1.85 !important;
     }
-    html.senior-text-mode .text-[10px],
-    html.senior-text-mode .text-[11px] {
+    html.senior-text-mode .text-xs,
+    html.senior-text-mode .text-xs {
       font-size: 14px !important;
       line-height: 1.5 !important;
     }
@@ -244,7 +274,7 @@
             <div class="flex items-center gap-1.5 sm:gap-2">
               <span class="text-xl sm:text-2xl font-black text-emerald-900 tracking-tight">KBIH KUWAISS</span>
             </div>
-            <p class="text-[11px] sm:text-xs text-slate-500 font-medium line-clamp-1">Komunitas Jamaah Haji & Alumni semua Angkatan</p>
+            <p class="text-xs sm:text-xs text-slate-500 font-medium line-clamp-1">Komunitas Jamaah Haji & Alumni semua Angkatan</p>
           </div>
         </div>
 
@@ -264,7 +294,7 @@
           <!-- Mobile Persona Quick Switcher Dropdown -->
           <div class="md:hidden flex items-center gap-1 bg-emerald-50 border border-emerald-200 rounded-lg px-1.5 py-1">
             <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-800 shrink-0"></i>
-            <select id="userRoleSelectMobile" onchange="changeCurrentUser(this.value)" class="text-[11px] bg-transparent text-emerald-950 font-bold max-w-[130px] truncate focus:outline-none">
+            <select id="userRoleSelectMobile" onchange="changeCurrentUser(this.value)" class="text-xs bg-transparent text-emerald-950 font-bold max-w-[130px] truncate focus:outline-none">
               <!-- Diisi dinamis dari database -->
             </select>
           </div>
@@ -288,7 +318,7 @@
         <button id="nav-announcements" onclick="switchTab('announcements')" class="tab-btn px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-[13px] flex items-center gap-1.5 text-slate-600 hover:bg-slate-100 transition relative whitespace-nowrap">
           <i data-lucide="bell-ring" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500"></i>
           <span>Info Terkini</span>
-          <span class="inline-flex items-center px-1 py-0.2 rounded-full text-[9px] font-black bg-amber-500 text-stone-900 animate-pulse">BARU</span>
+          <span class="inline-flex items-center px-1 py-0.2 rounded-full text-xs font-black bg-amber-500 text-stone-900 animate-pulse">BARU</span>
         </button>
         <button id="nav-directory" onclick="switchTab('directory')" class="tab-btn px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-[13px] flex items-center gap-1.5 text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
           <i data-lucide="users" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
@@ -345,7 +375,7 @@
               <div class="w-36 h-52 sm:w-44 sm:h-64 lg:w-48 lg:h-70 rounded-3xl overflow-hidden ring-4 ring-amber-400/80 shadow-2xl bg-emerald-950 flex items-center justify-center relative">
                 <img id="heroLeaderImg" src="ustadz_zuhdi.jpg" alt="Ust. Zuhdi Rofiqi, LC" class="w-full h-full object-cover" style="object-position: 50% 20%; transform: scale(1.0);">
               </div>
-              <div class="absolute -bottom-2 -right-2 bg-amber-500 text-stone-950 font-black text-[11px] px-3 py-1 rounded-full shadow-lg border border-amber-300 flex items-center gap-1 z-10">
+              <div class="absolute -bottom-2 -right-2 bg-amber-500 text-stone-950 font-black text-xs px-3 py-1 rounded-full shadow-lg border border-amber-300 flex items-center gap-1 z-10">
                 <i data-lucide="award" class="w-3.5 h-3.5"></i>
                 <span>Pimpinan KBIH</span>
               </div>
@@ -354,7 +384,7 @@
             <div class="mt-4 text-center sm:text-left">
               <h3 class="text-xl sm:text-2xl font-black text-white leading-tight">Ust. Zuhdi Rofiqi, LC</h3>
               <p class="text-xs text-amber-300 font-bold uppercase tracking-wider mt-0.5">Pimpinan & Pembimbing Utama Ibadah</p>
-              <div class="inline-flex items-center gap-1 text-[11px] bg-white/10 px-2.5 py-1 rounded-lg text-emerald-200 mt-2 border border-white/10">
+              <div class="inline-flex items-center gap-1 text-xs bg-white/10 px-2.5 py-1 rounded-lg text-emerald-200 mt-2 border border-white/10">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5 text-amber-400"></i>
                 <span>Membimbing 18 Angkatan (2007 s/d 2026)</span>
               </div>
@@ -402,7 +432,7 @@
               <button onclick="switchTab('announcements')" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-black px-4 py-2 rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center gap-2 border border-amber-300 ring-2 ring-amber-400/50">
                 <i data-lucide="bell-ring" class="w-4 h-4 text-stone-950"></i>
                 <span>Info Terkini & Agenda</span>
-                <span class="bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black animate-pulse">Update</span>
+                <span class="bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full font-black animate-pulse">Update</span>
               </button>
               <button onclick="switchTab('fiqih')" class="bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm transition flex items-center gap-2">
                 <i data-lucide="book-open" class="w-4 h-4"></i>
@@ -538,7 +568,7 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-[10px] font-extrabold uppercase bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded border border-amber-400/30">Official Partner</span>
+              <span class="text-xs font-extrabold uppercase bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded border border-amber-400/30">Official Partner</span>
               <span class="text-xs text-emerald-200">Sponsor & Pengembang Sistem</span>
             </div>
             <h4 class="font-bold text-white text-base mt-0.5">Didukung oleh Duta Global Tech & Mitra KBIH KUWAISS</h4>
@@ -797,12 +827,12 @@
 
       <!-- Filter Kategori Wajib Sesuai Dokumen -->
       <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
-        <button onclick="filterGalleryCategory('ALL')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white">Semua Kategori</button>
-        <button onclick="filterGalleryCategory('IHRAM')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Pakaian Ihram</button>
-        <button onclick="filterGalleryCategory('ARAFAH')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Wukuf di Arafah</button>
-        <button onclick="filterGalleryCategory('MUZDALIFAH')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Mabit Muzdalifah / Mina</button>
-        <button onclick="filterGalleryCategory('THAWAF')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Thawaf & Sa'i Ka'bah</button>
-        <button onclick="filterGalleryCategory('ZIARAH')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Ziarah Madinah & Raudhah</button>
+        <button onclick="filterGalleryCategory('ALL')" class="gallery-filter-btn px-4 py-3 min-h-[48px] rounded-full text-xs font-bold bg-slate-900 text-white">Semua Kategori</button>
+        <button onclick="filterGalleryCategory('IHRAM')" class="gallery-filter-btn px-4 py-3 min-h-[48px] rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Pakaian Ihram</button>
+        <button onclick="filterGalleryCategory('ARAFAH')" class="gallery-filter-btn px-4 py-3 min-h-[48px] rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Wukuf di Arafah</button>
+        <button onclick="filterGalleryCategory('MUZDALIFAH')" class="gallery-filter-btn px-4 py-3 min-h-[48px] rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Mabit Muzdalifah / Mina</button>
+        <button onclick="filterGalleryCategory('THAWAF')" class="gallery-filter-btn px-4 py-3 min-h-[48px] rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Thawaf & Sa'i Ka'bah</button>
+        <button onclick="filterGalleryCategory('ZIARAH')" class="gallery-filter-btn px-4 py-3 min-h-[48px] rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-300">Ziarah Madinah & Raudhah</button>
       </div>
 
       <!-- Grid Foto Jejak Mabrur -->
@@ -993,7 +1023,7 @@
         <div class="flex items-center gap-4 border-b border-slate-200 pb-5">
           <div class="relative group">
             <img id="profileAvatarBig" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=180" alt="Avatar" class="w-20 h-20 rounded-2xl object-cover ring-4 ring-emerald-100">
-            <label for="changeProfileAvatarInput" class="absolute inset-0 bg-black/50 text-white rounded-2xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-[10px] font-bold">
+            <label for="changeProfileAvatarInput" class="absolute inset-0 bg-black/50 text-white rounded-2xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-xs font-bold">
               <i data-lucide="camera" class="w-4 h-4 mb-0.5"></i>
               Ganti Foto
             </label>
@@ -1075,7 +1105,7 @@
               <i data-lucide="crown" class="w-6 h-6 text-stone-950"></i>
             </div>
             <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-wide border border-amber-400/30">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-extrabold uppercase tracking-wide border border-amber-400/30">
                 Pimpinan KBIH KUWAISS
               </div>
               <h3 class="text-lg sm:text-xl font-black text-white mt-1">Pengaturan Foto Profil Pimpinan</h3>
@@ -1094,13 +1124,13 @@
           <div class="md:col-span-4 flex flex-col items-center text-center">
             <div class="w-32 h-48 sm:w-36 sm:h-52 rounded-2xl overflow-hidden ring-4 ring-amber-400/80 shadow-xl bg-emerald-900 flex items-center justify-center relative">
               <img id="settingsLeaderImgPreview" src="ustadz_zuhdi.jpg" alt="Ust. Zuhdi Rofiqi, LC" class="w-full h-full object-cover" style="object-position: 50% 20% !important; transform: scale(1.0) !important;">
-              <div class="absolute -bottom-1 -right-1 bg-amber-500 text-stone-950 font-black text-[10px] px-2 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1">
+              <div class="absolute -bottom-1 -right-1 bg-amber-500 text-stone-950 font-black text-xs px-2 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1">
                 <i data-lucide="lock" class="w-3 h-3 text-stone-950"></i>
                 <span>Terkunci</span>
               </div>
             </div>
             <span class="text-xs font-bold text-white mt-2">Ust. Zuhdi Rofiqi, LC</span>
-            <span class="text-[11px] text-amber-300">🔒 Posisi Terkunci & Permanen</span>
+            <span class="text-xs text-amber-300">🔒 Posisi Terkunci & Permanen</span>
           </div>
 
           <!-- Keterangan & Fitur Yang Tersedia -->
@@ -1110,7 +1140,7 @@
                 <i data-lucide="info" class="w-4 h-4"></i>
                 Fungsi Menu Pengaturan Foto Pimpinan:
               </div>
-              <ul class="text-emerald-100 space-y-1.5 list-disc list-inside leading-relaxed text-[11px]">
+              <ul class="text-emerald-100 space-y-1.5 list-disc list-inside leading-relaxed text-xs">
                 <li><strong>Upload Foto Baru:</strong> Unggah foto terbaru pimpinan langsung dari galeri HP atau komputer.</li>
                 <li><strong>Presisi Posisi Wajah:</strong> Geser posisi vertikal (atas-bawah) dan horizontal (kiri-kanan) agar posisi peci/kopiah dan wajah pas di tengah bingkai.</li>
                 <li><strong>Zooming / Skala:</strong> Atur pembesaran foto secara proporsional tanpa terpotong.</li>
@@ -1225,7 +1255,7 @@
               <!-- Template 1: Untuk Grup Angkatan Sendiri -->
               <div class="border border-slate-200 hover:border-emerald-500 rounded-2xl p-4 transition bg-slate-50/50 flex flex-col justify-between">
                 <div>
-                  <span class="text-[10px] font-black uppercase text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Grup Seangkatan</span>
+                  <span class="text-xs font-black uppercase text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Grup Seangkatan</span>
                   <h4 class="font-bold text-slate-900 text-sm mt-1.5">Ajak Teman Satu Angkatan Reuni</h4>
                   <p class="text-xs text-slate-600 mt-1 line-clamp-3">
                     "Assalamu'alaikum sahabat haji sekalian. Mari berkumpul kembali dan upload 5-10 foto kenangan kita di aplikasi KBIH KUWAISS..."
@@ -1239,7 +1269,7 @@
               <!-- Template 2: Untuk Calon Jamaah Haji -->
               <div class="border border-slate-200 hover:border-emerald-500 rounded-2xl p-4 transition bg-slate-50/50 flex flex-col justify-between">
                 <div>
-                  <span class="text-[10px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Calon Jamaah</span>
+                  <span class="text-xs font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Calon Jamaah</span>
                   <h4 class="font-bold text-slate-900 text-sm mt-1.5">Berbagi Panduan & Tips Lapangan</h4>
                   <p class="text-xs text-slate-600 mt-1 line-clamp-3">
                     "Assalamu'alaikum. Bagi bapak/ibu yang sedang persiapan haji, bisa buka aplikasi KBIH KUWAISS untuk dengarkan audio doa Ust. Zuhdi Rofiqi, LC & tanya langsung ke alumni..."
@@ -1253,7 +1283,7 @@
               <!-- Template 3: Untuk Keluarga & Kerabat (Mode Asistensi) -->
               <div class="border border-slate-200 hover:border-emerald-500 rounded-2xl p-4 transition bg-slate-50/50 flex flex-col justify-between">
                 <div>
-                  <span class="text-[10px] font-black uppercase text-teal-700 bg-teal-100 px-2 py-0.5 rounded">Keluarga & Kerabat</span>
+                  <span class="text-xs font-black uppercase text-teal-700 bg-teal-100 px-2 py-0.5 rounded">Keluarga & Kerabat</span>
                   <h4 class="font-bold text-slate-900 text-sm mt-1.5">Bantu Orang Tua / Lansia</h4>
                   <p class="text-xs text-slate-600 mt-1 line-clamp-3">
                     "Assalamu'alaikum bapak/ibu/saudara, mari bantu daftarkan profil dan foto kenangan orang tua kita yang sudah berhaji di KBIH KUWAISS..."
@@ -1267,7 +1297,7 @@
               <!-- Template 4: Syi'ar Tausiyah & Doa Ust. Zuhdi Rofiqi, LC -->
               <div class="border border-slate-200 hover:border-emerald-500 rounded-2xl p-4 transition bg-slate-50/50 flex flex-col justify-between">
                 <div>
-                  <span class="text-[10px] font-black uppercase text-amber-800 bg-amber-200 px-2 py-0.5 rounded">Syi'ar Doa & Fiqih</span>
+                  <span class="text-xs font-black uppercase text-amber-800 bg-amber-200 px-2 py-0.5 rounded">Syi'ar Doa & Fiqih</span>
                   <h4 class="font-bold text-slate-900 text-sm mt-1.5">Koleksi Audio Doa Jernih</h4>
                   <p class="text-xs text-slate-600 mt-1 line-clamp-3">
                     "Mari dengarkan rekaman talbiyah dan doa haji yang dibimbing langsung oleh Ust. Zuhdi Rofiqi, LC.."
@@ -1303,7 +1333,7 @@
                     <i data-lucide="smartphone" class="w-3.5 h-3.5 text-emerald-700"></i>
                     Bagi Pengguna Android (Chrome):
                   </div>
-                  <p class="text-[11px] leading-relaxed">
+                  <p class="text-xs leading-relaxed">
                     Ketuk menu titik tiga (⋮) di pojok kanan atas browser Chrome, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> (Add to Home screen).
                   </p>
                 </div>
@@ -1312,7 +1342,7 @@
                     <i data-lucide="apple" class="w-3.5 h-3.5 text-emerald-700"></i>
                     Bagi Pengguna iPhone / iPad (Safari):
                   </div>
-                  <p class="text-[11px] leading-relaxed">
+                  <p class="text-xs leading-relaxed">
                     Ketuk tombol Bagikan (ikon kotak panah ke atas <span class="font-mono">➔</span>) di bagian bawah Safari, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> (Add to Home Screen).
                   </p>
                 </div>
@@ -1371,7 +1401,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h4 class="font-black text-slate-900 text-sm">Panel Admin KBIH KUWAISS</h4>
-              <span class="text-[10px] font-bold bg-emerald-800 text-white px-2 py-0.5 rounded-full">Khusus Pengelola</span>
+              <span class="text-xs font-bold bg-emerald-800 text-white px-2 py-0.5 rounded-full">Khusus Pengelola</span>
             </div>
             <p class="text-xs text-slate-600">Pusat penulisan pengumuman, jadwal ta'lim, umrah, manasik, dan upload brosur digital.</p>
           </div>
@@ -1391,27 +1421,27 @@
           
           <!-- Sub Menu Kategori Info Terkini KBIH KUWAISS Sesuai Kebutuhan Jamaah -->
           <div class="flex flex-wrap items-center gap-1.5" id="announcementFilterTabs">
-            <button onclick="filterAnnouncements('SEMUA')" class="ann-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition bg-emerald-800 text-white shadow-sm flex items-center gap-1.5" data-filter="SEMUA">
+            <button onclick="filterAnnouncements('SEMUA')" class="ann-filter-btn px-4 py-3 min-h-[48px] rounded-xl text-xs font-bold transition bg-emerald-800 text-white shadow-sm flex items-center gap-1.5" data-filter="SEMUA">
               <i data-lucide="layers" class="w-3.5 h-3.5"></i>
               <span>Semua Info</span>
             </button>
-            <button onclick="filterAnnouncements('JADWAL_UMRAH')" class="ann-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="JADWAL_UMRAH">
+            <button onclick="filterAnnouncements('JADWAL_UMRAH')" class="ann-filter-btn px-4 py-3 min-h-[48px] rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="JADWAL_UMRAH">
               <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-amber-600"></i>
               <span>Jadwal Umrah Terdekat</span>
             </button>
-            <button onclick="filterAnnouncements('PENDAFTARAN')" class="ann-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="PENDAFTARAN">
+            <button onclick="filterAnnouncements('PENDAFTARAN')" class="ann-filter-btn px-4 py-3 min-h-[48px] rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="PENDAFTARAN">
               <i data-lucide="user-plus" class="w-3.5 h-3.5 text-emerald-700"></i>
               <span>Pendaftaran Jamaah Umrah/Haji</span>
             </button>
-            <button onclick="filterAnnouncements('PENGAJIAN')" class="ann-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="PENGAJIAN">
+            <button onclick="filterAnnouncements('PENGAJIAN')" class="ann-filter-btn px-4 py-3 min-h-[48px] rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="PENGAJIAN">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-teal-700"></i>
               <span>Pertemuan Pengajian (Waktu & Tempat)</span>
             </button>
-            <button onclick="filterAnnouncements('DOKUMEN')" class="ann-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="DOKUMEN">
+            <button onclick="filterAnnouncements('DOKUMEN')" class="ann-filter-btn px-4 py-3 min-h-[48px] rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="DOKUMEN">
               <i data-lucide="file-check" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Kelengkapan Dokumen Haji/Umrah</span>
             </button>
-            <button onclick="filterAnnouncements('LAINNYA')" class="ann-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="LAINNYA">
+            <button onclick="filterAnnouncements('LAINNYA')" class="ann-filter-btn px-4 py-3 min-h-[48px] rounded-xl text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5" data-filter="LAINNYA">
               <i data-lucide="info" class="w-3.5 h-3.5 text-purple-600"></i>
               <span>Informasi Lain</span>
             </button>
@@ -1494,7 +1524,7 @@
               <i data-lucide="cpu" class="w-7 h-7 text-amber-300"></i>
             </div>
             <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider mb-1">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-wider mb-1">
                 Principal Technology Partner & Builder
               </div>
               <h2 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight">Duta Global Tech</h2>
@@ -1558,7 +1588,7 @@
               <i data-lucide="printer" class="w-7 h-7 text-white"></i>
             </div>
             <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black uppercase tracking-wider mb-1">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-black uppercase tracking-wider mb-1">
                 Official Digital Printing & Yearbook Partner
               </div>
               <h2 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight">SnapPrint</h2>
@@ -1632,13 +1662,13 @@
               <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
                 <i data-lucide="plane" class="w-6 h-6"></i>
               </div>
-              <span class="text-[10px] font-black uppercase text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Penerbangan & Transportasi</span>
+              <span class="text-xs font-black uppercase text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Penerbangan & Transportasi</span>
               <h3 class="font-bold text-slate-900 text-sm">Airlines & Bus VIP Saudi</h3>
               <p class="text-xs text-slate-600 leading-relaxed">
                 Penerbangan langsung tanpa transit menuju Jeddah/Madinah dan armada bus AC eksekutif berstandar Muassasah.
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-semibold flex items-center gap-1.5">
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 font-semibold flex items-center gap-1.5">
               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> Terakreditasi IATA
             </div>
           </div>
@@ -1649,13 +1679,13 @@
               <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
                 <i data-lucide="building" class="w-6 h-6"></i>
               </div>
-              <span class="text-[10px] font-black uppercase text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Akomodasi & Hotel</span>
+              <span class="text-xs font-black uppercase text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Akomodasi & Hotel</span>
               <h3 class="font-bold text-slate-900 text-sm">Hotel Ring 1 Haramain</h3>
               <p class="text-xs text-slate-600 leading-relaxed">
                 Akomodasi hotel bintang 4 & 5 di pelataran Masjidil Haram dan Masjid Nabawi, ramah untuk jamaah sepuh/lansia.
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-semibold flex items-center gap-1.5">
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 font-semibold flex items-center gap-1.5">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-600"></i> Jarak Jalan Kaki
             </div>
           </div>
@@ -1666,13 +1696,13 @@
               <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
               </div>
-              <span class="text-[10px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Perlengkapan & Logistik</span>
+              <span class="text-xs font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Perlengkapan & Logistik</span>
               <h3 class="font-bold text-slate-900 text-sm">Koper & Seragam Resmi</h3>
               <p class="text-xs text-slate-600 leading-relaxed">
                 Paket koper fiber 28 inch kokoh, tas paspor, batik resmi, serta kain ihram dan mukena berstandar Kemenag.
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-semibold flex items-center gap-1.5">
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 font-semibold flex items-center gap-1.5">
               <i data-lucide="package-check" class="w-3.5 h-3.5 text-emerald-600"></i> Standar Resmi Kemenag
             </div>
           </div>
@@ -1683,13 +1713,13 @@
               <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
                 <i data-lucide="heart-pulse" class="w-6 h-6"></i>
               </div>
-              <span class="text-[10px] font-black uppercase text-rose-700 bg-rose-100 px-2 py-0.5 rounded">Kesehatan & Vaksinasi</span>
+              <span class="text-xs font-black uppercase text-rose-700 bg-rose-100 px-2 py-0.5 rounded">Kesehatan & Vaksinasi</span>
               <h3 class="font-bold text-slate-900 text-sm">Layanan Medis & Asuransi</h3>
               <p class="text-xs text-slate-600 leading-relaxed">
                 Dukungan asistensi vaksin meningitis, tes kebugaran fisik lansia, serta perlindungan asuransi perjalanan ibadah.
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-semibold flex items-center gap-1.5">
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 font-semibold flex items-center gap-1.5">
               <i data-lucide="check" class="w-3.5 h-3.5 text-rose-600"></i> Proteksi Paripurna
             </div>
           </div>
@@ -1699,7 +1729,7 @@
       <!-- Peluang Kemitraan Usaha Alumni & Pendaftaran Sponsor -->
       <div class="bg-gradient-to-r from-slate-900 to-emerald-950 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-2 max-w-xl text-center md:text-left">
-          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[11px] font-bold border border-amber-400/30">
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
             <i data-lucide="store" class="w-3.5 h-3.5"></i>
             UMKM & USAHA ALUMNI
           </div>
@@ -1735,48 +1765,48 @@
     <div class="grid grid-cols-7 gap-0.5 items-center">
       
       <!-- Tab 1: Beranda -->
-      <button onclick="switchTab('dashboard')" id="mob-dashboard" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition mobile-tab-active">
+      <button onclick="switchTab('dashboard')" id="mob-dashboard" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition mobile-tab-active">
         <i data-lucide="home" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[8.5px] font-bold">Beranda</span>
+        <span class="text-xs font-bold">Beranda</span>
       </button>
 
       <!-- Tab 2: Info Terkini -->
-      <button onclick="switchTab('announcements')" id="mob-announcements" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition relative">
+      <button onclick="switchTab('announcements')" id="mob-announcements" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition relative">
         <div class="relative">
           <i data-lucide="bell" class="w-4 h-4 mb-0.5 text-amber-500"></i>
           <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
         </div>
-        <span class="text-[8.5px] font-bold text-amber-600">Info Baru</span>
+        <span class="text-xs font-bold text-amber-600">Info Baru</span>
       </button>
 
       <!-- Tab 3: Direktori -->
-      <button onclick="switchTab('directory')" id="mob-directory" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition">
+      <button onclick="switchTab('directory')" id="mob-directory" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition">
         <i data-lucide="users" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[8.5px] font-bold">Jamaah</span>
+        <span class="text-xs font-bold">Jamaah</span>
       </button>
 
       <!-- Tab 4: Bimbingan Doa -->
-      <button onclick="switchTab('fiqih')" id="mob-fiqih" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition">
+      <button onclick="switchTab('fiqih')" id="mob-fiqih" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition">
         <i data-lucide="book-open" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[8.5px] font-bold">Doa</span>
+        <span class="text-xs font-bold">Doa</span>
       </button>
 
       <!-- Tab 5: Forum Ukhuwah -->
-      <button onclick="switchTab('forum')" id="mob-forum" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition">
+      <button onclick="switchTab('forum')" id="mob-forum" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition">
         <i data-lucide="messages-square" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[8.5px] font-bold">Forum</span>
+        <span class="text-xs font-bold">Forum</span>
       </button>
 
       <!-- Tab 6: Galeri -->
-      <button onclick="switchTab('gallery')" id="mob-gallery" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition">
+      <button onclick="switchTab('gallery')" id="mob-gallery" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition">
         <i data-lucide="camera" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[8.5px] font-bold">Galeri</span>
+        <span class="text-xs font-bold">Galeri</span>
       </button>
 
       <!-- Tab 7: Sponsorship -->
-      <button onclick="switchTab('sponsor')" id="mob-sponsor" class="mobile-nav-btn flex flex-col items-center justify-center py-1 text-slate-500 hover:text-emerald-800 transition">
+      <button onclick="switchTab('sponsor')" id="mob-sponsor" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 min-h-[54px] text-slate-500 hover:text-emerald-800 transition">
         <i data-lucide="award" class="w-4 h-4 mb-0.5 text-amber-500"></i>
-        <span class="text-[7.5px] font-bold">Sponsorship</span>
+        <span class="text-xs font-bold">Sponsorship</span>
       </button>
 
     </div>
@@ -1787,7 +1817,7 @@
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="font-black text-lg text-slate-900">Form Pendaftaran Data Jamaah</h3>
-        <button onclick="closeAddJamaahModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeAddJamaahModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center min-w-[48px] min-h-[48px]"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleCreateJamaah(event)" class="space-y-3">
         <div>
@@ -1839,9 +1869,9 @@
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
               <i data-lucide="users-2" class="w-4 h-4 text-amber-700"></i>
-              Nama Mahrom / Pasangan <span class="text-[11px] font-normal text-amber-700">(Jika Memerlukan)</span>
+              Nama Mahrom / Pasangan <span class="text-xs font-normal text-amber-700">(Jika Memerlukan)</span>
             </label>
-            <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Opsional</span>
+            <span class="text-xs font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Opsional</span>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
@@ -1858,7 +1888,7 @@
               </select>
             </div>
           </div>
-          <p class="text-[10px] text-amber-800/80 leading-tight">
+          <p class="text-xs text-amber-800/80 leading-tight">
             * Khusus jamaah wanita yang membutuhkan pendampingan mahrom atau jamaah yang berangkat bersama pasangan/keluarga satu kamar.
           </p>
         </div>
@@ -1883,7 +1913,7 @@
             </div>
             <div class="flex-grow">
               <input type="file" id="newJamaahAvatarInput" accept="image/*" onchange="previewNewProfilePhoto(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-700 file:text-white hover:file:bg-emerald-800 cursor-pointer">
-              <p class="text-[11px] text-slate-500 mt-1">Foto wajah jelas tanpa kacamata hitam untuk kartu anggota & direktori.</p>
+              <p class="text-xs text-slate-500 mt-1">Foto wajah jelas tanpa kacamata hitam untuk kartu anggota & direktori.</p>
             </div>
           </div>
         </div>
@@ -1895,9 +1925,9 @@
               <i data-lucide="images" class="w-4 h-4 text-amber-700"></i>
               Upload Foto Kenangan Tanah Suci (6 s/d 10 Foto)
             </label>
-            <span id="memoriesPhotoCountBadge" class="text-[10px] font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">0/10 Terpilih</span>
+            <span id="memoriesPhotoCountBadge" class="text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">0/10 Terpilih</span>
           </div>
-          <p class="text-[11px] text-slate-600">
+          <p class="text-xs text-slate-600">
             Pilih minimal <strong>6 hingga maksimal 10 foto</strong> kenangan terbaik (Ihram, Arafah, Muzdalifah, Mina, Thawaf, Raudhah). Foto otomatis dikompresi (~400KB) untuk Buku Kenangan Digital (Yearbook).
           </p>
           <input type="file" id="newJamaahMemoriesInput" accept="image/*" multiple onchange="handleMemoriesPhotosSelect(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white hover:file:bg-amber-700 cursor-pointer">
@@ -1932,7 +1962,7 @@
             <p class="text-xs text-slate-500">Perbarui informasi profil dan data diri jamaah</p>
           </div>
         </div>
-        <button onclick="closeEditJamaahModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeEditJamaahModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center min-w-[48px] min-h-[48px]"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleUpdateJamaah(event)" class="space-y-3">
         <input type="hidden" id="editJamaahId">
@@ -2005,7 +2035,7 @@
             </div>
             <div class="flex-grow">
               <input type="file" id="editJamaahAvatarInput" accept="image/*" onchange="previewEditProfilePhoto(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-700 file:text-white hover:file:bg-emerald-800 cursor-pointer">
-              <p class="text-[11px] text-slate-500 mt-1">Pilih gambar baru jika ingin mengganti foto profil.</p>
+              <p class="text-xs text-slate-500 mt-1">Pilih gambar baru jika ingin mengganti foto profil.</p>
             </div>
           </div>
         </div>
@@ -2026,7 +2056,7 @@
     <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="font-black text-lg text-slate-900">Unggah Foto Sakral (Jejak Mabrur)</h3>
-        <button onclick="closeUploadPhotoModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeUploadPhotoModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center min-w-[48px] min-h-[48px]"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleUploadPhoto(event)" class="space-y-3">
         <div>
@@ -2046,13 +2076,13 @@
         <div>
           <div class="flex items-center justify-between mb-1">
             <label class="text-xs font-bold text-slate-700 block">Pilih File Foto Kenangan (Bisa 6 s/d 10 Foto Sekaligus)</label>
-            <span id="galleryBatchCountBadge" class="text-[10px] font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded-full">1 Foto Dipilih</span>
+            <span id="galleryBatchCountBadge" class="text-xs font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded-full">1 Foto Dipilih</span>
           </div>
           <input type="file" id="newPhotoFileInput" accept="image/*" multiple onchange="handleGalleryBatchSelect(event)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-700 file:text-white hover:file:bg-teal-800 cursor-pointer">
           <div id="galleryBatchPreview" class="grid grid-cols-5 gap-1.5 pt-2 hidden">
             <!-- Preview thumbnail dinamis -->
           </div>
-          <div class="mt-2 text-[11px] text-teal-800 flex items-center gap-1 font-medium bg-teal-50 p-2 rounded-xl border border-teal-200">
+          <div class="mt-2 text-xs text-teal-800 flex items-center gap-1 font-medium bg-teal-50 p-2 rounded-xl border border-teal-200">
             <i data-lucide="zap" class="w-3.5 h-3.5 text-teal-600 shrink-0"></i>
             <span>Kompresi Otomatis Cerdas: Setiap foto otomatis dioptimasi menjadi ~400KB sebelum diunggah ke server cloud biro.</span>
           </div>
@@ -2078,7 +2108,7 @@
           </div>
           <h3 class="font-black text-lg text-slate-900">Edit Foto Galeri</h3>
         </div>
-        <button onclick="closeEditPhotoModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeEditPhotoModal()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center min-w-[48px] min-h-[48px]"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleUpdatePhoto(event)" class="space-y-3">
         <input type="hidden" id="editPhotoId">
@@ -2142,7 +2172,7 @@
           <span id="pamphletModalBadge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Pengumuman</span>
           <h3 id="pamphletModalTitle" class="font-black text-sm sm:text-base text-slate-900 truncate max-w-xs sm:max-w-md">Detail Brosur / Pamflet</h3>
         </div>
-        <button onclick="closePamphletModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition">
+        <button onclick="closePamphletModal()" class="w-12 h-12 rounded-2xl bg-slate-200 hover:bg-slate-300 text-slate-800 flex items-center justify-center min-w-[48px] min-h-[48px] transition">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -2199,10 +2229,10 @@
           </div>
           <div>
             <h3 class="font-black text-base sm:text-lg">Form Publikasi Info & Brosur</h3>
-            <p class="text-[11px] text-emerald-200">Panel Pengelola / Admin KBIH KUWAISS</p>
+            <p class="text-xs text-emerald-200">Panel Pengelola / Admin KBIH KUWAISS</p>
           </div>
         </div>
-        <button onclick="closeAddAnnouncementModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+        <button onclick="closeAddAnnouncementModal()" class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center min-w-[48px] min-h-[48px] transition">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -2217,22 +2247,22 @@
               <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
               Gunakan Template Penulisan Cepat:
             </label>
-            <span class="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full font-semibold">1-Klik Isi Form</span>
+            <span class="text-xs text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full font-semibold">1-Klik Isi Form</span>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-            <button type="button" onclick="applyAnnouncementTemplate('JADWAL_UMRAH')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-[11px] font-bold transition text-center shadow-xs">
+            <button type="button" onclick="applyAnnouncementTemplate('JADWAL_UMRAH')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-xs font-bold transition text-center shadow-xs">
               🕋 Umrah Terdekat
             </button>
-            <button type="button" onclick="applyAnnouncementTemplate('PENDAFTARAN')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-[11px] font-bold transition text-center shadow-xs">
+            <button type="button" onclick="applyAnnouncementTemplate('PENDAFTARAN')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-xs font-bold transition text-center shadow-xs">
               📝 Pendaftaran
             </button>
-            <button type="button" onclick="applyAnnouncementTemplate('PENGAJIAN')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-[11px] font-bold transition text-center shadow-xs">
+            <button type="button" onclick="applyAnnouncementTemplate('PENGAJIAN')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-xs font-bold transition text-center shadow-xs">
               🕌 Pengajian
             </button>
-            <button type="button" onclick="applyAnnouncementTemplate('DOKUMEN')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-[11px] font-bold transition text-center shadow-xs">
+            <button type="button" onclick="applyAnnouncementTemplate('DOKUMEN')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-xs font-bold transition text-center shadow-xs">
               📄 Dokumen
             </button>
-            <button type="button" onclick="applyAnnouncementTemplate('LAINNYA')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-[11px] font-bold transition text-center shadow-xs col-span-2 sm:col-span-1">
+            <button type="button" onclick="applyAnnouncementTemplate('LAINNYA')" class="px-2.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-amber-200 rounded-xl text-xs font-bold transition text-center shadow-xs col-span-2 sm:col-span-1">
               ✨ Info Lain
             </button>
           </div>
@@ -2311,7 +2341,7 @@
             <img id="annPamphletPreviewImg" src="" alt="Preview Pamflet" class="w-full h-48 object-contain">
           </div>
           
-          <p class="text-[11px] text-slate-500 flex items-center gap-1 pt-1">
+          <p class="text-xs text-slate-500 flex items-center gap-1 pt-1">
             <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-700"></i>
             Admin dapat mengunggah file foto/pamflet langsung dari galeri HP atau PC. Jika tidak diunggah, sistem akan menggunakan poster resmi KBIH KUWAISS.
           </p>
@@ -2350,7 +2380,7 @@
             <p class="text-xs text-amber-200 font-medium">Upload & Presisikan Posisi Wajah / Zoom</p>
           </div>
         </div>
-        <button onclick="closeLeaderPhotoModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+        <button onclick="closeLeaderPhotoModal()" class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center min-w-[48px] min-h-[48px] transition">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -2360,15 +2390,15 @@
         
         <!-- Live Preview Box -->
         <div class="flex flex-col items-center justify-center bg-slate-100 p-4 rounded-2xl border border-slate-200">
-          <div class="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Tampilan Pada Halaman Muka</div>
+          <div class="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Tampilan Pada Halaman Muka</div>
           <div class="w-40 h-58 sm:w-44 sm:h-64 rounded-3xl overflow-hidden ring-4 ring-amber-400 shadow-xl bg-emerald-950 flex items-center justify-center relative">
             <img id="previewModalLeaderImg" src="ustadz_zuhdi.jpg" alt="Preview Foto Pimpinan" class="w-full h-full object-cover transition-transform" style="object-position: 50% 20%; transform: scale(1.0);">
-            <div class="absolute -bottom-1 -right-1 bg-amber-500 text-stone-950 font-black text-[10px] px-2.5 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1">
+            <div class="absolute -bottom-1 -right-1 bg-amber-500 text-stone-950 font-black text-xs px-2.5 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1">
               <i data-lucide="award" class="w-3 h-3"></i>
               <span>Pimpinan</span>
             </div>
           </div>
-          <div class="text-[11px] text-slate-500 mt-2 font-medium">Ust. Zuhdi Rofiqi, LC</div>
+          <div class="text-xs text-slate-500 mt-2 font-medium">Ust. Zuhdi Rofiqi, LC</div>
         </div>
 
         <!-- Kontrol Upload File Baru -->
@@ -2378,7 +2408,7 @@
             <span>Pilih Foto Baru dari HP / Laptop:</span>
           </label>
           <input type="file" id="leaderPhotoInput" accept="image/*" onchange="handleLeaderPhotoUpload(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-800 file:text-white hover:file:bg-emerald-900 cursor-pointer">
-          <p class="text-[10px] text-slate-500">Mendukung format JPG, PNG, WEBP. Ukuran file otomatis dioptimalkan.</p>
+          <p class="text-xs text-slate-500">Mendukung format JPG, PNG, WEBP. Ukuran file otomatis dioptimalkan.</p>
         </div>
 
         <!-- Slider Pengaturan Presisi Posisi (Horizontal, Vertikal, Zoom) -->
@@ -2388,19 +2418,19 @@
               <i data-lucide="move" class="w-3.5 h-3.5 text-emerald-700"></i>
               Penyesuaian Posisi & Skala
             </span>
-            <button type="button" onclick="resetLeaderPhotoAlignment()" class="text-[11px] font-bold text-amber-700 hover:text-amber-800 underline">
+            <button type="button" onclick="resetLeaderPhotoAlignment()" class="text-xs font-bold text-amber-700 hover:text-amber-800 underline">
               Reset Awal
             </button>
           </div>
 
           <!-- Posisi Vertikal (Atas - Tengah - Bawah) -->
           <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-semibold text-slate-600">
+            <div class="flex justify-between text-xs font-semibold text-slate-600">
               <span>Posisi Vertikal (Atas / Bawah)</span>
               <span id="labelPosY" class="font-mono text-emerald-700 font-bold">20%</span>
             </div>
             <input type="range" id="rangePosY" min="0" max="100" value="20" oninput="updateLeaderPhotoLive()" class="w-full accent-emerald-700 cursor-pointer">
-            <div class="flex justify-between text-[10px] text-slate-400">
+            <div class="flex justify-between text-xs text-slate-400">
               <span>Fokus Wajah (Atas)</span>
               <span>Tengah</span>
               <span>Bawah</span>
@@ -2409,12 +2439,12 @@
 
           <!-- Posisi Horizontal (Kiri - Tengah - Kanan) -->
           <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-semibold text-slate-600">
+            <div class="flex justify-between text-xs font-semibold text-slate-600">
               <span>Posisi Horizontal (Kiri / Kanan)</span>
               <span id="labelPosX" class="font-mono text-emerald-700 font-bold">50%</span>
             </div>
             <input type="range" id="rangePosX" min="0" max="100" value="50" oninput="updateLeaderPhotoLive()" class="w-full accent-emerald-700 cursor-pointer">
-            <div class="flex justify-between text-[10px] text-slate-400">
+            <div class="flex justify-between text-xs text-slate-400">
               <span>Kiri</span>
               <span>Tengah</span>
               <span>Kanan</span>
@@ -2423,12 +2453,12 @@
 
           <!-- Skala / Zoom Wajah -->
           <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-semibold text-slate-600">
+            <div class="flex justify-between text-xs font-semibold text-slate-600">
               <span>Zoom / Ukuran Skala Wajah</span>
               <span id="labelZoom" class="font-mono text-emerald-700 font-bold">1.00x</span>
             </div>
             <input type="range" id="rangeZoom" min="100" max="220" value="100" oninput="updateLeaderPhotoLive()" class="w-full accent-emerald-700 cursor-pointer">
-            <div class="flex justify-between text-[10px] text-slate-400">
+            <div class="flex justify-between text-xs text-slate-400">
               <span>Normal (1.0x)</span>
               <span>Dekat (1.5x)</span>
               <span>Maksimal (2.2x)</span>
@@ -2439,7 +2469,7 @@
 
         <!-- Tombol Aksi Simpan & Kunci Posisi -->
         <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
-          <div class="text-[11px] text-emerald-800 font-semibold flex items-center gap-1">
+          <div class="text-xs text-emerald-800 font-semibold flex items-center gap-1">
             <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
             <span>Terkunci permanen di sistem</span>
           </div>
@@ -2464,12 +2494,12 @@
       <div class="space-y-1.5 max-w-xl">
         <div class="flex items-center justify-center md:justify-start gap-2">
           <span class="font-black text-white text-base tracking-wide">KBIH KUWAISS</span>
-          <span class="bg-amber-400 text-stone-950 font-bold px-2 py-0.5 rounded text-[10px]">TERAKREDITASI</span>
+          <span class="bg-amber-400 text-stone-950 font-bold px-2 py-0.5 rounded text-xs">TERAKREDITASI</span>
         </div>
         <p class="text-slate-300 text-xs">
           Kelompok Bimbingan Ibadah Haji KBIH KUWAISS • Pimpinan: <strong>Ust. Zuhdi Rofiqi, LC</strong>
         </p>
-        <p class="text-slate-400 text-[11px] leading-relaxed">
+        <p class="text-slate-400 text-xs leading-relaxed">
           <i data-lucide="map-pin" class="w-3.5 h-3.5 inline mr-1 text-amber-400"></i>
           Jalan Raya Bekasi Timur Regensi Blok H1 No 10, RT 01, RW 016, Cimuning, Kecamatan Mustika Jaya, Kota Bekasi, Jawa Barat 17155
         </p>
@@ -2496,7 +2526,7 @@
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] text-slate-500 text-center sm:text-left">
+    <div class="max-w-7xl mx-auto pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500 text-center sm:text-left">
       <div>
         <span>© 2007–2026 KBIH KUWAISS. Seluruh Hak Cipta Dilindungi.</span>
         <span class="hidden sm:inline mx-1.5">•</span>
@@ -3431,7 +3461,7 @@
         return `
         <div class="bg-white rounded-2xl border ${isDup ? 'border-amber-300 ring-2 ring-amber-200' : 'border-slate-200'} p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between relative">
           ${isDup ? `
-            <div class="absolute -top-2.5 right-4 bg-amber-500 text-stone-950 font-black text-[10px] px-2.5 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1 z-10 animate-pulse">
+            <div class="absolute -top-2.5 right-4 bg-amber-500 text-stone-950 font-black text-xs px-2.5 py-0.5 rounded-full shadow border border-amber-300 flex items-center gap-1 z-10 animate-pulse">
               <i data-lucide="alert-triangle" class="w-3 h-3"></i>
               <span>Terdeteksi Duplikasi Input</span>
             </div>
@@ -3458,8 +3488,8 @@
               ${j.alamat ? `
               <div class="flex items-start gap-2 bg-slate-50 p-2 rounded-xl border border-slate-100">
                 <i data-lucide="home" class="w-3.5 h-3.5 text-emerald-700 shrink-0 mt-0.5"></i>
-                <div class="text-[11px] leading-snug">
-                  <span class="text-slate-500 font-semibold block text-[10px] uppercase tracking-wider">Alamat Saat Ini:</span>
+                <div class="text-xs leading-snug">
+                  <span class="text-slate-500 font-semibold block text-xs uppercase tracking-wider">Alamat Saat Ini:</span>
                   <span class="text-slate-800 font-medium">${j.alamat}</span>
                 </div>
               </div>` : ''}
@@ -3468,7 +3498,7 @@
                 <span>Regu / Maktab: <strong class="text-slate-800">${j.regu}</strong></span>
               </div>
               ${j.mahrom ? `
-              <div class="flex items-center gap-2 bg-amber-50/80 px-2.5 py-1.5 rounded-xl border border-amber-200/80 text-[11px]">
+              <div class="flex items-center gap-2 bg-amber-50/80 px-2.5 py-1.5 rounded-xl border border-amber-200/80 text-xs">
                 <i data-lucide="users-2" class="w-3.5 h-3.5 text-amber-700 shrink-0"></i>
                 <span class="text-amber-950 font-medium">Mahrom/Pasangan: <strong>${j.mahrom}</strong></span>
               </div>` : ''}
@@ -3505,7 +3535,7 @@
               ` : `
                 <button disabled title="Hanya bisa dihapus jika terjadi duplikasi input" class="px-3 py-1.5 bg-slate-100 text-slate-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 cursor-not-allowed border border-slate-200">
                   <i data-lucide="lock" class="w-3 h-3 text-slate-400"></i>
-                  <span class="text-[11px]">Terkunci</span>
+                  <span class="text-xs">Terkunci</span>
                 </button>
               `}
             </div>
@@ -3593,9 +3623,9 @@
       badge.innerText = `${tempMemoriesPhotos.length}/10 Terpilih`;
       
       if (tempMemoriesPhotos.length < 6) {
-        badge.className = 'text-[10px] font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full';
+        badge.className = 'text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full';
       } else {
-        badge.className = 'text-[10px] font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full';
+        badge.className = 'text-xs font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full';
       }
 
       container.innerHTML = '';
@@ -3608,7 +3638,7 @@
           div.className = 'relative rounded-lg overflow-hidden border border-slate-300 h-14 bg-slate-100 shadow-sm';
           div.innerHTML = `
             <img src="${e.target.result}" class="w-full h-full object-cover">
-            <span class="absolute bottom-0 right-0 bg-black/70 text-white text-[9px] px-1 rounded-tl">#${idx+1}</span>
+            <span class="absolute bottom-0 right-0 bg-black/70 text-white text-xs px-1 rounded-tl">#${idx+1}</span>
           `;
           container.appendChild(div);
         };
@@ -3692,7 +3722,7 @@
       document.getElementById('memoriesThumbnailsContainer').classList.add('hidden');
       document.getElementById('memoriesThumbnailsContainer').innerHTML = '';
       document.getElementById('memoriesPhotoCountBadge').innerText = '0/10 Terpilih';
-      document.getElementById('memoriesPhotoCountBadge').className = 'text-[10px] font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full';
+      document.getElementById('memoriesPhotoCountBadge').className = 'text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full';
       lucide.createIcons();
 
       alert(`Alhamdulillah! Data jamaah ${name} berhasil disimpan beserta foto diri terkini dan foto kenangan sakral.`);
@@ -3872,7 +3902,7 @@
               <div class="border-l-2 border-emerald-600 pl-3 space-y-0.5">
                 <div class="flex items-center gap-2">
                   <span class="text-xs font-bold text-slate-900">${c.author}</span>
-                  <span class="text-[11px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-semibold">${c.badge}</span>
+                  <span class="text-xs bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-semibold">${c.badge}</span>
                 </div>
                 <p class="text-xs text-slate-700">${c.text}</p>
               </div>
@@ -3961,10 +3991,10 @@
           <div>
             <div class="relative h-48 bg-slate-100 overflow-hidden">
               <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-              <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+              <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/20">
                 ${p.category}
               </span>
-              <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
+              <span class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">
                 ${p.size || '390 KB'}
               </span>
             </div>
@@ -3974,7 +4004,7 @@
                 <span class="font-medium text-slate-700">${p.jamaahName}</span>
                 <span class="font-semibold text-emerald-800">${p.angkatan}</span>
               </div>
-              <div class="text-[11px] text-slate-400">${p.date}</div>
+              <div class="text-xs text-slate-400">${p.date}</div>
             </div>
           </div>
 
@@ -4250,9 +4280,9 @@
       container.innerHTML = fiqihModules.map((m, idx) => `
         <div onclick="selectFiqihModule(${idx})" class="p-3.5 rounded-2xl border transition cursor-pointer flex items-center justify-between ${idx === activeFiqihIndex ? 'bg-emerald-50 border-emerald-600 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300'}">
           <div class="space-y-0.5">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">${m.category}</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">${m.category}</span>
             <h4 class="font-bold text-slate-900 text-xs sm:text-sm">${m.title}</h4>
-            <span class="text-[11px] text-slate-400">Ust. Zuhdi Rofiqi, LC • ${m.duration}</span>
+            <span class="text-xs text-slate-400">Ust. Zuhdi Rofiqi, LC • ${m.duration}</span>
           </div>
           <div class="w-8 h-8 rounded-full ${idx === activeFiqihIndex ? 'bg-emerald-700 text-white' : 'bg-slate-100 text-slate-600'} flex items-center justify-center shrink-0">
             <i data-lucide="${idx === activeFiqihIndex ? 'volume-2' : 'play'}" class="w-4 h-4"></i>
@@ -4294,8 +4324,8 @@
       photoGrid.innerHTML = photos.map(p => `
         <div class="border border-slate-200 rounded-xl overflow-hidden text-center p-2 bg-slate-50">
           <img src="${p.image}" class="w-full h-28 object-cover rounded-lg mb-1.5">
-          <div class="text-[11px] font-bold text-slate-800 line-clamp-1">${p.title}</div>
-          <div class="text-[10px] text-slate-500">${p.jamaahName}</div>
+          <div class="text-xs font-bold text-slate-800 line-clamp-1">${p.title}</div>
+          <div class="text-xs text-slate-500">${p.jamaahName}</div>
         </div>
       `).join('');
 
@@ -4543,15 +4573,15 @@
       container.innerHTML = items.map(item => {
         let catBadge = '';
         if (item.category === 'JADWAL_UMRAH') {
-          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-amber-100 text-amber-900 border border-amber-300">🕋 Jadwal Umrah Terdekat</span>';
+          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-100 text-amber-900 border border-amber-300">🕋 Jadwal Umrah Terdekat</span>';
         } else if (item.category === 'PENDAFTARAN') {
-          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-900 border border-emerald-300">📝 Pendaftaran Umrah/Haji</span>';
+          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-300">📝 Pendaftaran Umrah/Haji</span>';
         } else if (item.category === 'PENGAJIAN') {
-          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-teal-100 text-teal-900 border border-teal-300">🕌 Pertemuan Pengajian</span>';
+          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-teal-100 text-teal-900 border border-teal-300">🕌 Pertemuan Pengajian</span>';
         } else if (item.category === 'DOKUMEN') {
-          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-blue-100 text-blue-900 border border-blue-300">📄 Kelengkapan Dokumen</span>';
+          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-300">📄 Kelengkapan Dokumen</span>';
         } else {
-          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-purple-100 text-purple-900 border border-purple-300">✨ Informasi Lain</span>';
+          catBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-purple-100 text-purple-900 border border-purple-300">✨ Informasi Lain</span>';
         }
 
         return `
@@ -4564,7 +4594,7 @@
                 
                 <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 items-center">
                   ${catBadge}
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/90 text-stone-900 backdrop-blur-sm shadow-sm">${item.pamphletType}</span>
+                  <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-white/90 text-stone-900 backdrop-blur-sm shadow-sm">${item.pamphletType}</span>
                 </div>
 
                 <div class="absolute bottom-3 right-3">
@@ -4575,7 +4605,7 @@
                 </div>
 
                 <div class="absolute bottom-3 left-3 right-24">
-                  <span class="text-[11px] font-semibold text-amber-200 line-clamp-1 flex items-center gap-1">
+                  <span class="text-xs font-semibold text-amber-200 line-clamp-1 flex items-center gap-1">
                     <i data-lucide="award" class="w-3.5 h-3.5 text-amber-400"></i> ${item.pembimbing}
                   </span>
                 </div>
@@ -4606,7 +4636,7 @@
 
                 <!-- Highlight Badge -->
                 <div class="pt-1">
-                  <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                  <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
                     <i data-lucide="check-circle" class="w-3 h-3 text-emerald-600"></i>
                     ${item.highlight}
                   </span>
@@ -4708,7 +4738,7 @@
           <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950 font-medium">
             <strong>Catatan KBIHU:</strong> ${item.highlight}. Bimbingan ibadah langsung diasuh oleh <strong>${item.pembimbing}</strong>.
           </div>
-          <div class="text-[11px] text-slate-500 pt-1">
+          <div class="text-xs text-slate-500 pt-1">
             Sekretariat KBIH KUWAISS: Jl. Raya Bekasi Timur Regensi Blok H1 No 10, Cimuning, Mustika Jaya, Kota Bekasi. Hubungi: 08129032182.
           </div>
         </div>
