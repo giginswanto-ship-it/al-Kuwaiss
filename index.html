@@ -849,6 +849,22 @@
       </div>
 
       <!-- Grid Foto Jejak Mabrur -->
+      <!-- Petunjuk Interaktif Jamaah: Zoom & Simpan Foto ke HP -->
+      <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 text-xs text-emerald-950 shadow-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-800 text-amber-300 flex items-center justify-center font-black shrink-0 shadow-sm">
+            <i data-lucide="zoom-in" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="font-extrabold text-stone-900 block sm:inline">Fitur Zoom & Simpan Foto:</span>
+            <span class="text-slate-700"> Ketuk/klik foto apa saja untuk <strong>melihat Real Zoom Foto HD</strong> dan <strong>menyimpan langsung ke galeri/unduhan HP Anda</strong>.</span>
+          </div>
+        </div>
+        <span class="hidden md:inline-flex items-center gap-1 text-[11px] font-bold bg-white text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-300">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-amber-500"></i> Siap Unduh
+        </span>
+      </div>
+
       <div id="galleryPhotoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <!-- Render dinamis via Javascript -->
       </div>
@@ -2175,6 +2191,115 @@
         </div>
       </form>
     </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL LIGHTBOX: ZOOM REAL FOTO & SIMPAN KE HP / PERANGKAT      -->
+  <!-- ============================================================== -->
+  <div id="photoZoomModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden flex flex-col justify-between overflow-hidden select-none" onclick="handleZoomBackdropClick(event)">
+    
+    <!-- Top Bar Toolbar -->
+    <div class="p-3 sm:p-4 bg-slate-900/95 backdrop-blur-md border-b border-white/10 flex items-center justify-between gap-2 z-20 shrink-0" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <span id="zoomModalCategory" class="px-2.5 py-1 rounded-full text-xs font-black bg-amber-500 text-stone-950 shrink-0 uppercase tracking-wide">KATEGORI</span>
+        <div class="min-w-0">
+          <h3 id="zoomModalTitle" class="text-white font-extrabold text-sm sm:text-base truncate leading-tight">Momen Suci</h3>
+          <p id="zoomModalAuthor" class="text-xs text-slate-300 truncate">Jamaah KBIH KUWAISS</p>
+        </div>
+      </div>
+
+      <!-- Controls Toolbar -->
+      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+        <!-- Zoom Out Button -->
+        <button onclick="zoomOutPhoto()" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95" title="Perkecil (-)">
+          <i data-lucide="zoom-out" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        </button>
+        <!-- Zoom Level Indicator / Reset -->
+        <button onclick="resetZoomPhoto()" id="zoomLevelBtn" class="px-2.5 h-10 sm:h-11 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold flex items-center justify-center transition" title="Reset Ukuran Asli (100%)">
+          <span id="zoomLevelText">100%</span>
+        </button>
+        <!-- Zoom In Button -->
+        <button onclick="zoomInPhoto()" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95" title="Perbesar (+)">
+          <i data-lucide="zoom-in" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        </button>
+        <!-- Rotate Button -->
+        <button onclick="rotateZoomPhoto()" class="hidden sm:flex w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/10 hover:bg-white/20 text-white items-center justify-center transition active:scale-95" title="Putar 90 Derajat">
+          <i data-lucide="rotate-cw" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        </button>
+
+        <!-- Tombol Simpan / Unduh ke HP -->
+        <button onclick="downloadCurrentZoomPhoto()" class="px-3.5 sm:px-4 h-10 sm:h-11 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-lg transition active:scale-95 border border-amber-300" title="Simpan / Download Foto ke HP">
+          <i data-lucide="download" class="w-4 h-4 text-stone-950"></i>
+          <span class="hidden md:inline">Simpan ke HP</span>
+          <span class="md:hidden">Simpan</span>
+        </button>
+
+        <!-- Tombol Tutup (ESC) -->
+        <button onclick="closePhotoZoomModal()" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-red-600/80 hover:bg-red-600 text-white flex items-center justify-center transition active:scale-95 ml-1" title="Tutup Modal (ESC)">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Viewport: Zoom Canvas & Navigation Arrows -->
+    <div class="relative flex-grow w-full flex items-center justify-center overflow-hidden touch-none" id="photoZoomViewport">
+      
+      <!-- Navigasi Kiri (Previous) -->
+      <button onclick="navigateZoomPhoto(-1)" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90 border border-white/20 shadow-xl" title="Foto Sebelumnya (Panah Kiri)">
+        <i data-lucide="chevron-left" class="w-7 h-7 sm:w-8 sm:h-8"></i>
+      </button>
+
+      <!-- Navigasi Kanan (Next) -->
+      <button onclick="navigateZoomPhoto(1)" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90 border border-white/20 shadow-xl" title="Foto Berikutnya (Panah Kanan)">
+        <i data-lucide="chevron-right" class="w-7 h-7 sm:w-8 sm:h-8"></i>
+      </button>
+
+      <!-- Gambar Asli yang Bisa Di-Zoom Real -->
+      <div id="photoZoomImgWrap" class="cursor-grab active:cursor-grabbing transition-transform duration-75 ease-out select-none flex items-center justify-center" style="transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        <img id="photoZoomRealImg" src="" alt="Real Foto Zoom" class="max-w-[92vw] max-h-[72vh] object-contain rounded-xl shadow-2xl pointer-events-none" ondblclick="handleZoomDoubleClick(event)">
+      </div>
+
+      <!-- Petunjuk Gestur Layar Sentuh HP -->
+      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <span class="bg-black/70 text-slate-200 text-[11px] sm:text-xs px-3.5 py-1 rounded-full backdrop-blur-md border border-white/10 flex items-center gap-1.5 shadow">
+          <i data-lucide="touchpad" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>Ketuk 2x atau cubit layar untuk Zoom • Geser untuk geser/detail</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Bottom Bar Mobile & Action Buttons -->
+    <div class="p-3 sm:p-4 bg-slate-900/95 backdrop-blur-md border-t border-white/10 flex flex-wrap items-center justify-between gap-3 z-20 shrink-0" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2 sm:gap-3 text-xs text-slate-400">
+        <span id="zoomModalDate" class="font-medium text-slate-300">Musim Haji</span>
+        <span>•</span>
+        <span id="zoomModalSize" class="font-mono text-slate-300">Resolusi HD Penuh</span>
+        <span>•</span>
+        <span id="zoomModalIndex" class="font-mono text-amber-300 font-bold">Foto 1 dari 10</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Tombol Bagikan WA / Native Share -->
+        <button onclick="shareCurrentZoomPhoto()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95" title="Bagikan ke WhatsApp">
+          <i data-lucide="share-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Bagikan</span>
+        </button>
+
+        <!-- Tombol Simpan Foto ke HP -->
+        <button onclick="downloadCurrentZoomPhoto()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-lg transition active:scale-95 border border-amber-300" title="Simpan / Download Foto ke HP">
+          <i data-lucide="download" class="w-4 h-4 text-stone-950"></i>
+          <span>Simpan Foto ke HP</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notifikasi Download / Simpan Foto -->
+  <div id="photoDownloadToast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 hidden bg-stone-950/95 text-white px-5 py-3 rounded-2xl shadow-2xl border border-amber-400/60 flex items-center gap-3 text-xs sm:text-sm transition-all duration-300">
+    <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+    <span id="photoDownloadToastText">Foto berhasil disimpan ke galeri/unduhan HP Anda.</span>
   </div>
 
   <!-- MODAL: Lihat Pamflet & Brosur Resolusi Penuh -->
@@ -4006,34 +4131,53 @@
       container.innerHTML = photos.map(p => `
         <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition group flex flex-col justify-between">
           <div>
-            <div class="relative h-48 bg-slate-100 overflow-hidden">
+            <!-- Klik Foto Langsung untuk Zoom Real HD -->
+            <div onclick="openPhotoZoomModal(${p.id})" class="relative h-52 bg-slate-100 overflow-hidden cursor-pointer group/img" title="Ketuk untuk Zoom Real Foto & Simpan ke HP">
               <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-              <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+              
+              <span class="absolute top-2 left-2 bg-emerald-950/85 backdrop-blur-md text-amber-300 text-xs font-black px-2.5 py-0.5 rounded-full border border-white/20 shadow">
                 ${p.category}
               </span>
-              <span class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">
+              <span class="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-0.5 rounded font-mono">
                 ${p.size || '390 KB'}
               </span>
+
+              <!-- Overlay Animasi Bantuan Sentuh / Zoom -->
+              <div class="absolute inset-0 bg-black/35 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center p-3">
+                <span class="bg-black/80 backdrop-blur-md text-white text-xs font-black px-3.5 py-2 rounded-full flex items-center gap-2 shadow-2xl border border-white/30 transform scale-95 group-hover/img:scale-100 transition-transform">
+                  <i data-lucide="zoom-in" class="w-4 h-4 text-amber-300"></i>
+                  <span>Zoom Real Foto</span>
+                </span>
+              </div>
             </div>
+
             <div class="p-4 space-y-1.5">
-              <h4 class="font-bold text-slate-900 text-sm line-clamp-1" title="${p.title}">${p.title}</h4>
+              <h4 onclick="openPhotoZoomModal(${p.id})" class="font-extrabold text-slate-900 text-sm line-clamp-1 cursor-pointer hover:text-emerald-800 transition" title="${p.title}">
+                ${p.title}
+              </h4>
               <div class="flex items-center justify-between text-xs text-slate-500">
-                <span class="font-medium text-slate-700">${p.jamaahName}</span>
-                <span class="font-semibold text-emerald-800">${p.angkatan}</span>
+                <span class="font-bold text-slate-700 truncate max-w-[150px]">${p.jamaahName}</span>
+                <span class="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">${p.angkatan}</span>
               </div>
               <div class="text-xs text-slate-400">${p.date}</div>
             </div>
           </div>
 
-          <!-- Tombol Aksi: Edit & Hapus Foto -->
+          <!-- Tombol Aksi: Zoom Real Foto & Simpan ke HP -->
           <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center gap-2">
-            <button onclick="openEditPhotoModal(${p.id})" class="flex-1 py-1.5 px-2 bg-white hover:bg-amber-50 text-amber-900 border border-amber-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-xs">
-              <i data-lucide="pencil" class="w-3.5 h-3.5 text-amber-700"></i>
-              <span>Edit</span>
+            <button onclick="openPhotoZoomModal(${p.id})" class="flex-1 py-2.5 px-3 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-xs active:scale-95 min-h-[44px]" title="Buka Real Zoom Foto HD">
+              <i data-lucide="zoom-in" class="w-4 h-4 text-amber-300"></i>
+              <span>Zoom Real</span>
             </button>
-            <button onclick="deleteGalleryPhoto(${p.id})" class="py-1.5 px-3 bg-white hover:bg-red-50 text-red-700 hover:text-red-800 border border-red-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition shadow-xs" title="Hapus foto ini dari galeri">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-600"></i>
-              <span>Hapus</span>
+            <button onclick="event.stopPropagation(); downloadPhotoDirect(${p.id})" class="py-2.5 px-3.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-xs active:scale-95 min-h-[44px]" title="Simpan / Download Foto ke HP">
+              <i data-lucide="download" class="w-4 h-4 text-stone-950"></i>
+              <span>Simpan</span>
+            </button>
+            <button onclick="openEditPhotoModal(${p.id})" class="p-2.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition shadow-xs min-h-[44px] min-w-[40px] flex items-center justify-center" title="Edit Data Foto">
+              <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="deleteGalleryPhoto(${p.id})" class="p-2.5 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition shadow-xs min-h-[44px] min-w-[40px] flex items-center justify-center" title="Hapus Foto">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>
           </div>
         </div>
@@ -5097,6 +5241,389 @@
       applyLeaderPhotoSettings();
       closeLeaderPhotoModal();
       alert('Alhamdulillah! Posisi dan foto profil Pimpinan KBIH KUWAISS berhasil disimpan.');
+    }
+
+
+    // ==============================================================
+    // MODUL LIGHTBOX: REAL ZOOM FOTO & SIMPAN / DOWNLOAD KE HP
+    // ==============================================================
+    let currentZoomPhotoIndex = 0;
+    let currentZoomPhotoList = [];
+    let currentZoomPhoto = null;
+    let zoomScale = 1;
+    let zoomTranslateX = 0;
+    let zoomTranslateY = 0;
+    let zoomRotate = 0;
+
+    // Gesture State
+    let isZoomDragging = false;
+    let zoomDragStartX = 0;
+    let zoomDragStartY = 0;
+    let initialPinchDistance = 0;
+    let initialPinchScale = 1;
+    let lastTapTimestamp = 0;
+    let toastTimeout = null;
+
+    function openPhotoZoomModal(id) {
+      // Ambil daftar foto sesuai filter aktif atau seluruh galeri
+      if (currentGalleryFilter === 'ALL') {
+        currentZoomPhotoList = galleryPhotos.slice();
+      } else {
+        currentZoomPhotoList = galleryPhotos.filter(p => p.category === currentGalleryFilter);
+      }
+
+      if (currentZoomPhotoList.length === 0) {
+        currentZoomPhotoList = galleryPhotos.slice();
+      }
+
+      const idx = currentZoomPhotoList.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        currentZoomPhotoIndex = idx;
+      } else {
+        currentZoomPhotoIndex = 0;
+      }
+
+      currentZoomPhoto = currentZoomPhotoList[currentZoomPhotoIndex];
+      if (!currentZoomPhoto) return;
+
+      renderZoomPhotoContent();
+
+      const modal = document.getElementById('photoZoomModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      resetZoomPhoto();
+      initZoomGestures();
+      lucide.createIcons();
+    }
+
+    function closePhotoZoomModal() {
+      const modal = document.getElementById('photoZoomModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+      resetZoomPhoto();
+    }
+
+    function handleZoomBackdropClick(e) {
+      // Tutup jika klik langsung di background hitam
+      if (e.target.id === 'photoZoomModal' || e.target.id === 'photoZoomViewport') {
+        closePhotoZoomModal();
+      }
+    }
+
+    function renderZoomPhotoContent() {
+      if (!currentZoomPhoto) return;
+
+      const img = document.getElementById('photoZoomRealImg');
+      if (img) {
+        img.src = currentZoomPhoto.image;
+        img.alt = currentZoomPhoto.title || 'Foto Jejak Mabrur KBIH KUWAISS';
+      }
+
+      const titleEl = document.getElementById('zoomModalTitle');
+      if (titleEl) titleEl.innerText = currentZoomPhoto.title || 'Foto Kenangan Suci';
+
+      const authorEl = document.getElementById('zoomModalAuthor');
+      if (authorEl) authorEl.innerText = `${currentZoomPhoto.jamaahName || 'Jamaah'} • ${currentZoomPhoto.angkatan || 'Angkatan 18'}`;
+
+      const catEl = document.getElementById('zoomModalCategory');
+      if (catEl) catEl.innerText = currentZoomPhoto.category || 'GALERI';
+
+      const dateEl = document.getElementById('zoomModalDate');
+      if (dateEl) dateEl.innerText = currentZoomPhoto.date || 'Musim Haji';
+
+      const sizeEl = document.getElementById('zoomModalSize');
+      if (sizeEl) sizeEl.innerText = currentZoomPhoto.size ? `Resolusi Asli (${currentZoomPhoto.size})` : 'Kualitas HD Asli';
+
+      const indexEl = document.getElementById('zoomModalIndex');
+      if (indexEl) indexEl.innerText = `Foto ${currentZoomPhotoIndex + 1} dari ${currentZoomPhotoList.length}`;
+    }
+
+    function updateZoomTransform() {
+      const wrap = document.getElementById('photoZoomImgWrap');
+      if (wrap) {
+        wrap.style.transform = `translate(${zoomTranslateX}px, ${zoomTranslateY}px) scale(${zoomScale}) rotate(${zoomRotate}deg)`;
+      }
+      const lvlText = document.getElementById('zoomLevelText');
+      if (lvlText) {
+        lvlText.innerText = Math.round(zoomScale * 100) + '%';
+      }
+    }
+
+    function zoomInPhoto() {
+      zoomScale = Math.min(5.0, Math.round((zoomScale + 0.35) * 100) / 100);
+      updateZoomTransform();
+    }
+
+    function zoomOutPhoto() {
+      zoomScale = Math.max(0.5, Math.round((zoomScale - 0.35) * 100) / 100);
+      if (zoomScale <= 1) {
+        zoomTranslateX = 0;
+        zoomTranslateY = 0;
+      }
+      updateZoomTransform();
+    }
+
+    function resetZoomPhoto() {
+      zoomScale = 1;
+      zoomTranslateX = 0;
+      zoomTranslateY = 0;
+      zoomRotate = 0;
+      updateZoomTransform();
+    }
+
+    function rotateZoomPhoto() {
+      zoomRotate = (zoomRotate + 90) % 360;
+      updateZoomTransform();
+    }
+
+    function navigateZoomPhoto(direction) {
+      if (currentZoomPhotoList.length <= 1) return;
+      currentZoomPhotoIndex = (currentZoomPhotoIndex + direction + currentZoomPhotoList.length) % currentZoomPhotoList.length;
+      currentZoomPhoto = currentZoomPhotoList[currentZoomPhotoIndex];
+      renderZoomPhotoContent();
+      resetZoomPhoto();
+    }
+
+    function handleZoomDoubleClick(e) {
+      if (zoomScale > 1) {
+        resetZoomPhoto();
+      } else {
+        zoomScale = 2.5;
+        updateZoomTransform();
+      }
+    }
+
+    function handleZoomWheel(e) {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        zoomInPhoto();
+      } else {
+        zoomOutPhoto();
+      }
+    }
+
+    // Inisialisasi Gestur Sentuh HP (Pinch-to-zoom, Pan, Double-Tap, Swipe)
+    let zoomGesturesInitialized = false;
+    function initZoomGestures() {
+      if (zoomGesturesInitialized) return;
+      const viewport = document.getElementById('photoZoomViewport');
+      if (!viewport) return;
+      zoomGesturesInitialized = true;
+
+      // Mouse Drag Pan untuk Desktop
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        isZoomDragging = true;
+        zoomDragStartX = e.clientX - zoomTranslateX;
+        zoomDragStartY = e.clientY - zoomTranslateY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isZoomDragging) return;
+        if (zoomScale > 1) {
+          zoomTranslateX = e.clientX - zoomDragStartX;
+          zoomTranslateY = e.clientY - zoomDragStartY;
+          updateZoomTransform();
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        isZoomDragging = false;
+      });
+
+      // Sentuhan HP Android / iOS
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartTime = 0;
+
+      viewport.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          const now = Date.now();
+          if (now - lastTapTimestamp < 320) {
+            // Double Tap
+            handleZoomDoubleClick(e);
+            lastTapTimestamp = 0;
+            return;
+          }
+          lastTapTimestamp = now;
+
+          isZoomDragging = true;
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchStartTime = now;
+          zoomDragStartX = touchStartX - zoomTranslateX;
+          zoomDragStartY = touchStartY - zoomTranslateY;
+        } else if (e.touches.length === 2) {
+          // Pinch to Zoom
+          isZoomDragging = false;
+          initialPinchDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          initialPinchScale = zoomScale;
+        }
+      }, { passive: false });
+
+      viewport.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1 && isZoomDragging) {
+          if (zoomScale > 1) {
+            e.preventDefault();
+            zoomTranslateX = e.touches[0].clientX - zoomDragStartX;
+            zoomTranslateY = e.touches[0].clientY - zoomDragStartY;
+            updateZoomTransform();
+          }
+        } else if (e.touches.length === 2 && initialPinchDistance > 0) {
+          e.preventDefault();
+          const currentDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const ratio = currentDistance / initialPinchDistance;
+          zoomScale = Math.min(5.0, Math.max(0.6, Math.round(initialPinchScale * ratio * 100) / 100));
+          updateZoomTransform();
+        }
+      }, { passive: false });
+
+      viewport.addEventListener('touchend', (e) => {
+        if (e.touches.length === 0) {
+          isZoomDragging = false;
+          initialPinchDistance = 0;
+
+          // Cek horizontal swipe untuk ganti foto jika tidak dalam kondisi zoom
+          if (zoomScale === 1 && e.changedTouches && e.changedTouches.length === 1) {
+            const deltaX = e.changedTouches[0].clientX - touchStartX;
+            const deltaTime = Date.now() - touchStartTime;
+            if (deltaTime < 350 && Math.abs(deltaX) > 55) {
+              if (deltaX < 0) {
+                navigateZoomPhoto(1); // Swipe kiri -> Foto Berikutnya
+              } else {
+                navigateZoomPhoto(-1); // Swipe kanan -> Foto Sebelumnya
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Keyboard Shortcuts Navigation
+    window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('photoZoomModal');
+      if (!modal || modal.classList.contains('hidden')) return;
+
+      if (e.key === 'Escape') {
+        closePhotoZoomModal();
+      } else if (e.key === 'ArrowLeft') {
+        navigateZoomPhoto(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigateZoomPhoto(1);
+      } else if (e.key === '+' || e.key === '=') {
+        zoomInPhoto();
+      } else if (e.key === '-') {
+        zoomOutPhoto();
+      } else if (e.key === '0') {
+        resetZoomPhoto();
+      }
+    });
+
+    // ==============================================================
+    // FUNGSI SIMPAN / DOWNLOAD FOTO KE HP ATAU PERANGKAT JAMAAH
+    // ==============================================================
+    function downloadCurrentZoomPhoto() {
+      if (!currentZoomPhoto) return;
+      executeSavePhotoToDevice(currentZoomPhoto);
+    }
+
+    function downloadPhotoDirect(id) {
+      const p = galleryPhotos.find(item => item.id === id);
+      if (!p) return;
+      executeSavePhotoToDevice(p);
+    }
+
+    function executeSavePhotoToDevice(photo) {
+      const imgUrl = photo.image;
+      const cleanTitle = (photo.title || 'Foto-Jejak-Mabrur').replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `KBIH_KUWAISS_${cleanTitle}_${photo.id}.jpg`;
+
+      showDownloadToast('Sedang memproses unduhan foto ke perangkat HP Anda...');
+
+      if (imgUrl.startsWith('data:image')) {
+        // Base64 Langsung Unduh
+        const a = document.createElement('a');
+        a.href = imgUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showDownloadToast('Alhamdulillah! Foto berhasil disimpan ke galeri/unduhan HP.');
+      } else {
+        // Remote Image (Unsplash / Server) -> Coba Blob Fetch
+        fetch(imgUrl, { mode: 'cors' })
+          .then(res => {
+            if (!res.ok) throw new Error('Fetch gagal');
+            return res.blob();
+          })
+          .then(blob => {
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
+            showDownloadToast('Alhamdulillah! Foto berhasil disimpan ke galeri/unduhan HP.');
+          })
+          .catch(() => {
+            // Fallback download
+            const a = document.createElement('a');
+            a.href = imgUrl;
+            a.target = '_blank';
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showDownloadToast('Foto dibuka dalam resolusi penuh. Tekan tahan foto untuk "Simpan Gambar".');
+          });
+      }
+    }
+
+    function shareCurrentZoomPhoto() {
+      if (!currentZoomPhoto) return;
+      const p = currentZoomPhoto;
+      const shareUrl = window.location.origin + window.location.pathname;
+      const msg = `*DOKUMENTASI SAKRAL KBIH KUWAISS* 🕋\n(Pimpinan: Ust. Zuhdi Rofiqi, LC)\n\n📷 *"${p.title}"*\n👤 Oleh: ${p.jamaahName} (${p.angkatan})\n📍 Kategori: ${p.category}\n🗓 ${p.date}\n\nLihat dokumentasi lengkap & bimbingan manasik di web komunitas:\n👉 ${shareUrl}`;
+
+      if (navigator.share && window.isSecureContext) {
+        navigator.share({
+          title: p.title,
+          text: msg,
+          url: shareUrl
+        }).catch(() => {
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+      } else {
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+      }
+    }
+
+    function showDownloadToast(msg) {
+      const toast = document.getElementById('photoDownloadToast');
+      const text = document.getElementById('photoDownloadToastText');
+      if (!toast || !text) return;
+
+      text.innerText = msg;
+      toast.classList.remove('hidden');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4200);
+      lucide.createIcons();
     }
 
     // Jalankan inisialisasi awal saat load

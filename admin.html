@@ -1117,6 +1117,91 @@
   </div>
 
 
+
+  <!-- ============================================================== -->
+  <!-- MODAL LIGHTBOX: ZOOM REAL FOTO ADMIN & UNDUH KE HP / PERANGKAT -->
+  <!-- ============================================================== -->
+  <div id="adminPhotoZoomModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden flex flex-col justify-between overflow-hidden select-none" onclick="handleAdminZoomBackdropClick(event)">
+    
+    <!-- Top Bar Toolbar -->
+    <div class="p-3 sm:p-4 bg-slate-900/95 backdrop-blur-md border-b border-white/10 flex items-center justify-between gap-2 z-20 shrink-0" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <span id="admZoomCategory" class="px-2.5 py-1 rounded-full text-xs font-black bg-amber-500 text-stone-950 shrink-0 uppercase tracking-wide">IHRAM</span>
+        <div class="min-w-0">
+          <h3 id="admZoomTitle" class="text-white font-extrabold text-sm sm:text-base truncate leading-tight">Momen Suci</h3>
+          <p id="admZoomAuthor" class="text-xs text-slate-300 truncate">H. Syamsul Arifin • Angkatan 3</p>
+        </div>
+      </div>
+
+      <!-- Controls Toolbar -->
+      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+        <button onclick="zoomOutAdminPhoto()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95" title="Perkecil (-)">
+          <i data-lucide="zoom-out" class="w-4 h-4"></i>
+        </button>
+        <button onclick="resetZoomAdminPhoto()" id="admZoomLevelBtn" class="px-2.5 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold flex items-center justify-center transition" title="Reset Ukuran (100%)">
+          <span id="admZoomLevelText">100%</span>
+        </button>
+        <button onclick="zoomInAdminPhoto()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95" title="Perbesar (+)">
+          <i data-lucide="zoom-in" class="w-4 h-4"></i>
+        </button>
+        <button onclick="rotateZoomAdminPhoto()" class="hidden sm:flex w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white items-center justify-center transition active:scale-95" title="Putar 90 Derajat">
+          <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Tombol Simpan ke HP -->
+        <button onclick="downloadCurrentAdminZoomPhoto()" class="px-3.5 sm:px-4 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-lg transition active:scale-95 border border-amber-300" title="Simpan / Download Foto ke HP">
+          <i data-lucide="download" class="w-4 h-4 text-stone-950"></i>
+          <span>Simpan ke HP</span>
+        </button>
+
+        <button onclick="closeAdminPhotoZoomModal()" class="w-10 h-10 rounded-xl bg-red-600/80 hover:bg-red-600 text-white flex items-center justify-center transition active:scale-95 ml-1" title="Tutup Modal (ESC)">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Viewport -->
+    <div class="relative flex-grow w-full flex items-center justify-center overflow-hidden touch-none" id="admPhotoZoomViewport">
+      <button onclick="navigateAdminZoomPhoto(-1)" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90 border border-white/20 shadow-xl" title="Foto Sebelumnya">
+        <i data-lucide="chevron-left" class="w-7 h-7"></i>
+      </button>
+
+      <button onclick="navigateAdminZoomPhoto(1)" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90 border border-white/20 shadow-xl" title="Foto Berikutnya">
+        <i data-lucide="chevron-right" class="w-7 h-7"></i>
+      </button>
+
+      <div id="admPhotoZoomImgWrap" class="cursor-grab active:cursor-grabbing transition-transform duration-75 ease-out select-none flex items-center justify-center" style="transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        <img id="admPhotoZoomRealImg" src="" alt="Real Foto Zoom" class="max-w-[92vw] max-h-[72vh] object-contain rounded-xl shadow-2xl pointer-events-none" ondblclick="handleAdminZoomDoubleClick(event)">
+      </div>
+
+      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <span class="bg-black/70 text-slate-200 text-[11px] sm:text-xs px-3.5 py-1 rounded-full backdrop-blur-md border border-white/10 flex items-center gap-1.5 shadow">
+          <i data-lucide="touchpad" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>Ketuk 2x atau cubit layar untuk Zoom • Geser untuk detail</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Bottom Bar Mobile & Action Buttons -->
+    <div class="p-3 sm:p-4 bg-slate-900/95 backdrop-blur-md border-t border-white/10 flex flex-wrap items-center justify-between gap-3 z-20 shrink-0" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2 sm:gap-3 text-xs text-slate-400">
+        <span id="admZoomDate" class="font-medium text-slate-300">Musim Haji</span>
+        <span>•</span>
+        <span id="admZoomSize" class="font-mono text-slate-300">Resolusi HD Penuh</span>
+        <span>•</span>
+        <span id="admZoomIndex" class="font-mono text-amber-300 font-bold">Foto 1 dari 10</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="downloadCurrentAdminZoomPhoto()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-lg transition active:scale-95 border border-amber-300" title="Simpan / Download Foto ke HP">
+          <i data-lucide="download" class="w-4 h-4 text-stone-950"></i>
+          <span>Simpan Foto ke HP</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
   <!-- ============================================== -->
   <!-- MODAL: EDIT & UPDATE FOTO GALERI JEJAK MABRUR -->
   <!-- ============================================== -->
@@ -1743,29 +1828,48 @@
       }
 
       container.innerHTML = photos.map(p => `
-        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between group">
           <div>
-            <div class="relative h-48 bg-slate-900 overflow-hidden">
-              <img src="${p.image}" class="w-full h-full object-cover">
-              <span class="absolute top-2 left-2 bg-emerald-950/80 backdrop-blur-md text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+            <!-- Klik Foto untuk Zoom Real HD & Unduh -->
+            <div onclick="openAdminPhotoZoomModal(${p.id})" class="relative h-48 bg-slate-900 overflow-hidden cursor-pointer group/admimg" title="Ketuk untuk melihat foto dalam ukuran asli (Zoom HD) & Simpan">
+              <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2 left-2 bg-emerald-950/85 backdrop-blur-md text-amber-300 text-xs font-black px-2.5 py-0.5 rounded-full border border-white/20 shadow">
                 ${p.category}
               </span>
+              
+              <!-- Hover Zoom Badge -->
+              <div class="absolute inset-0 bg-black/35 opacity-0 group-hover/admimg:opacity-100 transition-opacity flex items-center justify-center p-2">
+                <span class="bg-black/80 backdrop-blur-sm text-white text-xs font-black px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl border border-white/20">
+                  <i data-lucide="zoom-in" class="w-4 h-4 text-amber-300"></i>
+                  <span>Zoom Real Foto</span>
+                </span>
+              </div>
             </div>
             <div class="p-4 space-y-1">
-              <h4 class="font-extrabold text-slate-900 text-sm line-clamp-1" title="${p.title}">${p.title}</h4>
+              <h4 onclick="openAdminPhotoZoomModal(${p.id})" class="font-extrabold text-slate-900 text-sm line-clamp-1 cursor-pointer hover:text-emerald-800 transition" title="${p.title}">${p.title}</h4>
               <div class="text-xs text-slate-600 font-medium">${p.jamaahName} • <span class="text-emerald-800 font-bold">${p.angkatan}</span></div>
               <div class="text-[11px] text-slate-400">${p.date}</div>
             </div>
           </div>
-          <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
-            <button onclick="openAdminEditPhotoModal(${p.id})" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs rounded-xl transition flex items-center gap-1 border border-amber-200" title="Update Foto">
-              <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-              <span>Update Foto</span>
-            </button>
-            <button onclick="deleteAdminPhoto(${p.id})" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl transition flex items-center gap-1 border border-red-200" title="Hapus Foto">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              <span>Hapus</span>
-            </button>
+          <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-1.5">
+            <div class="flex items-center gap-1.5">
+              <button onclick="openAdminPhotoZoomModal(${p.id})" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs rounded-xl transition flex items-center gap-1 border border-emerald-200" title="Zoom Real Foto">
+                <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-emerald-700"></i>
+                <span class="hidden sm:inline">Zoom</span>
+              </button>
+              <button onclick="downloadAdminPhotoDirect(${p.id})" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 font-black text-xs rounded-xl transition flex items-center gap-1 border border-amber-200" title="Simpan / Download Foto ke HP">
+                <i data-lucide="download" class="w-3.5 h-3.5 text-stone-950"></i>
+                <span>Simpan</span>
+              </button>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="openAdminEditPhotoModal(${p.id})" class="p-1.5 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl transition flex items-center border border-slate-300" title="Update Foto">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="deleteAdminPhoto(${p.id})" class="p-1.5 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl transition flex items-center border border-red-200" title="Hapus Foto">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
           </div>
         </div>
       `).join('');
@@ -2375,6 +2479,180 @@
       renderAdminAnnouncementsGrid(announcementsData);
       closeAdminEditAnnouncementModal();
       alert(`Alhamdulillah! Pengumuman "${title}" berhasil di-update.`);
+    }
+
+
+    // ==============================================================
+    // LOGIKA REAL ZOOM FOTO & SIMPAN/UNDUH DI ADMIN PANEL
+    // ==============================================================
+    let admZoomScale = 1;
+    let admZoomTranslateX = 0;
+    let admZoomTranslateY = 0;
+    let admZoomRotate = 0;
+    let currentAdmZoomIndex = 0;
+    let currentAdmZoomList = [];
+    let currentAdmZoomPhoto = null;
+
+    function openAdminPhotoZoomModal(id) {
+      if (currentAdminGalleryFilter === 'ALL') {
+        currentAdmZoomList = galleryPhotos.slice();
+      } else {
+        currentAdmZoomList = galleryPhotos.filter(p => p.category === currentAdminGalleryFilter);
+      }
+      if (currentAdmZoomList.length === 0) currentAdmZoomList = galleryPhotos.slice();
+
+      const idx = currentAdmZoomList.findIndex(p => p.id === id);
+      currentAdmZoomIndex = idx !== -1 ? idx : 0;
+      currentAdmZoomPhoto = currentAdmZoomList[currentAdmZoomIndex];
+      if (!currentAdmZoomPhoto) return;
+
+      renderAdminZoomContent();
+      const modal = document.getElementById('adminPhotoZoomModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      resetZoomAdminPhoto();
+      lucide.createIcons();
+    }
+
+    function closeAdminPhotoZoomModal() {
+      const modal = document.getElementById('adminPhotoZoomModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+      resetZoomAdminPhoto();
+    }
+
+    function handleAdminZoomBackdropClick(e) {
+      if (e.target.id === 'adminPhotoZoomModal' || e.target.id === 'admPhotoZoomViewport') {
+        closeAdminPhotoZoomModal();
+      }
+    }
+
+    function renderAdminZoomContent() {
+      if (!currentAdmZoomPhoto) return;
+      const img = document.getElementById('admPhotoZoomRealImg');
+      if (img) img.src = currentAdmZoomPhoto.image;
+
+      const title = document.getElementById('admZoomTitle');
+      if (title) title.innerText = currentAdmZoomPhoto.title || 'Foto Kenangan Suci';
+
+      const author = document.getElementById('admZoomAuthor');
+      if (author) author.innerText = `${currentAdmZoomPhoto.jamaahName || 'Jamaah'} • ${currentAdmZoomPhoto.angkatan || 'Angkatan 18'}`;
+
+      const cat = document.getElementById('admZoomCategory');
+      if (cat) cat.innerText = currentAdmZoomPhoto.category || 'IHRAM';
+
+      const date = document.getElementById('admZoomDate');
+      if (date) date.innerText = currentAdmZoomPhoto.date || 'Musim Haji';
+
+      const size = document.getElementById('admZoomSize');
+      if (size) size.innerText = currentAdmZoomPhoto.size ? `Resolusi Asli (${currentAdmZoomPhoto.size})` : 'Resolusi HD Penuh';
+
+      const index = document.getElementById('admZoomIndex');
+      if (index) index.innerText = `Foto ${currentAdmZoomIndex + 1} dari ${currentAdmZoomList.length}`;
+    }
+
+    function updateAdminZoomTransform() {
+      const wrap = document.getElementById('admPhotoZoomImgWrap');
+      if (wrap) {
+        wrap.style.transform = `translate(${admZoomTranslateX}px, ${admZoomTranslateY}px) scale(${admZoomScale}) rotate(${admZoomRotate}deg)`;
+      }
+      const lvl = document.getElementById('admZoomLevelText');
+      if (lvl) lvl.innerText = Math.round(admZoomScale * 100) + '%';
+    }
+
+    function zoomInAdminPhoto() {
+      admZoomScale = Math.min(5.0, Math.round((admZoomScale + 0.35) * 100) / 100);
+      updateAdminZoomTransform();
+    }
+
+    function zoomOutAdminPhoto() {
+      admZoomScale = Math.max(0.5, Math.round((admZoomScale - 0.35) * 100) / 100);
+      if (admZoomScale <= 1) {
+        admZoomTranslateX = 0;
+        admZoomTranslateY = 0;
+      }
+      updateAdminZoomTransform();
+    }
+
+    function resetZoomAdminPhoto() {
+      admZoomScale = 1;
+      admZoomTranslateX = 0;
+      admZoomTranslateY = 0;
+      admZoomRotate = 0;
+      updateAdminZoomTransform();
+    }
+
+    function rotateZoomAdminPhoto() {
+      admZoomRotate = (admRotate = (admZoomRotate + 90) % 360);
+      updateAdminZoomTransform();
+    }
+
+    function navigateAdminZoomPhoto(dir) {
+      if (currentAdmZoomList.length <= 1) return;
+      currentAdmZoomIndex = (currentAdmZoomIndex + dir + currentAdmZoomList.length) % currentAdmZoomList.length;
+      currentAdmZoomPhoto = currentAdmZoomList[currentAdmZoomIndex];
+      renderAdminZoomContent();
+      resetZoomAdminPhoto();
+    }
+
+    function handleAdminZoomDoubleClick(e) {
+      if (admZoomScale > 1) {
+        resetZoomAdminPhoto();
+      } else {
+        admZoomScale = 2.5;
+        updateAdminZoomTransform();
+      }
+    }
+
+    function downloadCurrentAdminZoomPhoto() {
+      if (!currentAdmZoomPhoto) return;
+      downloadAdminPhotoDirect(currentAdmZoomPhoto.id);
+    }
+
+    function downloadAdminPhotoDirect(id) {
+      const photo = galleryPhotos.find(p => p.id === id);
+      if (!photo) return;
+
+      const clean = (photo.title || 'Foto-Jejak-Mabrur').replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `KBIH_KUWAISS_${clean}_${photo.id}.jpg`;
+
+      if (photo.image.startsWith('data:image')) {
+        const a = document.createElement('a');
+        a.href = photo.image;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        alert('Alhamdulillah! Foto berhasil disimpan ke galeri/unduhan HP.');
+      } else {
+        fetch(photo.image, { mode: 'cors' })
+          .then(res => res.blob())
+          .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+            alert('Alhamdulillah! Foto berhasil disimpan ke galeri/unduhan HP.');
+          })
+          .catch(() => {
+            const a = document.createElement('a');
+            a.href = photo.image;
+            a.target = '_blank';
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert('Foto dibuka dalam ukuran penuh. Silakan tekan tahan foto untuk menyimpannya.');
+          });
+      }
     }
 
     // Jalankan saat halaman siap
