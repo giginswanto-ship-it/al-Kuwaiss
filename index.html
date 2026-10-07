@@ -287,12 +287,12 @@
 <body class="min-h-screen flex flex-col antialiased">
 
   <!-- Top Announcement Bar (Tausiyah / Agenda Terdekat / Running Text) -->
-  <div id="topAnnouncementBar" class="bg-emerald-950 text-emerald-100 px-3 sm:px-4 py-2 text-xs md:text-sm border-b border-emerald-800 transition-all">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2">
-      <!-- Bagian Kiri: Badge & Slight Berjalan (Running Text Ticker) -->
-      <div class="flex items-center gap-2.5 font-medium min-w-0 flex-1 overflow-hidden">
+  <div id="topAnnouncementBar" class="bg-emerald-950 text-emerald-100 px-3 sm:px-5 py-2.5 text-xs md:text-sm border-b border-emerald-800 transition-all shadow-sm">
+    <div class="max-w-7xl mx-auto space-y-2">
+      <!-- Baris 1: Papan Teks Berjalan Pengumuman Biro (Slight Berjalan Lebar Penuh) -->
+      <div class="flex items-center gap-2.5 font-medium min-w-0 w-full overflow-hidden">
         <button id="topBarBadgeBtn" onclick="switchTab('announcements')" class="bg-amber-500 hover:bg-amber-400 text-stone-900 font-extrabold px-2.5 py-0.5 rounded text-xs shrink-0 shadow-xs flex items-center gap-1 transition active:scale-95 cursor-pointer" title="Klik untuk lihat rincian pengumuman">
-          <i data-lucide="megaphone" class="w-3 h-3 text-stone-950"></i>
+          <i data-lucide="megaphone" class="w-3.5 h-3.5 text-stone-950"></i>
           <span id="topBarBadgeText">PENGUMUMAN BIRO</span>
         </button>
         <div id="topTickerWrapper" class="ticker-wrapper flex-1 min-w-0 py-0.5 cursor-pointer group" onclick="switchTab('announcements')" title="Klik untuk membuka Info Terkini KBIH KUWAISS (Arahkan kursor/tahan sentuhan untuk jeda)">
@@ -307,19 +307,24 @@
         </div>
       </div>
 
-      <!-- Bagian Kanan: Info Pimpinan, Tombol Admin & Mode Lansia -->
-      <div class="flex items-center justify-between md:justify-end gap-2.5 sm:gap-4 text-xs font-semibold shrink-0 pt-1 md:pt-0 border-t border-emerald-900/60 md:border-t-0">
-        <span class="text-amber-300 hidden xl:inline font-bold">Pimpinan: Ust. Zuhdi Rofiqi, LC</span>
-        <!-- Portal Pengelola Admin -->
-        <a href="admin.html" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-2.5 py-1 rounded-md transition flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95" title="Buka Portal Admin Pengelola KBIH KUWAISS">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-          <span>Portal Admin</span>
-        </a>
-        <!-- Toggle Aksesibilitas Lansia -->
-        <button id="seniorModeBtn" onclick="toggleSeniorMode()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-md border border-emerald-600 transition flex items-center gap-1.5 cursor-pointer active:scale-95">
-          <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-          <span>Mode Lansia (Teks Besar)</span>
-        </button>
+      <!-- Baris 2: Identitas Pimpinan & Tombol Aksi Cepat (Persis Screenshot Jamaah) -->
+      <div class="flex items-center justify-between text-xs font-semibold pt-1 border-t border-emerald-900/60">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-amber-300 font-bold">Pimpinan: Ust. Zuhdi Rofiqi, LC</span>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Portal Pengelola Admin -->
+          <a href="admin.html" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-2.5 py-1 rounded-md transition flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95" title="Buka Portal Admin Pengelola KBIH KUWAISS">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>Portal Admin</span>
+          </a>
+          <!-- Toggle Aksesibilitas Lansia -->
+          <button id="seniorModeBtn" onclick="toggleSeniorMode()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-md border border-emerald-600 transition flex items-center gap-1.5 cursor-pointer active:scale-95">
+            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+            <span>Mode Lansia (Teks Besar)</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -526,6 +531,30 @@
 
         <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none translate-x-12 translate-y-12">
           <i data-lucide="landmark" class="w-96 h-96 text-white"></i>
+        </div>
+      </div>
+
+      <!-- Banner Pengumuman Biro Berjalan / Terkini di Dashboard -->
+      <div id="dashboardAnnouncementCard" class="bg-gradient-to-r from-emerald-900 via-teal-900 to-emerald-950 text-white rounded-2xl p-4 sm:p-5 border border-emerald-700 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3 cursor-pointer hover:border-amber-400 transition" onclick="switchTab('announcements')" title="Klik untuk membuka Info Terkini">
+        <div class="flex items-center gap-3.5 min-w-0 flex-1">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 text-stone-950 flex items-center justify-center font-black shrink-0 shadow">
+            <i data-lucide="megaphone" class="w-5 h-5 text-stone-950"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span id="dashTickerBadge" class="bg-amber-500 text-stone-950 font-extrabold px-2.5 py-0.5 rounded text-xs uppercase tracking-wide">PENGUMUMAN BIRO</span>
+              <span class="text-xs text-amber-300 font-bold">Agenda & Kabar Terkini Jamaah</span>
+            </div>
+            <p id="dashTickerText" class="text-xs sm:text-sm text-emerald-100 font-medium leading-relaxed truncate">
+              Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 self-end md:self-auto">
+          <span class="text-xs font-bold text-amber-300 flex items-center gap-1 bg-white/10 px-3 py-1.5 rounded-xl border border-white/20">
+            <span>Buka Info Terkini</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </span>
         </div>
       </div>
 
@@ -1477,6 +1506,34 @@
 
         <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
           <i data-lucide="bell-ring" class="w-64 h-64 text-amber-300"></i>
+        </div>
+      </div>
+
+      <!-- Status Bilah Pengumuman Sedang Berjalan (Tampilan Jamaah) -->
+      <div id="activeTickerStatusCard" class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-4 sm:p-5 rounded-2xl border border-emerald-800 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5 min-w-0 flex-1">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 text-stone-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+            <i data-lucide="volume-2" class="w-5 h-5 text-stone-950"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span id="currentTickerBadgeInfo" class="bg-amber-500 text-stone-950 font-extrabold px-2 py-0.5 rounded text-[11px] uppercase tracking-wide">PENGUMUMAN BIRO</span>
+              <span id="currentTickerModeBadge" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Sedang Berjalan di Bilah Atas</span>
+              </span>
+            </div>
+            <p id="currentTickerTextInfo" class="text-xs sm:text-sm font-medium text-emerald-50 truncate leading-relaxed">
+              Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0 self-end md:self-auto">
+          <button type="button" onclick="openTickerSettingsModal()" class="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-black rounded-xl transition flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
+            <i data-lucide="sliders" class="w-3.5 h-3.5 text-stone-950"></i>
+            <span>Ubah Teks & Kecepatan</span>
+          </button>
         </div>
       </div>
 
@@ -3403,6 +3460,7 @@
         localStorage.setItem('alkuwaiss_forum_posts', JSON.stringify(forumPosts));
         localStorage.setItem('alkuwaiss_announcements', JSON.stringify(announcementsData));
         localStorage.setItem('alkuwaiss_users', JSON.stringify(USERS));
+        localStorage.setItem('alkuwaiss_ticker_config', JSON.stringify(tickerConfig));
       } catch (err) {
         console.warn('Storage quota atau private browsing aktif, data disimpan dalam memori runtime.', err);
       }
@@ -3439,6 +3497,14 @@
               else if (item.category === 'BROSUR') item.category = 'PENDAFTARAN';
               return item;
             });
+          }
+        }
+
+        const savedTicker = localStorage.getItem('alkuwaiss_ticker_config');
+        if (savedTicker) {
+          const parsed = JSON.parse(savedTicker);
+          if (parsed && typeof parsed === 'object') {
+            tickerConfig = Object.assign(tickerConfig, parsed);
           }
         }
 
@@ -3554,6 +3620,8 @@
       renderFiqihPlaylist();
       renderYearbookPreview();
       renderAnnouncements(announcementsData);
+      loadTickerConfig();
+      applyTickerConfig();
       updateKotaDatalist();
       updateDashboardStats();
       changeCurrentUser(currentRoleKey);
@@ -4944,7 +5012,6 @@
 
       if (tickerConfig.status === 'hidden' || tickerConfig.enabled === false) {
         bar.classList.add('hidden');
-        return;
       } else {
         bar.classList.remove('hidden');
       }
@@ -4952,11 +5019,48 @@
       const badgeStr = tickerConfig.badge || 'PENGUMUMAN BIRO';
       if (badgeText) badgeText.innerText = badgeStr;
 
-      const rawText = tickerConfig.text || 'Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.';
-      const displayText = rawText.trim() + ' ✦ ';
+      // Update di kartu info status dalam Tab Info Terkini
+      const infoBadge = document.getElementById('currentTickerBadgeInfo');
+      if (infoBadge) infoBadge.innerText = badgeStr;
 
-      if (span1) span1.innerText = displayText;
-      if (span2) span2.innerText = displayText;
+      // Update di kartu Dashboard
+      const dashBadge = document.getElementById('dashTickerBadge');
+      if (dashBadge) dashBadge.innerText = badgeStr;
+
+      const rawText = tickerConfig.text || 'Reuni Akbar & Tabligh Alumni Angkatan 1 s/d 15 segera dilaksanakan. Verifikasi kehadiran di menu Agenda.';
+      
+      const infoText = document.getElementById('currentTickerTextInfo');
+      if (infoText) infoText.innerText = rawText;
+
+      const dashText = document.getElementById('dashTickerText');
+      if (dashText) dashText.innerText = rawText;
+
+      const modeBadge = document.getElementById('currentTickerModeBadge');
+      if (modeBadge) {
+        if (tickerConfig.status === 'static') {
+          modeBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400"></span><span class="text-amber-300">Teks Diam (Statis)</span>';
+        } else if (tickerConfig.status === 'hidden') {
+          modeBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span><span class="text-red-300">Bilah Tersembunyi</span>';
+        } else {
+          modeBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="text-emerald-300">Sedang Berjalan di Bilah Atas</span>';
+        }
+      }
+
+      // Buat pengulangan unit teks seamless agar mengalir berkesinambungan tanpa gap kosong
+      let unit = rawText.trim();
+      if (!unit.endsWith('✦') && !unit.endsWith('•') && !unit.endsWith('★')) {
+        unit += ' ✦ ';
+      } else {
+        unit += ' ';
+      }
+      
+      let repeated = unit;
+      while (repeated.length < 180) {
+        repeated += unit;
+      }
+
+      if (span1) span1.innerText = repeated;
+      if (span2) span2.innerText = repeated;
 
       let duration = '22s';
       if (tickerConfig.speed === 'slow') duration = '36s';
@@ -4967,6 +5071,7 @@
         if (tickerConfig.status === 'static') {
           track.style.animation = 'none';
           if (span2) span2.style.display = 'none';
+          if (span1) span1.innerText = rawText.trim();
         } else {
           track.style.animation = `ticker-slide-anim ${duration} linear infinite`;
           if (span2) span2.style.display = 'inline-flex';
@@ -4974,6 +5079,32 @@
       }
       lucide.createIcons();
     }
+
+    // ==============================================
+    // SINKRONISASI REAL-TIME MULTI-TAB & WATCHDOG
+    // ==============================================
+    window.addEventListener('storage', (e) => {
+      if (!e.key || e.key === 'alkuwaiss_ticker_config' || e.key === 'alkuwaiss_announcements' || e.key === 'alkuwaiss_last_update_time') {
+        loadTickerConfig();
+        applyTickerConfig();
+        if (e.key === 'alkuwaiss_announcements') {
+          loadSystemState();
+          renderAnnouncements(announcementsData);
+        }
+      }
+    });
+
+    let lastKnownTickerRaw = '';
+    setInterval(() => {
+      try {
+        const saved = localStorage.getItem('alkuwaiss_ticker_config');
+        if (saved && saved !== lastKnownTickerRaw) {
+          lastKnownTickerRaw = saved;
+          loadTickerConfig();
+          applyTickerConfig();
+        }
+      } catch (err) {}
+    }, 1500);
 
     function openTickerSettingsModal() {
       loadTickerConfig();
